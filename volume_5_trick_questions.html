@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wet Utilities Master Handbook - Volume 5: Trick Questions</title>
+    
+    <script>
+        MathJax = {
+            tex: { inlineMath: [['$', '$'], ['\\(', '\\)']], displayMath: [['$$', '$$'], ['\\[', '\\]']] },
+            svg: { fontCache: 'global' }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    
+    <style>
+        :root {
+            --primary: #b91c1c; /* Red 700 - Warning/Trick Theme */
+            --secondary: #ef4444; /* Red 500 */
+            --bg: #f8fafc;
+            --surface: #ffffff;
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+            --border: #e2e8f0;
+            --water: #2DA8D8; 
+            --sewer: #4CAF7D; 
+            --storm: #E8913A; 
+            --pump: #8b5cf6;
+            --mat: #64748b;
+        }
+
+        body { font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; background-color: var(--bg); color: var(--text-main); line-height: 1.6; margin: 0; padding: 0; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 2rem; }
+
+        header { background-color: var(--primary); color: white; padding: 3rem 2rem; border-radius: 8px 8px 0 0; margin-bottom: 2rem; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); border-bottom: 6px solid var(--secondary); }
+        header h1 { margin: 0; font-size: 2.5rem; letter-spacing: -0.5px; }
+        header p { margin: 0.5rem 0 0; opacity: 0.9; font-size: 1.1rem; }
+        .vol-badge { display: inline-block; background: var(--secondary); color: white; padding: 0.25rem 0.75rem; border-radius: 999px; font-weight: bold; font-size: 0.875rem; margin-bottom: 1rem; }
+        .manual-link {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: 1.25rem;
+            padding: 0.8rem 1.2rem;
+            border-radius: 999px;
+            background: rgba(255, 255, 255, 0.14);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            text-decoration: none;
+            font-weight: 700;
+            transition: all 0.2s ease;
+        }
+        .manual-link:hover { background: white; color: var(--primary); transform: translateY(-1px); }
+
+        .controls { background: var(--surface); padding: 1.5rem; border-radius: 8px; border: 1px solid var(--border); margin-bottom: 2rem; display: flex; flex-direction: column; gap: 1rem; }
+        .search-bar { width: 100%; padding: 0.75rem; font-size: 1rem; border: 1px solid var(--border); border-radius: 6px; box-sizing: border-box; }
+        .search-bar:focus { outline: none; border-color: var(--secondary); box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.2); }
+        
+        .filters { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+        .filter-btn { padding: 0.5rem 1rem; border: 1px solid var(--border); background: var(--bg); border-radius: 999px; cursor: pointer; font-size: 0.875rem; font-weight: 600; color: var(--text-muted); transition: all 0.2s; }
+        .filter-btn:hover { background: #e2e8f0; }
+        .filter-btn.active { background: var(--primary); color: white; border-color: var(--primary); }
+
+        .qa-card { background: var(--surface); border: 1px solid var(--border); border-left: 4px solid var(--primary); border-radius: 8px; margin-bottom: 1rem; box-shadow: 0 1px 3px rgba(0,0,0,0.05); overflow: hidden; }
+        .qa-summary { padding: 1.25rem; font-weight: 600; cursor: pointer; display: flex; gap: 1rem; align-items: flex-start; background: var(--surface); }
+        .qa-summary:hover { background: #fef2f2; }
+        .qa-summary::-webkit-details-marker { display: none; }
+        .qa-content { padding: 1.5rem; border-top: 1px solid var(--border); background: #fafaf9; font-size: 0.95rem; }
+        
+        .badge { padding: 0.2rem 0.5rem; border-radius: 4px; font-size: 0.75rem; font-family: monospace; font-weight: bold; text-transform: uppercase; white-space: nowrap; }
+        .badge-water { background: rgba(45,168,216,0.1); color: var(--water); border: 1px solid var(--water); }
+        .badge-sewer { background: rgba(76,175,125,0.1); color: var(--sewer); border: 1px solid var(--sewer); }
+        .badge-storm { background: rgba(232,145,58,0.1); color: var(--storm); border: 1px solid var(--storm); }
+        .badge-pump { background: rgba(139,92,246,0.1); color: var(--pump); border: 1px solid var(--pump); }
+        .badge-mat { background: rgba(100,116,139,0.1); color: var(--mat); border: 1px solid var(--mat); }
+        
+        .level { font-size: 0.7rem; font-weight: bold; letter-spacing: 0.5px; margin-left: auto; align-self: center; padding: 0.2rem 0.5rem; border-radius: 4px; }
+        .level-beg { background: #dcfce7; color: #166534; }
+        .level-int { background: #fef08a; color: #854d0e; }
+        .level-exp { background: #fee2e2; color: #991b1b; }
+
+        .stat-bar { display: flex; justify-content: space-between; font-size: 0.875rem; color: var(--text-muted); margin-bottom: 1rem; padding: 0 0.5rem; }
+        
+        .trick-label { color: var(--primary); font-weight: 800; margin-right: 0.5rem; }
+
+        /* Mobile responsiveness */
+        * { box-sizing: border-box; }
+        img, svg, canvas { max-width: 100%; height: auto; }
+        .qa-content { overflow-x: auto; }
+
+        @media (max-width: 768px) {
+            .container { padding: 1rem; }
+            header { padding: 2rem 1.25rem; margin-bottom: 1rem; }
+            header h1 { font-size: 2rem; line-height: 1.15; }
+            header p { font-size: 1rem; }
+            .manual-link { width: 100%; max-width: 320px; text-align: center; }
+            .controls { padding: 1rem; }
+            .filters { align-items: stretch; }
+            .filters > span { width: 100%; margin: 0 0 0.25rem 0 !important; }
+            .filter-btn { flex: 1 1 calc(50% - 0.5rem); min-height: 42px; padding: 0.55rem 0.75rem; }
+            .qa-summary { flex-wrap: wrap; gap: 0.6rem; padding: 1rem; }
+            .qa-summary span:not(.badge):not(.level) { flex: 1 1 100%; }
+            .badge, .level { white-space: normal; }
+            .level { margin-left: 0; }
+            .qa-content { padding: 1rem; }
+            .stat-bar { flex-direction: column; gap: 0.35rem; }
+        }
+
+        @media (max-width: 480px) {
+            .container { padding: 0.75rem; }
+            header { padding: 1.5rem 1rem; }
+            header h1 { font-size: 1.65rem; }
+            .filter-btn { flex-basis: 100%; }
+            .search-bar { font-size: 0.95rem; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <span class="vol-badge">VOLUME 5 OF 7</span>
+        <h1>Trick Questions & Engineering Traps</h1>
+        <p>50 Scenario-Based Questions Testing True Hydraulic Intuition</p>
+        <a class="manual-link" href="water resource manual.html">Back to Water Resource Manual</a>
+    </header>
+
+    <div class="controls">
+        <input type="text" id="searchInput" class="search-bar" placeholder="Search scenarios, keywords, or concepts (e.g., 'Cavitation', 'Oversized', 'Surge')...">
+        <div style="display: flex; flex-direction: column; gap: 0.75rem; margin-top: 0.5rem;">
+            <div class="filters" id="categoryFilters">
+                <span style="font-size: 0.85rem; color: var(--text-muted); align-self: center; font-weight: bold; margin-right: 0.5rem; min-width: 45px;">Topic:</span>
+                <button class="filter-btn active" data-filter="all">All (50)</button>
+                <button class="filter-btn" data-filter="Water">Water Supply</button>
+                <button class="filter-btn" data-filter="Sewer">Sanitary Sewer</button>
+                <button class="filter-btn" data-filter="Storm">Stormwater</button>
+                <button class="filter-btn" data-filter="Pump">Pumps & Surge</button>
+                <button class="filter-btn" data-filter="Material">Materials & Const.</button>
+            </div>
+            <div class="filters" id="levelFilters">
+                <span style="font-size: 0.85rem; color: var(--text-muted); align-self: center; font-weight: bold; margin-right: 0.5rem; min-width: 45px;">Level:</span>
+                <button class="filter-btn active" data-filter="all">All Levels</button>
+                <button class="filter-btn" data-filter="Beginner">Intermediate</button>
+                <button class="filter-btn" data-filter="Intermediate">Advanced</button>
+                <button class="filter-btn" data-filter="Expert">Principal/Expert</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="stat-bar">
+        <span id="resultCount">Showing 50 trick questions</span>
+        <span id="expandBtn" style="cursor: pointer; color: var(--primary); font-weight: 600; transition: color 0.2s;">Expand all to study</span>
+    </div>
+
+    <div id="qaList">
+        <!-- Injected via JS -->
+    </div>
+</div>
+
+<script>
+    // 50 Trick Scenario Database
+    const db = [
+        /* ================= WATER SUPPLY (10 Questions) ================= */
+        { c: "Water", l: "Intermediate", q: "A neighborhood complains of low pressure (20 psi). A junior engineer proposes increasing the 150mm pipe to a 300mm pipe. Why won't this solve the problem?", a: "Increasing pipe diameter only reduces *dynamic friction headloss*. It does absolutely nothing to change the *static pressure*. If the neighborhood is physically too high in elevation relative to the reservoir, the static pressure will always be 20 psi even if you use a 1000mm pipe. You must install a booster pump or a higher elevated tank." },
+        { c: "Water", l: "Expert", q: "You have a dead-end main with stagnant, brown water. To fix it, you loop the pipe back into the main transmission line at another location. Why does the water quality get WORSE?", a: "Water only flows when there is a difference in Hydraulic Grade Line (HGL). If you loop the pipe back into the transmission main at a point with the exact same HGL, there is zero driving head. Flow stops completely. Instead of a dead-end that gets flushed occasionally when a user opens a tap, you have created a massive, stagnant loop where water rots indefinitely." },
+        { c: "Water", l: "Expert", q: "To 'future-proof' a 500-home subdivision being built in 5 phases over 10 years, you size the reservoir for the ultimate Phase 5 demand. Why is this a major public health hazard?", a: "If the reservoir is sized for Phase 5 (e.g., 2 million liters), but only Phase 1 is currently occupied, the daily turnover of water will be minuscule. The water will sit in the massive tank for weeks. The chlorine residual will decay to zero, allowing pathogen and biofilm regrowth. Tanks must be compartmentalized or sized for phased growth." },
+        { c: "Water", l: "Beginner", q: "An EPANET model reports a node has '-5 psi' of pressure. Does this mean water flows backwards?", a: "No. Pipes operate under atmospheric pressure. A negative pressure in a model means the calculated HGL has fallen below the physical ground elevation of the node. In reality, a vacuum forms, causing the pipe to suck in contaminated groundwater through micro-leaks, or triggering a catastrophic column separation and structural collapse." },
+        { c: "Water", l: "Intermediate", q: "A client wants to save money by putting a 150mm water main right next to a 150mm sanitary sewer in the same trench. What is the engineering trap?", a: "Cross-contamination. Ten States Standards absolutely forbids this. Water mains must have a minimum 10-foot (3.0m) horizontal separation from sewers. If the water main ever depressurizes (e.g., pump failure, fire draft), it will suck raw sewage from the adjacent leaking sewer directly into the potable water supply." },
+        { c: "Water", l: "Expert", q: "You install an Air Release Valve (ARV) at the highest point of a pipeline. The pipeline profile is perfectly flat for 5 kilometers. Do you still need ARVs?", a: "Yes. Even on perfectly flat terrain, dissolved air comes out of solution due to pressure drops and turbulence. Without ARVs, this air will accumulate at localized minor high points (even a 10cm deflection in the trench), reducing the effective pipe diameter, increasing headloss, and eventually causing air-binding." },
+        { c: "Water", l: "Beginner", q: "A PRV (Pressure Reducing Valve) reduces pressure from 100 psi to 50 psi. What happens to the flow rate?", a: "Nothing. A PRV regulates pressure, not flow. It modulates its internal orifice to dissipate *energy* (head) while allowing the system demand (flow) to pass through. Flow is determined by the consumers downstream, not the PRV." },
+        { c: "Water", l: "Intermediate", q: "You model a fire flow event. The residual pressure at the hydrant is 30 psi (passing the 20 psi rule). However, your senior engineer fails the design. Why?", a: "You only checked the node *at* the hydrant. During a massive fire draft, the HGL drops in a steep cone of depression. While the hydrant node might be 30 psi, a higher-elevation node two streets away might have dropped to 5 psi or negative pressure. You must check the residual pressure of the *entire surrounding network* during the fire flow." },
+        { c: "Water", l: "Expert", q: "You add a parallel 200mm pipe to an existing 200mm pipe. Your junior engineer says the flow capacity will exactly double. Why is he wrong?", a: "He assumes a constant headloss. In reality, as the parallel pipes allow more flow, the velocity in the *common upstream transmission main* increases, exponentially increasing the friction headloss before the split. This steeper system curve intersects the pump curve at a lower total flow. You might only see a 30-40% increase, not 100%." },
+        { c: "Water", l: "Intermediate", q: "Why is designing a water network strictly for the 'Peak Hour Demand (PHD)' a trap in small residential grids?", a: "In small residential cul-de-sacs (e.g., 50 houses), the PHD might only be 20 GPM. If you size the pipe for 20 GPM, you get a 50mm (2-inch) pipe. However, if a house catches fire, the fire truck will attempt to pull 1,000 GPM. The 50mm pipe will immediately cavitate and collapse. Small networks are almost always governed by the Fire Flow + MDD scenario, requiring minimum 150mm (6-inch) pipes." },
+
+        /* ================= SANITARY SEWER (10 Questions) ================= */
+        { c: "Sewer", l: "Expert", q: "A client complains their 200mm sewer is backing up frequently. Your junior engineer suggests upgrading it to 400mm to 'add capacity'. Why will this make the problem worse?", a: "Increasing diameter without increasing flow reduces the flow depth ($d/D$). The small trickle of sewage spreads out over a wider wetted perimeter, dropping the velocity well below the 0.6 m/s self-cleansing threshold. Solids will rapidly settle out and putrefy. The 400mm pipe will clog even faster than the 200mm pipe. The real issue is likely a sag, I&I, or grease blockage, not pipe diameter." },
+        { c: "Sewer", l: "Intermediate", q: "To increase the velocity of a slow sewer, the contractor steepens the slope from 1% to 15% down a hill. Why is this a disaster?", a: "Excessive slope causes the velocity to exceed the maximum limit (3.0 m/s). This leads to severe scouring/abrasion of the pipe invert by grit. Furthermore, it can induce 'supercritical flow'. When the slope flattens out at the bottom, a 'Hydraulic Jump' will occur, violently releasing H2S gas and potentially blowing the manhole covers off." },
+        { c: "Sewer", l: "Beginner", q: "Why shouldn't you connect a pressurized force main directly into the invert of a standard gravity manhole?", a: "Force mains carry anaerobic sewage. Discharging it directly into the invert creates massive turbulence. This violently strips dissolved Hydrogen Sulfide (H2S) out of the liquid and into the air. The resulting gas causes deadly odor issues and rapid sulfuric acid corrosion of the concrete manhole. You must use a submerged drop or a specialized receiving structure." },
+        { c: "Sewer", l: "Expert", q: "You design a gravity sewer network using HDPE pipes with fully welded, watertight joints. Can you safely set your Infiltration & Inflow (I&I) allowance to zero?", a: "Never. Even if the pipe joints are perfectly welded, I&I will still enter the system. Manhole covers have pick-holes that allow street runoff (Inflow). House laterals (which you don't control) will be poorly connected by private plumbers. Roots will crack connections over 50 years. Ten States mandates a baseline I&I allowance regardless of pipe material." },
+        { c: "Sewer", l: "Intermediate", q: "A 300mm sewer enters a manhole, and a 200mm sewer exits it because the slope gets much steeper downstream. Why is this a code violation?", a: "Sewer codes universally state that a downstream pipe can *never* be smaller in diameter than an upstream pipe, regardless of the hydraulic capacity or slope. This is to prevent physical blockages. If a mop head or large rag successfully passes through the 300mm pipe, it will instantly wedge into the 200mm exit, causing a massive backup." },
+        { c: "Sewer", l: "Expert", q: "An industrial factory discharges a constant, measured flow of 20 L/s, 24 hours a day. Should you apply the Harmon Peaking Factor to this flow when sizing the municipal pipe?", a: "No. The Harmon Peaking Factor formula ($PF = 1 + 14/(4+\\sqrt{P})$) is statistically derived based on the diurnal waking/sleeping/showering habits of *human populations*. It has absolutely no relation to a constant industrial pump. You apply the peaking factor ONLY to the domestic flow, and then add the raw 20 L/s industrial flow on top of that peak." },
+        { c: "Sewer", l: "Beginner", q: "Why is a concrete sewer pipe highly risky for a low-slope residential trunk main?", a: "Low slopes cause sluggish velocity and long retention times, leading to anaerobic conditions and H2S gas generation. Bacteria on the crown of the pipe convert H2S into Sulfuric Acid ($H_2SO_4$). Concrete is highly alkaline and will be rapidly eaten away by the acid (Crown Corrosion) until the pipe collapses. Concrete must be lined with PVC or Epoxy." },
+        { c: "Sewer", l: "Intermediate", q: "You size a lift station wet well to be incredibly large so the pumps only have to turn on once a day. What is the fatal flaw?", a: "A massive wet well means the sewage retention time is 24 hours. Raw sewage becomes septic (anaerobic) in a few hours. The wet well will turn into a massive methane and H2S gas generator, causing catastrophic odor complaints and extreme corrosion. Wet wells must be sized to limit retention time to a maximum of 30 minutes while respecting pump cycle limits." },
+        { c: "Sewer", l: "Expert", q: "Can you 'siphon' sewage over a small hill to avoid a pump station?", a: "No. A true siphon operates under negative pressure (vacuum) at the crest. Sewage contains high amounts of dissolved gases (methane, H2S) and suspended solids. Under vacuum, the gases will immediately come out of solution, breaking the siphon vacuum. The solids will then settle and plug the pipe permanently. You must use a lift station." },
+        { c: "Sewer", l: "Intermediate", q: "Why is 'matching inverts' at a manhole where a 200mm pipe meets a 600mm pipe a terrible design?", a: "If you align the bottom inverts, the crown of the 600mm pipe is 400mm higher than the crown of the 200mm pipe. When the 600mm pipe flows 80% full, the water level will back up and completely submerge the 200mm upstream pipe, causing it to surcharge. You must match the *crowns* (soffits) of the pipes, or use the 0.8 d/D matching rule." },
+
+        /* ================= STORMWATER (10 Questions) ================= */
+        { c: "Storm", l: "Intermediate", q: "A natural meandering stream floods local houses. The city lines it with smooth concrete to get the water out faster. Why does the downstream city now flood worse?", a: "By lining the channel, Manning's roughness ($n$) drops from ~0.040 to 0.013. The velocity increases drastically, and the Time of Concentration ($T_c$) of the basin plummets. A shorter $T_c$ means the hydrograph peak is much higher and arrives much faster, completely overwhelming the downstream infrastructure. You solved a local problem by creating a regional disaster." },
+        { c: "Storm", l: "Beginner", q: "You use the Rational Method ($Q=CiA$) to size a 50,000 cubic meter detention pond. Why will your pond fail?", a: "The Rational Method only provides a single *Peak Flow Rate* ($Q_p$ in m³/s). It does not provide the *Volume* or the shape of the hydrograph over time. To size a pond, you must perform Level-Pool Routing, which requires knowing how much volume enters the pond over the entire duration of the storm. You must use the Modified Rational Method or SCS Unit Hydrograph." },
+        { c: "Storm", l: "Expert", q: "A roof drains into a pipe. The calculated Time of Concentration ($T_c$) is 30 seconds. If you use this on the IDF curve, what goes wrong?", a: "On an Intensity-Duration-Frequency (IDF) curve, as duration approaches zero, rainfall intensity approaches infinity. Using a 30-second $T_c$ might yield an absurd intensity of 500 mm/hr, causing you to size a massive 600mm pipe just for one roof. Municipalities enforce a 'Minimum $T_c$' (usually 5 or 10 minutes) to cap the intensity and reflect the physical reality of wetting delays." },
+        { c: "Storm", l: "Intermediate", q: "A road has a 'Sag Inlet' at the low point and an 'On-Grade Inlet' on the slope. If both get blocked by leaves, which one causes a disaster?", a: "The Sag Inlet. If an on-grade inlet blocks, the water simply bypasses it and continues flowing downhill in the gutter to the next inlet. If the sag inlet (at the absolute low point) blocks, the water has nowhere to go. It will pond infinitely until it overtops the curb and floods the surrounding houses." },
+        { c: "Storm", l: "Expert", q: "You upsize a road culvert from 600mm to 1200mm to stop highway flooding. The highway still floods. Why?", a: "The culvert might be operating under 'Tailwater Control' (Outlet Control). If the downstream river or channel is flooded and its water level is higher than the culvert, the culvert is physically blocked by the backwater. Upsizing the pipe does absolutely nothing because the bottleneck is the downstream water surface elevation, not the pipe diameter." },
+        { c: "Storm", l: "Intermediate", q: "You apply the Kirpich Equation ($T_c = 0.0195 L^{0.77} S^{-0.385}$) to calculate runoff for a flat, fully paved Walmart parking lot. Why is your design ruined?", a: "The Kirpich equation was empirically derived for steep, unpaved, natural agricultural basins in Tennessee. If you apply it to a flat, paved parking lot, it will drastically overestimate the $T_c$. A longer $T_c$ gives a lower rainfall intensity, meaning you will massively undersize the storm sewer pipes, causing the parking lot to flood." },
+        { c: "Storm", l: "Expert", q: "Why does the Kinematic Wave routing method in software fail to show flooding when an outfall is submerged by high tide?", a: "Kinematic wave routing only translates hydrographs downstream; it solves the continuity equation but simplifies momentum. It is mathematically incapable of modeling backwater, reverse flow, or pressurized surcharging. If the outfall is blocked by tide, Kinematic wave just deletes the water. You MUST use Dynamic Wave routing (full St. Venant equations) to see the flood." },
+        { c: "Storm", l: "Beginner", q: "A client asks you to design a city's minor storm drains for the 100-year storm to 'guarantee no flooding'. Why do you refuse?", a: "Designing underground pipes for a 100-year storm is economically unfeasible; the pipes would be massive (e.g., 2000mm on every street). Standard practice sizes minor underground pipes for a 2-yr to 10-yr storm. The 100-yr storm is managed using the 'Major System'—allowing the streets to temporarily flood and act as open channels to safely convey water to ponds/rivers." },
+        { c: "Storm", l: "Intermediate", q: "You install a flap gate (check valve) on a storm outfall discharging into a tidal river to prevent the river from backing up into the city. During a hurricane, the city floods anyway. Why?", a: "A hurricane brings a massive storm surge (closing the flap gate tightly) AND massive rainfall over the city. Because the gate is shut by the ocean pressure, the city's rainfall cannot drain out. The water backs up behind the gate and floods the city from the inside. You must install a massive stormwater pump station to lift the city water over the closed gate." },
+        { c: "Storm", l: "Expert", q: "A developer installs permeable paving (SuDS) over a heavy clay soil to infiltrate runoff. Why will the pavement fail structurally?", a: "Clay soils (Hydrologic Soil Group D) have an infiltration rate near zero. The water will pass through the permeable pavers and pool in the gravel sub-base, turning the clay subgrade to mush. Under traffic loads, the pavement will rut and collapse. In clay soils, permeable paving MUST have a perforated underdrain pipe to carry the water away." },
+
+        /* ================= PUMPS & SURGE (10 Questions) ================= */
+        { c: "Pump", l: "Intermediate", q: "Your pump is vibrating violently and cavitating. The contractor partially closes the SUCTION valve to reduce the flow. Why will the pump explode?", a: "Cavitation happens when Net Positive Suction Head available (NPSHa) drops below required (NPSHr), causing water to boil. Partially closing the suction valve creates a massive friction headloss right before the impeller, dropping NPSHa even further. The fluid boils instantly and violently destroys the impeller. You must throttle the DISCHARGE valve to push the pump back on its curve." },
+        { c: "Pump", l: "Expert", q: "You have 50 meters of static elevation to overcome. A single pump can only generate 30m of head. You put two of these pumps in PARALLEL. Will water reach the top?", a: "No. Pumps in parallel add FLOW at a given head. They do not add head. If each pump maxes out at 30m of head, they will simply 'deadhead' against the 50m static column of water, churning and boiling without opening the check valves. To overcome massive static lift, you must put the pumps in SERIES, which adds their heads together." },
+        { c: "Pump", l: "Beginner", q: "What happens if you run a centrifugal pump with the discharge valve completely closed (Deadheading)?", a: "Flow is zero, but the impeller is still spinning at full speed. All of the motor's mechanical energy is converted directly into heat. The water inside the pump casing will quickly boil, turning to steam. The extreme heat will melt the mechanical seals, warp the shaft, and cause catastrophic failure in minutes." },
+        { c: "Pump", l: "Expert", q: "To save power during low flow, an operator dials the VFD (Variable Frequency Drive) down to 10% speed on a system with 40 meters of static lift. What breaks?", a: "According to the Affinity Laws, pump head drops by the square of the speed change. At 10% speed, the pump might only generate 2 meters of head. This cannot overcome the 40m static lift. The check valve remains shut, and the pump deadheads, eventually overheating. VFDs in static-heavy systems have a strict 'Minimum Speed' limit (e.g., 70%)." },
+        { c: "Pump", l: "Intermediate", q: "You design a pump station with two identical pumps (Duty/Duty). One pump gives 100 L/s. When both run together, you expect 200 L/s. You only get 140 L/s. Why?", a: "When the second pump turns on, the flow in the common force main increases. Because friction headloss increases with the square of velocity ($V^2$), the system resistance curve steepens drastically. The pumps are forced to operate further back on their performance curves at a higher head but lower flow. Two pumps in parallel never equal double the flow." },
+        { c: "Pump", l: "Expert", q: "During a power failure on a 10km force main, the pressure drops instantly, causing water to boil and form a vapor pocket at a high point. Why is the danger not the vacuum, but what happens next?", a: "This is Column Separation. The vacuum is bad, but the catastrophic event occurs a few seconds later. The water column reverses direction due to gravity and slams back into the stationary water column. This collapses the vapor pocket instantly, creating a massive pressure spike (water hammer) that can easily exceed the burst rating of the pipe." },
+        { c: "Pump", l: "Beginner", q: "A pump is installed with a concentric reducer on the suction side pipe. Why is it sucking air and losing prime?", a: "A concentric reducer on a horizontal suction line creates a high point at the top of the fitting. Air bubbles travelling along the top of the pipe get trapped in this pocket. The air bubble grows until it gets sucked into the impeller, causing the pump to lose prime. You must always use an ECCENTRIC reducer (flat side up) on pump suction lines." },
+        { c: "Pump", l: "Intermediate", q: "To protect the pump from water hammer, you install a check valve, and then 10 meters downstream, you install the surge air vessel. What is the trap?", a: "When the pump trips, a negative pressure wave travels down the pipe. Because the check valve is *upstream* of the surge vessel, it slams shut instantly. The surge vessel injects water downstream, protecting the pipe, but the 10 meters of pipe between the pump and the check valve is unprotected. It will experience a hard vacuum and potentially collapse." },
+        { c: "Pump", l: "Expert", q: "A pump curve shows it requires 3m of NPSHr. You calculate your NPSHa is 3.5m. The water temperature suddenly rises by 20°C. Does the pump cavitate?", a: "Yes. Vapor pressure is highly dependent on temperature. As water gets hotter, its vapor pressure increases exponentially, meaning it takes less vacuum to make it boil. The higher vapor pressure subtracts directly from the NPSH available ($NPSHa = H_{atm} - H_{vapor} - H_{friction} \pm H_{static}$). The NPSHa drops below 3m, and the pump cavitates." },
+        { c: "Pump", l: "Intermediate", q: "You select a pump that operates on the extreme far-right side of its curve (Runout). What are the consequences?", a: "Operating at runout means the pump is moving massive amounts of water against very little resistance. This requires maximum brake horsepower, often overloading and burning out the motor. Additionally, NPSHr increases drastically on the far right of the curve, almost guaranteeing severe cavitation. Pumps should operate near their Best Efficiency Point (BEP)." },
+
+        /* ================= MATERIALS & CONSTRUCTION (10 Questions) ================= */
+        { c: "Material", l: "Expert", q: "A contractor suggests testing a 600mm HDPE water main using compressed air at 150 psi because water is hard to find on site. Why do you fire him immediately?", a: "Water is incompressible; if a pipe bursts during a hydrotest, the pressure drops instantly and safely. Air is highly compressible. It stores massive amounts of potential energy. If a 600mm pipe ruptures under 150 psi of air, it will explode like a bomb, sending deadly shrapnel and trench debris flying across the site, likely killing workers." },
+        { c: "Material", l: "Intermediate", q: "You specify bare Reinforced Concrete Pipe (RCP) for an industrial sanitary sewer. Why will you face a massive lawsuit in 5 years?", a: "Bare concrete is highly alkaline. Sanitary sewage generates H2S gas, which bacteria convert to Sulfuric Acid ($H_2SO_4$). This acid will rapidly dissolve the concrete pipe crown. In an industrial setting, the effluent might also be acidic. The sewer will collapse entirely. Concrete used in sewers MUST be lined with HDPE, PVC, or specialized epoxy." },
+        { c: "Material", l: "Expert", q: "You specify GRP (Glass Reinforced Plastic) pipe for a deep transmission main. The contractor backfills the trench with the excavated native clay. What happens?", a: "GRP is a flexible pipe. It has little inherent structural ring stiffness; it relies entirely on the passive resistance of highly compacted, granular side-fill soil to hold its shape. Clay cannot be compacted properly around a pipe. The earth load from above will squash the GRP pipe into an oval, causing the fiberglass matrix to crack and the pipe to collapse." },
+        { c: "Material", l: "Beginner", q: "A contractor wraps a Ductile Iron pipe in a loose Polyethylene sleeve (bagging) before burying it. A junior engineer complains water will get inside the bag. Is this bad?", a: "No, it's exactly how it works. Water *will* seep between the pipe and the loose polywrap. However, because the water is trapped, the oxygen dissolved in it is quickly consumed by a microscopic layer of initial rust. Once the oxygen is depleted, the galvanic corrosion process halts completely. The pipe is protected." },
+        { c: "Material", l: "Intermediate", q: "You apply Cathodic Protection (Impressed Current) to a 10km PVC water main to protect it from corrosive soils. Why is this a waste of money?", a: "PVC (Polyvinyl Chloride) is plastic. It is an electrical insulator and completely immune to galvanic/electrochemical corrosion. Cathodic protection only works on conductive metallic pipes (Steel, Ductile Iron) by making the pipe the cathode of an electrochemical cell. Applying it to PVC does absolutely nothing." },
+        { c: "Material", l: "Expert", q: "A contractor uses HDD (Horizontal Directional Drilling) to pull a PVC pipe under a river. He completes the pull successfully. 24 hours later, the pipe snaps. Why?", a: "Standard bell-and-spigot PVC cannot be used for HDD because the joints will pull apart. Even if fusible PVC or HDPE is used, the contractor likely ignored the 'Relaxation Time'. Plastics stretch under the extreme pulling tension of HDD. If you tie-in the pipe immediately after pulling, the pipe will attempt to shrink back to its original length, snapping the connection." },
+        { c: "Material", l: "Beginner", q: "You install an underground plastic (HDPE) water main. 10 years later, the utility needs to find it, but their ground-penetrating metal detectors show nothing. What did you forget?", a: "A Tracer Wire. Plastic pipes are non-metallic and invisible to standard utility locating equipment. A continuous copper wire must be taped to the top of the pipe during installation so locators can induce an electrical current into it to trace the pipe's path from the surface." },
+        { c: "Material", l: "Intermediate", q: "A flanged joint leaks slightly in a buried trench. The contractor decides to just bury it, assuming the dirt will seal it. What is the trap?", a: "Flanged joints are completely rigid. They are designed for exposed piping inside pump stations. If buried, any slight soil settlement or traffic load vibration will put immense bending stress on the rigid flange, causing it to snap or the gasket to blow out. Buried pipes should use flexible push-on (bell and spigot) joints to accommodate ground movement." },
+        { c: "Material", l: "Expert", q: "You specify a Thrust Block at a 90-degree bend on a welded steel pipeline. The senior engineer crosses it out. Why?", a: "Thrust blocks are required for push-on joints (like PVC or standard DI) because the hydrostatic pressure at a bend will literally blow the spigot out of the bell. Welded steel pipes have fully restrained joints; the weld physically holds the pipe together against the thrust force. The thrust is transferred along the pipe wall into soil friction. A block is redundant." },
+        { c: "Material", l: "Intermediate", q: "A contractor passes a CCTV (camera) inspection of a newly laid 300mm HDPE water main and asks for final payment. Why do you refuse?", a: "CCTV is for gravity sewers to check for sags, debris, and lateral connections. A water main operates under high pressure (e.g., 150 psi). A camera cannot verify the pressure integrity of the butt-fusion welds or mechanical joints. The contractor MUST perform and pass a Hydrostatic Pressure Test (usually 1.5x working pressure for 2 hours) before acceptance." }
+    ];
+
+    const qaList = document.getElementById('qaList');
+    const resultCount = document.getElementById('resultCount');
+    const expandBtn = document.getElementById('expandBtn');
+
+    let currentCategory = 'all';
+    let currentLevel = 'all';
+    let searchTerm = '';
+    let isExpanded = false;
+
+    function renderQA() {
+        qaList.innerHTML = '';
+        let count = 0;
+
+        db.forEach((item, index) => {
+            const matchCategory = currentCategory === 'all' || item.c === currentCategory;
+            const matchLevel = currentLevel === 'all' || item.l === currentLevel;
+            const matchSearch = searchTerm === '' || 
+                                item.q.toLowerCase().includes(searchTerm) || 
+                                item.a.toLowerCase().includes(searchTerm) || 
+                                item.c.toLowerCase().includes(searchTerm);
+
+            if (matchCategory && matchLevel && matchSearch) {
+                count++;
+
+                let badgeClass = '';
+                if (item.c === "Water") badgeClass = 'badge-water';
+                if (item.c === "Sewer") badgeClass = 'badge-sewer';
+                if (item.c === "Storm") badgeClass = 'badge-storm';
+                if (item.c === "Pump") badgeClass = 'badge-pump';
+                if (item.c === "Material") badgeClass = 'badge-mat';
+
+                let lvlClass = '';
+                if (item.l === "Beginner") lvlClass = 'level-beg';
+                if (item.l === "Intermediate") lvlClass = 'level-int';
+                if (item.l === "Expert") lvlClass = 'level-exp';
+
+                const expandAttr = isExpanded || searchTerm !== '' ? 'open' : '';
+
+                const html = `
+                    <details class="qa-card" id="q${index}" ${expandAttr}>
+                        <summary class="qa-summary">
+                            <div>
+                                <span class="badge ${badgeClass}">${item.c}</span>
+                                <span class="level ${lvlClass}">${item.l}</span>
+                            </div>
+                            <div style="flex-grow:1"><span class="trick-label">TRICK:</span>${item.q}</div>
+                            <div style="color:var(--primary)">▼</div>
+                        </summary>
+                        <div class="qa-content">
+                            <strong>Explanation:</strong> ${item.a}
+                        </div>
+                    </details>
+                `;
+                qaList.innerHTML += html;
+            }
+        });
+
+        resultCount.innerText = `Showing ${count} trick questions`;
+        
+        // Re-render math equations if applicable
+        if (window.MathJax && typeof window.MathJax.typesetPromise === 'function') {
+            MathJax.typesetPromise().catch(err => console.error('MathJax typeset failed:', err));
+        }
+    }
+
+    // Initialize display
+    renderQA();
+    
+    // Category Filter Buttons
+    document.querySelectorAll('#categoryFilters .filter-btn').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            document.querySelectorAll('#categoryFilters .filter-btn').forEach(b => b.classList.remove('active'));
+            e.target.classList.add('active');
+            currentCategory = e.target.dataset.filter;
+            renderQA();
+        });
+    });
+
+    // Level Filter Buttons
+    document.querySelectorAll('#levelFilters .filter-btn').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            document.querySelectorAll('#levelFilters .filter-btn').forEach(b => b.classList.remove('active'));
+            e.target.classList.add('active');
+            currentLevel = e.target.dataset.filter;
+            renderQA();
+        });
+    });
+
+    // Search Input Logic
+    document.getElementById('searchInput').addEventListener('input', (e) => {
+        searchTerm = e.target.value.toLowerCase();
+        renderQA();
+    });
+
+    // Expand / Collapse All Logic
+    expandBtn.addEventListener('click', () => {
+        isExpanded = !isExpanded;
+        expandBtn.innerText = isExpanded ? "Collapse all" : "Expand all to study";
+        
+        document.querySelectorAll('.qa-card').forEach(card => {
+            if (isExpanded) {
+                card.setAttribute('open', '');
+            } else {
+                card.removeAttribute('open');
+            }
+        });
+    });
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wet Utilities Master Handbook - Volume 7: Flashcards</title>
+    
+    <script>
+        window.MathJax = {
+            tex: { inlineMath: [['$', '$'], ['\\(', '\\)']], displayMath: [['$$', '$$'], ['\\[', '\\]']] },
+            svg: { fontCache: 'global' }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+    <style>
+        :root {
+            --primary: #0f172a; /* Slate 900 */
+            --secondary: #3b82f6; /* Blue 500 */
+            --accent: #f59e0b; /* Amber */
+            --bg: #f8fafc;
+            --surface: #ffffff;
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+            --border: #e2e8f0;
+            --success: #10b981;
+            --danger: #ef4444;
+            --water: #2DA8D8; 
+            --sewer: #4CAF7D; 
+            --storm: #E8913A; 
+            --pump: #8b5cf6;
+            --mat: #64748b;
+        }
+
+        body { font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; background-color: var(--bg); color: var(--text-main); line-height: 1.6; margin: 0; padding: 0; display: flex; flex-direction: column; min-height: 100vh; }
+        .container { max-width: 900px; margin: 0 auto; padding: 2rem; width: 100%; box-sizing: border-box; flex-grow: 1; display: flex; flex-direction: column; }
+
+        header { background-color: var(--primary); color: white; padding: 2rem; border-radius: 8px 8px 0 0; margin-bottom: 1rem; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); border-bottom: 4px solid var(--secondary); text-align: center; }
+        header h1 { margin: 0; font-size: 2rem; letter-spacing: -0.5px; }
+        header p { margin: 0.5rem 0 0; opacity: 0.9; font-size: 1rem; }
+        .vol-badge { display: inline-block; background: var(--secondary); color: white; padding: 0.25rem 0.75rem; border-radius: 999px; font-weight: bold; font-size: 0.8rem; margin-bottom: 0.5rem; }
+        .manual-link {
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          margin-top: 1rem;
+          padding: 0.75rem 1.1rem;
+          border-radius: 999px;
+          background: rgba(255, 255, 255, 0.14);
+          color: white;
+          border: 1px solid rgba(255, 255, 255, 0.3);
+          text-decoration: none;
+          font-weight: 700;
+          transition: all 0.2s ease;
+        }
+        .manual-link:hover { background: white; color: var(--primary); transform: translateY(-1px); }
+
+        /* Dashboard & Progress */
+        .dashboard { background: var(--surface); padding: 1.5rem; border-radius: 8px; border: 1px solid var(--border); margin-bottom: 1.5rem; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
+        .progress-bar-bg { width: 100%; height: 12px; background: var(--border); border-radius: 999px; overflow: hidden; margin: 10px 0; }
+        .progress-bar-fill { height: 100%; background: var(--success); width: 0%; transition: width 0.4s ease; }
+        .stats { display: flex; justify-content: space-between; font-size: 0.9rem; font-weight: 600; color: var(--text-muted); }
+        
+        .filters { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-top: 1rem; justify-content: center; }
+        .filter-btn { padding: 0.4rem 0.8rem; border: 1px solid var(--border); background: var(--bg); border-radius: 999px; cursor: pointer; font-size: 0.8rem; font-weight: 600; color: var(--text-muted); transition: all 0.2s; }
+        .filter-btn:hover { background: #e2e8f0; }
+        .filter-btn.active { background: var(--primary); color: white; border-color: var(--primary); }
+
+        /* Flashcard 3D Flip Mechanics */
+        .flashcard-container { perspective: 1000px; width: 100%; height: 400px; margin-bottom: 1.5rem; position: relative; }
+        .flashcard { width: 100%; height: 100%; position: absolute; transition: transform 0.6s cubic-bezier(0.4, 0.2, 0.2, 1); transform-style: preserve-3d; cursor: pointer; }
+        .flashcard.is-flipped { transform: rotateY(180deg); }
+        
+        .card-face { position: absolute; width: 100%; height: 100%; backface-visibility: hidden; border-radius: 12px; box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1); display: flex; flex-direction: column; padding: 2rem; box-sizing: border-box; background: var(--surface); border: 2px solid var(--border); overflow-y: auto; }
+        .card-back { transform: rotateY(180deg); border-color: var(--secondary); background: #f8fafc; }
+
+        .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; border-bottom: 1px solid var(--border); padding-bottom: 0.5rem; }
+        .card-category { font-size: 0.75rem; font-family: monospace; font-weight: bold; text-transform: uppercase; padding: 0.2rem 0.6rem; border-radius: 4px; }
+        .card-status { font-size: 0.8rem; font-weight: bold; }
+        
+        .cat-water { background: rgba(45,168,216,0.1); color: var(--water); border: 1px solid var(--water); }
+        .cat-sewer { background: rgba(76,175,125,0.1); color: var(--sewer); border: 1px solid var(--sewer); }
+        .cat-storm { background: rgba(232,145,58,0.1); color: var(--storm); border: 1px solid var(--storm); }
+        .cat-pump { background: rgba(139,92,246,0.1); color: var(--pump); border: 1px solid var(--pump); }
+        .cat-mat { background: rgba(100,116,139,0.1); color: var(--mat); border: 1px solid var(--mat); }
+
+        .card-body { flex-grow: 1; display: flex; align-items: center; justify-content: center; text-align: center; font-size: 1.25rem; font-weight: 500; color: var(--primary); }
+        .card-back .card-body { font-size: 1.1rem; font-weight: 400; text-align: left; align-items: flex-start; margin-top: 1rem; display: block; }
+        .card-instruction { text-align: center; font-size: 0.8rem; color: var(--text-muted); margin-top: 1rem; font-style: italic; }
+
+        /* Controls */
+        .controls { display: flex; justify-content: space-between; gap: 1rem; flex-wrap: wrap; }
+        .btn { padding: 0.75rem 1.5rem; border: none; border-radius: 6px; cursor: pointer; font-size: 1rem; font-weight: bold; transition: opacity 0.2s; color: white; display: flex; align-items: center; justify-content: center; flex: 1; min-width: 120px; }
+        .btn:hover { opacity: 0.9; }
+        .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+        .btn-prev { background: var(--text-muted); }
+        .btn-next { background: var(--secondary); }
+        .btn-mastered { background: var(--success); }
+        .btn-review { background: var(--danger); }
+
+        .math-row { display: block; margin: 10px 0; text-align: center; font-size: 1.1em; color: var(--secondary); }
+
+        @media (max-width: 600px) {
+            .controls { flex-direction: column; }
+            .flashcard-container { height: 450px; }
+            .card-body { font-size: 1.1rem; }
+        }
+
+        /* Mobile responsiveness */
+        * { box-sizing: border-box; }
+        img, svg, canvas { max-width: 100%; height: auto; }
+
+        @media (max-width: 768px) {
+            .container { padding: 1rem; max-width: 100%; }
+            header { padding: 2rem 1.25rem; margin-bottom: 1rem; }
+            header h1 { font-size: 2rem; line-height: 1.15; }
+            header p { font-size: 1rem; }
+            .manual-link { width: 100%; max-width: 320px; text-align: center; }
+            .dashboard { padding: 1rem; }
+            .stats { flex-direction: column; align-items: flex-start; gap: 0.35rem; }
+            .filters { align-items: stretch; }
+            .filter-btn { flex: 1 1 calc(50% - 0.5rem); min-height: 42px; padding: 0.55rem 0.75rem; }
+            .flashcard-container { height: min(520px, 68vh); min-height: 420px; }
+            .card-face { padding: 1.25rem; }
+            .card-header { flex-wrap: wrap; gap: 0.5rem; }
+            .card-body { font-size: 1.08rem; }
+            .card-back .card-body { font-size: 1rem; }
+            .controls { gap: 0.75rem; }
+            .btn { min-height: 44px; }
+            .math-row { overflow-x: auto; }
+        }
+
+        @media (max-width: 480px) {
+            .container { padding: 0.75rem; }
+            header { padding: 1.5rem 1rem; }
+            header h1 { font-size: 1.65rem; }
+            .filter-btn { flex-basis: 100%; }
+            .flashcard-container { min-height: 460px; height: 72vh; }
+            .card-face { padding: 1rem; }
+            .card-category, .card-status { white-space: normal; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+      <span class="vol-badge">VOLUME 7 OF 7</span>
+      <h1>Rapid Interview Revision</h1>
+      <p>50 Hardcore Flashcards: Formulas, Scenarios & Standards</p>
+      <a class="manual-link" href="water resource manual.html">Back to Water Resource Manual</a>
+    </header>
+
+    <div class="dashboard">
+        <div class="stats">
+            <span id="stat-total">Total Cards: 50</span>
+            <span id="stat-mastered" style="color: var(--success);">Mastered: 0</span>
+            <span id="stat-review" style="color: var(--danger);">Needs Review: 0</span>
+        </div>
+        <div class="progress-bar-bg">
+            <div class="progress-bar-fill" id="progress-fill"></div>
+        </div>
+        <div class="filters" id="cat-filters">
+            <button class="filter-btn active" data-filter="All">All Topics</button>
+            <button class="filter-btn" data-filter="Water">Water</button>
+            <button class="filter-btn" data-filter="Sewer">Sewer</button>
+            <button class="filter-btn" data-filter="Storm">Storm</button>
+            <button class="filter-btn" data-filter="Pump">Pumps</button>
+            <button class="filter-btn" data-filter="Material">Materials</button>
+        </div>
+        <div class="filters" style="margin-top: 0.5rem;" id="status-filters">
+            <button class="filter-btn active" data-status="All">All Status</button>
+            <button class="filter-btn" data-status="Unseen">Unseen</button>
+            <button class="filter-btn" data-status="Review">Needs Review</button>
+            <button class="filter-btn" data-status="Mastered">Mastered</button>
+        </div>
+    </div>
+
+    <div class="flashcard-container" id="flashcard-container">
+        <div class="flashcard" id="flashcard">
+            <!-- Front of Card -->
+            <div class="card-face card-front">
+                <div class="card-header">
+                    <span class="card-category" id="card-cat-front">CATEGORY</span>
+                    <span class="card-status" id="card-status-front">Unseen</span>
+                </div>
+                <div class="card-body" id="card-q">
+                    Question text goes here.
+                </div>
+                <div class="card-instruction">Click anywhere on card to flip</div>
+            </div>
+            
+            <!-- Back of Card -->
+            <div class="card-face card-back">
+                <div class="card-header">
+                    <span class="card-category" id="card-cat-back">CATEGORY</span>
+                    <span style="color: var(--secondary); font-weight: bold;">ANSWER</span>
+                </div>
+                <div class="card-body" id="card-a">
+                    Answer text goes here.
+                </div>
+                <div class="card-instruction">Click anywhere on card to flip back</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="controls">
+        <button class="btn btn-prev" id="btn-prev">← Previous</button>
+        <button class="btn btn-review" id="btn-review">Needs Review ❌</button>
+        <button class="btn btn-mastered" id="btn-mastered">Mastered ✅</button>
+        <button class="btn btn-next" id="btn-next">Next →</button>
+    </div>
+</div>
+
+<script>
+    const db = [
+        /* ================= WATER SUPPLY (10) ================= */
+        { id: 1, c: "Water", q: "What is the absolute minimum residual pressure required during a fire flow event, and what happens if you breach it?", 
+          a: "20 psi (1.4 bar). Breaching it causes the pump to pull a hard vacuum, collapsing thin-walled pipes and sucking contaminated groundwater into the potable system." },
+        { id: 2, c: "Water", q: "A large PRV is chattering violently at 2:00 AM. What is the cause, and what is the design fix?", 
+          a: "The PRV is oversized for low-flow nighttime demand. The plug is operating too close to the seat (wire-drawing). Fix: Install a small parallel 'Jockey PRV' set 5 psi higher to handle low flows." },
+        { id: 3, c: "Water", q: "State the Hazen-Williams equation. Why is it a catastrophic mistake to use the manufacturer's C-factor for a new Ductile Iron pipe in a model?", 
+          a: "<span class='math-row'>$$h_f = \\frac{10.67 \\cdot L \\cdot Q^{1.852}}{C^{1.852} \\cdot D^{4.87}}$$</span> You must use the <em>Aged</em> C-factor (e.g., 100 instead of 140). Over 30 years, tuberculation increases roughness. Designing with a new C-value severely undersizes the system's long-term capacity." },
+        { id: 4, c: "Water", q: "A looped subdivision network receives complaints of stagnant water. The pipes are sized for the ultimate 20-year Peak Hour. What is the interim operational fix?", 
+          a: "Install automated flush valves at critical nodes to artificially force velocity, turnover the volume, and maintain chlorine residuals until the population matches the pipe capacity." },
+        { id: 5, c: "Water", q: "In a master-planned community, do you size the distribution mains for Peak Hour Demand (PHD) or Maximum Day Demand (MDD)?", 
+          a: "Neither independently. Mains must be sized for the MAXIMUM of either (PHD) OR (MDD + Fire Flow). In small residential loops, MDD + Fire Flow almost always dictates a minimum 150mm pipe." },
+        { id: 6, c: "Water", q: "An EPS (Extended Period Simulation) model shows an elevated tank starting at 50% full, but ending the 24-hour cycle at 20% full. Identify the failure.", 
+          a: "Mass Balance Deficit. The source pumps or transmission mains cannot deliver the Total Daily Demand over 24 hours. The tank will eventually run completely dry over consecutive days." },
+        { id: 7, c: "Water", q: "What is an Altitude Valve and where is it exclusively placed?", 
+          a: "Placed at the base of an elevated storage tank. It automatically shuts when the tank hits high-water level to prevent overflow, and opens when network pressure drops to allow the tank to feed the system." },
+        { id: 8, c: "Water", q: "A 500mm water main model shows a pressure of -5 psi at a high elevation node. Does water flow backward?", 
+          a: "No. Pipes operate under atmospheric pressure. Negative model pressure means the Hydraulic Grade Line (HGL) dropped below the physical elevation. In reality, column separation occurs, forming a vacuum pocket." },
+        { id: 9, c: "Water", q: "What is the primary factor limiting the maximum allowable velocity in a water main to 2.5 m/s?", 
+          a: "Transient Surge (Water Hammer). Joukowsky's equation <span class='math-row'>$$\\Delta P = \\rho \\cdot a \\cdot \\Delta V$$</span> shows that the pressure spike is directly proportional to the extinguished velocity. Extreme velocity leads to pipe-bursting surge spikes upon valve closure." },
+        { id: 10, c: "Water", q: "State the mathematical principle for sizing a Thrust Block at a 90-degree pipe bend.", 
+          a: "The block must distribute the hydrostatic thrust force <span class='math-row'>$$F = 2 P A \\sin(\\theta/2)$$</span> over a large enough bearing area so that the applied pressure does not exceed the soil's safe bearing capacity." },
+
+        /* ================= SEWERAGE (10) ================= */
+        { id: 11, c: "Sewer", q: "What is the minimum self-cleansing velocity for a sanitary sewer, and what happens if it is not met?", 
+          a: "0.6 m/s (2.0 ft/s) at full/half-full flow. If missed, organic solids drop out of suspension, putrefy, generate H2S gas, and eventually physically block the pipe." },
+        { id: 12, c: "Sewer", q: "Why are sanitary gravity sewers designed to a maximum depth-to-diameter ratio (d/D) of 0.50 to 0.70, rather than 100% full?", 
+          a: "To leave an empty airspace at the crown for ventilation of corrosive/toxic gases, and to provide a volumetric buffer for extreme, unexpected Peak Wet Weather Flow (I&I) events." },
+        { id: 13, c: "Sewer", q: "State the Harmon Peaking Factor Formula. Would you apply this to a factory discharging a constant 20 L/s?", 
+          a: "<span class='math-row'>$$PF = 1 + \\frac{14}{4 + \\sqrt{P}}$$</span> No. Harmon is based on the statistical diurnal waking/sleeping habits of human populations. Apply it ONLY to domestic base flows, then add the constant industrial flow." },
+        { id: 14, c: "Sewer", q: "Per Ten States Standards, what elevation difference between an incoming and outgoing pipe triggers the mandatory requirement for a Drop Manhole?", 
+          a: "24 inches (0.6 meters) or more. Drops prevent splashing, worker hazard, manhole benching scour, and turbulent stripping of H2S gas." },
+        { id: 15, c: "Sewer", q: "A 200mm sewer at 0.5% slope meets 0.6 m/s when full. Currently, it serves 5 houses and flows at d/D = 0.05. Will solids settle?", 
+          a: "Yes. At partial flow, the hydraulic radius shrinks. The actual velocity drops well below 0.6 m/s. This 'Partial Flow Trap' requires either steeper initial slopes or municipal flushing programs." },
+        { id: 16, c: "Sewer", q: "Why is discharging a pressurized force main directly into the invert of a standard gravity manhole a catastrophic design error?", 
+          a: "The massive turbulence violently strips dissolved H2S gas out of the anaerobic sewage into the air, causing deadly odor complaints and rapid sulfuric acid corrosion of the manhole." },
+        { id: 17, c: "Sewer", q: "Why must an inverted siphon always be designed with a minimum of two (preferably three) parallel barrels?", 
+          a: "A siphon relies entirely on upstream head. A single large barrel designed for ultimate flow will have velocity < 0.1 m/s at current low flows. Solids will settle in the 'U' bend and block it like concrete. Multiple barrels allow low flows to be concentrated in a small pipe to maintain self-cleansing velocity." },
+        { id: 18, c: "Sewer", q: "How do you calculate the active volume required in a lift station wet well?", 
+          a: "<span class='math-row'>$$V = \\frac{T_{min} \\cdot Q}{4}$$</span> Where $T_{min}$ is the minimum allowable pump cycle time (usually 10-15 mins to prevent motor burnout) and $Q$ is the pump capacity." },
+        { id: 19, c: "Sewer", q: "Describe the mechanism of Microbial Induced Corrosion (MIC) in concrete sewers.", 
+          a: "Anaerobic sewage generates H2S gas. The gas rises to the empty crown. Thiobacillus bacteria convert H2S + moisture into Sulfuric Acid ($H_2SO_4$). The acid dissolves the alkaline concrete structure." },
+        { id: 20, c: "Sewer", q: "Why do force mains require a higher minimum velocity (0.9 m/s) compared to gravity sewers (0.6 m/s)?", 
+          a: "Because force mains follow the topography up and down. Solids must be kept in suspension against gravity in the steep vertical/inclined sections to prevent them from falling backward and plugging check valves." },
+
+        /* ================= STORM DRAINAGE (10) ================= */
+        { id: 21, c: "Storm", q: "What is the primary limitation of the Rational Method ($Q=CiA$) when designing detention ponds?", 
+          a: "It only calculates a single peak flow rate ($Q_p$). It does not provide the total runoff volume or a time-based hydrograph, which are mathematically required for Level-Pool routing. You must use Modified Rational or TR-55." },
+        { id: 22, c: "Storm", q: "Why does Kinematic Wave routing fail to show upstream flooding when an outfall is submerged by a river?", 
+          a: "Kinematic wave simplifies momentum and only translates water downstream. It mathematically cannot model backwater, reverse flow, or pressurized surcharging. You must use Dynamic Wave (St. Venant equations)." },
+        { id: 23, c: "Storm", q: "Why do municipalities mandate a 'Minimum Time of Concentration ($T_c$)' of 5 or 10 minutes?", 
+          a: "On an IDF curve, as duration approaches zero, intensity approaches infinity. Without a minimum $T_c$, a small roof would yield a mathematically absurd intensity, massively oversizing pipes." },
+        { id: 24, c: "Storm", q: "A road has a Sag Inlet at the low point and an On-Grade inlet on the slope. If both block with leaves, which causes a disaster?", 
+          a: "The Sag Inlet. Water bypassing an on-grade inlet flows downhill. Water at a sag inlet has nowhere to go. It will pond infinitely until it overtops the curb and floods properties." },
+        { id: 25, c: "Storm", q: "You upsize a flooded highway culvert from 900mm to 1500mm, but the highway still floods. What hydraulic condition did you ignore?", 
+          a: "Tailwater Control (Outlet Control). If the downstream river is flooded above the culvert crown, the culvert is physically blocked by backwater. Upsizing the barrel diameter does nothing if the outfall is submerged." },
+        { id: 26, c: "Storm", q: "Applying the Kirpich Equation to a flat, paved Walmart parking lot is a fatal error. Why?", 
+          a: "Kirpich ($T_c = 0.0195 L^{0.77} S^{-0.385}$) was derived for steep, natural agricultural basins. It will drastically overestimate $T_c$ on a flat paved lot, yielding a low intensity and dangerously undersizing the pipes." },
+        { id: 27, c: "Storm", q: "What is the governing equation for routing a hydrograph through a detention pond?", 
+          a: "The Continuity Equation for Storage: <span class='math-row'>$$\\frac{\\Delta S}{\\Delta t} = I_{avg} - O_{avg}$$</span> Change in storage equals Inflow minus Outflow. Requires a Stage-Storage-Discharge curve." },
+        { id: 28, c: "Storm", q: "Name the 4 Pillars of Sustainable Drainage Systems (SuDS) according to CIRIA C753.", 
+          a: "1. Water Quantity (flood control), 2. Water Quality (pollution removal), 3. Amenity (livable spaces), 4. Biodiversity (ecological value)." },
+        { id: 29, c: "Storm", q: "What is the standard design Return Period difference between a minor residential storm drain and a major arterial road culvert?", 
+          a: "Residential pipes are sized for 2 to 5-year storms (minor system). Arterial road culverts are sized for 25 to 50-year storms to prevent critical infrastructure washout." },
+        { id: 30, c: "Storm", q: "State the equation for discharge through a sharp-edged orifice in a pond outlet structure.", 
+          a: "<span class='math-row'>$$Q = C_d \\cdot A \\cdot \\sqrt{2gH}$$</span> Where $C_d$ is the discharge coefficient (typ 0.60), $A$ is area, and $H$ is the hydraulic head above the orifice center." },
+
+        /* ================= PUMPS & SURGE (10) ================= */
+        { id: 31, c: "Pump", q: "A pump is cavitating. Your contractor suggests partially closing the suction valve to reduce flow. Why will this destroy the pump?", 
+          a: "Throttling suction creates massive friction headloss before the impeller, dropping NPSHa even further below vapor pressure, causing explosive cavitation. ALWAYS throttle the discharge valve." },
+        { id: 32, c: "Pump", q: "You place two identical pumps in PARALLEL. Will the flow exactly double? Why or why not?", 
+          a: "No. As flow increases in the common discharge pipe, friction headloss increases exponentially ($V^2$). This steepens the System Curve, pushing both pumps back on their performance curves. You may only get a 40% increase." },
+        { id: 33, c: "Pump", q: "What happens if you run a centrifugal pump against a completely closed discharge valve (Deadheading)?", 
+          a: "Flow is zero. The motor's mechanical energy converts entirely into heat. The water inside the casing boils into steam, melting the mechanical seals and catastrophically destroying the pump." },
+        { id: 34, c: "Pump", q: "To save power, an operator dials a VFD down to 10% speed on a force main with 30 meters of static lift. What is the engineering trap?", 
+          a: "Pump head drops by the square of the speed (Affinity Laws). At 10% speed, the pump generates less head than the 30m static lift. The check valve won't open, and the pump deadheads and boils." },
+        { id: 35, c: "Pump", q: "Explain the mechanism of Column Separation during a transient surge event.", 
+          a: "On pump trip, water momentum continues forward, creating a hard vacuum that boils water into a vapor cavity. Gravity reverses the column, slamming it back together, collapsing the cavity and generating a pipe-bursting pressure spike." },
+        { id: 36, c: "Pump", q: "You place an air surge vessel 10 meters downstream of a pump check valve. Why is the pipe between the pump and the check valve in danger?", 
+          a: "On pump trip, the check valve slams shut instantly. The surge vessel injects water downstream to protect the main, but the 10m of pipe upstream of the check valve is unprotected and will experience a hard vacuum." },
+        { id: 37, c: "Pump", q: "State the equation for Total Dynamic Head (TDH).", 
+          a: "<span class='math-row'>$$TDH = H_{static} + H_{friction} + H_{minor}$$</span> The sum of static elevation lift, pipe friction losses, and minor losses from fittings/valves." },
+        { id: 38, c: "Pump", q: "Why must you use an ECCENTRIC reducer (flat side up) rather than a concentric reducer on a horizontal pump suction line?", 
+          a: "A concentric reducer creates a localized high point. Air bubbles trap in this pocket, grow, and eventually get sucked into the impeller en masse, causing the pump to lose prime." },
+        { id: 39, c: "Pump", q: "What happens to NPSHa (Available) if the pumped water temperature drastically increases?", 
+          a: "NPSHa decreases. Hot water has a much higher vapor pressure. Since $NPSHa = H_{atm} - H_{vapor} - H_{loss}$, a higher vapor pressure brings the fluid closer to boiling, increasing cavitation risk." },
+        { id: 40, c: "Pump", q: "What are the consequences of selecting a pump that operates on the extreme far-right side of its curve (Runout)?", 
+          a: "It moves massive flow against little head, maximizing brake horsepower and burning out the motor. Furthermore, NPSHr spikes at runout, almost guaranteeing cavitation." },
+
+        /* ================= MATERIALS & CONST. (10) ================= */
+        { id: 41, c: "Material", q: "State the Ten States Standards rule for minimum separation between a potable water main and a sanitary sewer.", 
+          a: "10 feet (3.0 meters) horizontal separation. If crossing, the water main must be at least 18 inches (450 mm) vertically ABOVE the sewer." },
+        { id: 42, c: "Material", q: "How does loose Polyethylene Encasement (bagging) protect a Ductile Iron pipe if water can seep inside the bag?", 
+          a: "It traps a thin layer of groundwater. The dissolved oxygen in that trapped layer is quickly depleted by microscopic initial rusting. Once oxygen is gone, the galvanic corrosion process halts completely." },
+        { id: 43, c: "Material", q: "A contractor tests a 600mm HDPE water main with 150 psi of compressed air instead of water. Why do you issue a stop-work order?", 
+          a: "Water is incompressible; if the pipe fails, pressure drops safely. Air is highly compressible and stores massive potential energy. If it ruptures at 150 psi, it explodes like a bomb, producing deadly shrapnel." },
+        { id: 44, c: "Material", q: "Why will applying Cathodic Protection (Impressed Current) to a 10km PVC water main waste the client's money?", 
+          a: "PVC is plastic, an electrical insulator. It is completely immune to galvanic/electrochemical corrosion. Cathodic protection only works on conductive metals (Steel, DI) by making them the cathode of a circuit." },
+        { id: 45, c: "Material", q: "A contractor completes an HDD (Horizontal Directional Drill) pull of a fusible PVC pipe, immediately ties it in, and buries it. 24 hours later, the joint snaps. Why?", 
+          a: "Ignored Relaxation Time. Plastics stretch longitudinally under the extreme pulling tension of HDD. If tied in immediately, the pipe shrinks back to its original length over 24 hours, snapping the rigid connection." },
+        { id: 46, c: "Material", q: "Why is trench compaction absolutely critical for GRP or HDPE pipes, but less critical for Reinforced Concrete Pipe (RCP)?", 
+          a: "GRP/HDPE are flexible. They rely entirely on the passive resistance of highly compacted side-fill soil to hold their circular shape against earth loads. RCP is rigid and supports loads through inherent structural strength." },
+        { id: 47, c: "Material", q: "Why does an engineer cross out a Thrust Block requirement at a 90-degree bend on a fully welded Steel pipeline?", 
+          a: "Welded steel joints are fully restrained. The weld physically holds the pipe together against the hydrostatic thrust force, transferring it via friction to the soil along the pipe length. A block is redundant." },
+        { id: 48, c: "Material", q: "A flanged joint leaks slightly in a buried trench. The contractor decides to just bury it. Why is this a trap?", 
+          a: "Flanges are rigid, designed for exposed pump stations. If buried, any soil settlement or traffic vibration puts immense bending stress on the rigid joint, snapping it. Buried pipes must use flexible push-on joints." },
+        { id: 49, c: "Material", q: "You specify bare concrete pipe for an industrial sanitary sewer. What guarantees you will face a lawsuit in 5 years?", 
+          a: "Anaerobic industrial sewage generates H2S, converting to Sulfuric Acid. Concrete is alkaline. The acid will dissolve the pipe crown entirely. Concrete in sewers MUST have an HDPE, PVC, or epoxy liner." },
+        { id: 50, c: "Material", q: "You bury a plastic water main. 10 years later, locators using metal detectors cannot find it to prevent excavation damage. What did you forget to specify?", 
+          a: "Tracer Wire. A continuous copper wire taped to the top of non-metallic pipes during installation. Locators induce a current in the wire to trace the pipe from the surface." }
+    ];
+
+    // App State
+    let currentIndex = 0;
+    let filteredDb = [...db];
+    let currentCat = "All";
+    let currentStatus = "All";
+    
+    // Status tracking: unassigned id -> "Unseen", "Review", "Mastered"
+    let userProgress = {};
+    db.forEach(card => userProgress[card.id] = "Unseen");
+
+    // DOM Elements
+    const elCard = document.getElementById('flashcard');
+    const elQ = document.getElementById('card-q');
+    const elA = document.getElementById('card-a');
+    const elCatFront = document.getElementById('card-cat-front');
+    const elCatBack = document.getElementById('card-cat-back');
+    const elStatusFront = document.getElementById('card-status-front');
+    
+    const btnPrev = document.getElementById('btn-prev');
+    const btnNext = document.getElementById('btn-next');
+    const btnReview = document.getElementById('btn-review');
+    const btnMastered = document.getElementById('btn-mastered');
+
+    // Flip Logic
+    elCard.addEventListener('click', () => {
+        elCard.classList.toggle('is-flipped');
+    });
+
+    function getCatClass(cat) {
+        if(cat === "Water") return "cat-water";
+        if(cat === "Sewer") return "cat-sewer";
+        if(cat === "Storm") return "cat-storm";
+        if(cat === "Pump") return "cat-pump";
+        if(cat === "Material") return "cat-mat";
+        return "";
+    }
+
+    function updateDashboard() {
+        let mastered = 0;
+        let review = 0;
+        Object.values(userProgress).forEach(status => {
+            if(status === "Mastered") mastered++;
+            if(status === "Review") review++;
+        });
+
+        document.getElementById('stat-mastered').innerText = `Mastered: ${mastered}`;
+        document.getElementById('stat-review').innerText = `Needs Review: ${review}`;
+        
+        let percent = (mastered / db.length) * 100;
+        document.getElementById('progress-fill').style.width = `${percent}%`;
+    }
+
+    function renderCard() {
+        if(filteredDb.length === 0) {
+            elQ.innerHTML = "No cards match current filters.";
+            elA.innerHTML = "Adjust filters to continue.";
+            elCatFront.innerText = "NONE";
+            elStatusFront.innerText = "";
+            btnNext.disabled = true;
+            btnPrev.disabled = true;
+            btnReview.disabled = true;
+            btnMastered.disabled = true;
+            return;
+        }
+
+        btnNext.disabled = currentIndex === filteredDb.length - 1;
+        btnPrev.disabled = currentIndex === 0;
+        btnReview.disabled = false;
+        btnMastered.disabled = false;
+
+        const card = filteredDb[currentIndex];
+        const status = userProgress[card.id];
+
+        // Ensure card is facing front when new content loads
+        elCard.classList.remove('is-flipped');
+
+        // Allow animation to reset before changing text
+        setTimeout(() => {
+            elQ.innerHTML = `<strong>${currentIndex + 1}/${filteredDb.length}:</strong> ${card.q}`;
+            elA.innerHTML = card.a;
+            
+            elCatFront.className = `card-category ${getCatClass(card.c)}`;
+            elCatBack.className = `card-category ${getCatClass(card.c)}`;
+            elCatFront.innerText = card.c;
+            elCatBack.innerText = card.c;
+
+            elStatusFront.innerText = status;
+            if(status === "Mastered") elStatusFront.style.color = "var(--success)";
+            else if(status === "Review") elStatusFront.style.color = "var(--danger)";
+            else elStatusFront.style.color = "var(--text-muted)";
+
+            // Re-render MathJax if present
+            if (window.MathJax && typeof window.MathJax.typesetPromise === 'function') {
+                MathJax.typesetPromise([elQ, elA]).catch(err => console.log(err));
+            }
+        }, 150); // slight delay to hide text swap during flip
+    }
+
+    function applyFilters() {
+        filteredDb = db.filter(card => {
+            let matchCat = currentCat === "All" || card.c === currentCat;
+            let matchStatus = currentStatus === "All" || userProgress[card.id] === currentStatus;
+            return matchCat && matchStatus;
+        });
+        currentIndex = 0;
+        renderCard();
+    }
+
+    // Event Listeners for Filters
+    document.querySelectorAll('#cat-filters .filter-btn').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            document.querySelectorAll('#cat-filters .filter-btn').forEach(b => b.classList.remove('active'));
+            e.target.classList.add('active');
+            currentCat = e.target.dataset.filter;
+            applyFilters();
+        });
+    });
+
+    document.querySelectorAll('#status-filters .filter-btn').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            document.querySelectorAll('#status-filters .filter-btn').forEach(b => b.classList.remove('active'));
+            e.target.classList.add('active');
+            currentStatus = e.target.dataset.status;
+            applyFilters();
+        });
+    });
+
+    // Event Listeners for Controls
+    btnNext.addEventListener('click', () => {
+        if (currentIndex < filteredDb.length - 1) {
+            currentIndex++;
+            renderCard();
+        }
+    });
+
+    btnPrev.addEventListener('click', () => {
+        if (currentIndex > 0) {
+            currentIndex--;
+            renderCard();
+        }
+    });
+
+    btnMastered.addEventListener('click', () => {
+        if(filteredDb.length > 0) {
+            let cardId = filteredDb[currentIndex].id;
+            userProgress[cardId] = "Mastered";
+            updateDashboard();
+            
+            // Auto advance or re-render
+            if(currentStatus !== "All") {
+                applyFilters(); // It will disappear from the current view if filtered
+            } else {
+                if (currentIndex < filteredDb.length - 1) currentIndex++;
+                renderCard();
+            }
+        }
+    });
+
+    btnReview.addEventListener('click', () => {
+        if(filteredDb.length > 0) {
+            let cardId = filteredDb[currentIndex].id;
+            userProgress[cardId] = "Review";
+            updateDashboard();
+            
+            if(currentStatus !== "All") {
+                applyFilters();
+            } else {
+                if (currentIndex < filteredDb.length - 1) currentIndex++;
+                renderCard();
+            }
+        }
+    });
+
+    // Initialize
+    updateDashboard();
+    renderCard();
+
+</script>
+</body>
+</html>

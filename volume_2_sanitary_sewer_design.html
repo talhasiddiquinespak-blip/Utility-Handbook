@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wet Utilities Master Handbook - Volume 2: Sanitary Sewer Design</title>
+        <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']]
+            }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        :root {
+            --primary: #065f46; /* Deep Sewer Green */
+            --secondary: #10b981;
+            --accent: #f59e0b;
+            --bg: #f8fafc;
+            --surface: #ffffff;
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+            --border: #e2e8f0;
+            --success: #16a34a;
+            --danger: #dc2626;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background-color: var(--bg);
+            color: var(--text-main);
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        header {
+            background-color: var(--primary);
+            color: white;
+            padding: 3rem 2rem;
+            border-radius: 8px 8px 0 0;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        header h1 { margin: 0; font-size: 2.5rem; letter-spacing: -0.5px; }
+        header p { margin: 0.5rem 0 0; opacity: 0.9; font-size: 1.1rem; }
+        .vol-badge { display: inline-block; background: var(--accent); color: white; padding: 0.25rem 0.75rem; border-radius: 999px; font-weight: bold; font-size: 0.875rem; margin-bottom: 1rem; }
+        .manual-link {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: 1.25rem;
+            padding: 0.8rem 1.2rem;
+            border-radius: 999px;
+            background: rgba(255, 255, 255, 0.14);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            text-decoration: none;
+            font-weight: 700;
+            transition: all 0.2s ease;
+        }
+        .manual-link:hover { background: white; color: var(--primary); transform: translateY(-1px); }
+
+        section.main-chapter {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+
+        h2 { color: var(--primary); border-bottom: 2px solid var(--border); padding-bottom: 0.5rem; margin-top: 0; }
+        h3 { color: var(--secondary); margin-top: 2rem; border-left: 4px solid var(--secondary); padding-left: 0.75rem; }
+        h4 { color: var(--text-main); font-weight: 600; margin-top: 1.5rem; }
+
+        .attr-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            background: #f1f5f9;
+            padding: 1.5rem;
+            border-radius: 6px;
+            border-left: 4px solid var(--secondary);
+            margin: 1rem 0;
+            font-size: 0.95rem;
+        }
+        .attr-grid div { margin-bottom: 0.5rem; }
+        .attr-grid strong { color: var(--primary); display: block; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.5px; }
+        .full-width { grid-column: 1 / -1; }
+
+        table { width: 100%; border-collapse: collapse; margin: 1.5rem 0; font-size: 0.9rem; }
+        th, td { padding: 0.75rem; border: 1px solid var(--border); text-align: left; }
+        th { background-color: #f8fafc; color: var(--primary); font-weight: 600; }
+
+        .interview-box {
+            background: #fffbeb;
+            border: 1px solid #fde68a;
+            border-left: 4px solid var(--accent);
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            border-radius: 0 6px 6px 0;
+        }
+        .interview-box h4 { color: #b45309; margin-top: 0; display: flex; align-items: center; gap: 0.5rem; }
+        
+        .mistake-box {
+            background: #fef2f2;
+            border: 1px solid #fecaca;
+            border-left: 4px solid var(--danger);
+            padding: 1rem 1.5rem;
+            margin: 1rem 0;
+        }
+        .mistake-box strong { color: var(--danger); }
+
+        .case-study-box {
+            background: #f0fdf4;
+            border: 1px solid #bbf7d0;
+            border-left: 4px solid var(--success);
+            padding: 2rem;
+            margin: 2rem 0;
+            border-radius: 6px;
+        }
+        .case-study-box h3 { color: var(--success); margin-top: 0; border: none; padding: 0; }
+
+        .standards-tag {
+            display: inline-block;
+            background: #e2e8f0;
+            color: #334155;
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-family: monospace;
+            margin-right: 0.5rem;
+            border: 1px solid #cbd5e1;
+        }
+
+        details {
+            background: #ffffff;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            margin-bottom: 1rem;
+        }
+        summary {
+            padding: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            background: #f8fafc;
+            border-radius: 6px;
+        }
+        summary:hover { background: #f1f5f9; }
+        .details-content { padding: 1.5rem; border-top: 1px solid var(--border); }
+        .math-block { overflow-x: auto; padding: 1rem 0; font-size: 1.1rem; }
+
+        @media (max-width: 768px) {
+            .attr-grid { grid-template-columns: 1fr; }
+        }
+
+        /* Mobile responsiveness */
+        * { box-sizing: border-box; }
+        img, svg, canvas { max-width: 100%; height: auto; }
+        table { display: block; overflow-x: auto; white-space: nowrap; -webkit-overflow-scrolling: touch; }
+        th, td { vertical-align: top; }
+        .math-block { max-width: 100%; }
+
+        @media (max-width: 768px) {
+            .container { padding: 1rem; }
+            header { padding: 2rem 1.25rem; margin-bottom: 1rem; }
+            header h1 { font-size: 2rem; line-height: 1.15; }
+            header p { font-size: 1rem; }
+            .manual-link { width: 100%; max-width: 320px; text-align: center; }
+            section.main-chapter { padding: 1.25rem; }
+            h2 { font-size: 1.35rem; }
+            h3 { font-size: 1.1rem; }
+            .attr-grid { padding: 1rem; gap: 0.75rem; }
+            .interview-box, .mistake-box { padding: 1rem; }
+        }
+
+        @media (max-width: 480px) {
+            .container { padding: 0.75rem; }
+            header { padding: 1.5rem 1rem; }
+            header h1 { font-size: 1.65rem; }
+            section.main-chapter { padding: 1rem; }
+            table { font-size: 0.82rem; }
+            th, td { padding: 0.6rem; }
+        }
+
+        .volume-progress {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 1rem 1.25rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+        .progress-meta { display: flex; justify-content: space-between; gap: 1rem; font-weight: 700; color: var(--primary); margin-bottom: 0.6rem; }
+        .progress-track { height: 10px; background: var(--border); border-radius: 999px; overflow: hidden; }
+        .progress-fill { height: 100%; width: 0%; background: var(--secondary); transition: width 0.25s ease; }
+        .section-done {
+            float: right;
+            margin-left: 1rem;
+            padding: 0.45rem 0.75rem;
+            border: 1px solid var(--border);
+            border-radius: 999px;
+            background: var(--bg);
+            color: var(--text-muted);
+            font-weight: 700;
+            cursor: pointer;
+        }
+        .section-done.done { background: var(--success); color: white; border-color: var(--success); }
+        @media (max-width: 768px) {
+            .progress-meta { flex-direction: column; gap: 0.25rem; }
+            .section-done { float: none; display: inline-flex; margin: 0.75rem 0 0; width: 100%; justify-content: center; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <span class="vol-badge">VOLUME 2 OF 7</span>
+        <h1>Sanitary Sewer Design</h1>
+        <p>Comprehensive Master Handbook for Senior Wet Utilities Engineers</p>
+        <a class="manual-link" href="water resource manual.html">Back to Water Resource Manual</a>
+    </header>
+
+    <section class="main-chapter" id="sec-1">
+        <h2>1. Wastewater Generation & Base Flows</h2>
+        <p>Unlike water distribution (pressure flow), sanitary sewers are gravity-driven open-channel systems. Estimating the correct base flow is the critical first step before applying peaking factors or calculating pipe hydraulics.</p>
+        
+        <div class="attr-grid">
+            <div class="full-width"><strong>Governing Standards</strong>
+                <span class="standards-tag">Ten States Part 10</span>
+                <span class="standards-tag">Metcalf & Eddy (5th Ed)</span>
+                <span class="standards-tag">BS EN 752</span>
+                <span class="standards-tag">Sewers for Adoption (UK)</span>
+            </div>
+            <div><strong>Dry Weather Flow (DWF)</strong>The baseline flow consisting of domestic sewage, commercial/industrial effluent, and unavoidable baseline groundwater infiltration (no storm influence).</div>
+            <div><strong>Peak Wet Weather Flow (PWWF)</strong>The ultimate design flow. Consists of Peak DWF + Extreme Infiltration & Inflow (I&I) from storm events. <em>Pipes are strictly sized for PWWF.</em></div>
+        </div>
+
+        <h3>1.1 Flow Estimation Methods</h3>
+        
+        <details>
+            <summary>A. Water Demand / Return Factor Method (Most Common)</summary>
+            <div class="details-content">
+                <div class="attr-grid">
+                    <div class="full-width"><strong>Equation:</strong> $$DWF = Population \times Per\_Capita\_Demand \times Return\_Factor$$</div>
+                    <div><strong>Return Factor:</strong> Typically 0.75 to 0.85 (75% - 85%). The remaining 15-25% is lost to evaporation, landscape irrigation, and consumption.</div>
+                    <div><strong>Application:</strong> Used for large-scale master planning and municipal expansions where accurate water consumption data exists.</div>
+                </div>
+            </div>
+        </details>
+
+        <details>
+            <summary>B. Unit Flow / Land Use Method</summary>
+            <div class="details-content">
+                <div class="attr-grid">
+                    <div class="full-width"><strong>Concept:</strong> Assigning a specific flow rate per unit of land area (e.g., Liters/Hectare/day) based on zoning laws.</div>
+                    <div><strong>Typical Values:</strong> Light Industrial: 15,000 L/Ha/d. Heavy Industrial: 40,000+ L/Ha/d. Commercial: 25,000 L/Ha/d.</div>
+                    <div><strong>Application:</strong> Greenfield developments, industrial parks, and areas where population density is unknown but building footprints are fixed.</div>
+                </div>
+            </div>
+        </details>
+
+        <details>
+            <summary>C. Fixture Unit Method</summary>
+            <div class="details-content">
+                <div class="attr-grid">
+                    <div class="full-width"><strong>Concept:</strong> Based on the Uniform Plumbing Code (UPC) or International Plumbing Code (IPC). Each toilet, sink, and shower is assigned a "Drainage Fixture Unit" (DFU).</div>
+                    <div><strong>Application:</strong> Small developments, high-rise building connections, hospitals, or specific campus facilities. Converts total DFUs to GPM using Hunter's Curve.</div>
+                    <div><strong>Limitation:</strong> Highly conservative. Will drastically oversize municipal mains if applied to entire cities.</div>
+                </div>
+            </div>
+        </details>
+    </section>
+
+    <section class="main-chapter" id="sec-2">
+        <h2>2. Peaking Factors and I&I</h2>
+        <p>Sewage flow follows a diurnal pattern, peaking in the morning (showers) and evening (dinner/laundry). As the population grows, statistical diversity flattens the peak. Therefore, <em>the smaller the population, the higher the peaking factor.</em></p>
+
+        <h3>2.1 Peaking Factor Formulas</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Method</th>
+                    <th>Equation</th>
+                    <th>Variables</th>
+                    <th>Usage / Notes</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Harmon Formula</strong></td>
+                    <td>$$PF = 1 + \frac{14}{4 + \sqrt{P}}$$</td>
+                    <td>P = Population in thousands (e.g., for 5,000 pax, P = 5).</td>
+                    <td>The global gold standard (Metcalf & Eddy). Capped at a max of 4.0 or 5.0 in most codes. Drops to ~2.0 for very large cities.</td>
+                </tr>
+                <tr>
+                    <td><strong>Babbit Formula</strong></td>
+                    <td>$$PF = \frac{5}{P^{0.2}}$$</td>
+                    <td>P = Population in thousands.</td>
+                    <td>Yields slightly more conservative (higher) peaks than Harmon. Common in US. Max limit typically 5.0.</td>
+                </tr>
+                <tr>
+                    <td><strong>Ten States Constant</strong></td>
+                    <td>Nomograph / Constant 4.0</td>
+                    <td>Depends on flow rate, lateral vs trunk.</td>
+                    <td>Ten States §11.24 states peak hourly flow should be based on local data, but often dictates a constant PF of 4.0 for laterals.</td>
+                </tr>
+                <tr>
+                    <td><strong>BS EN 752 / UK</strong></td>
+                    <td>$$PWWF = 6 \times DWF$$</td>
+                    <td>Constant multiplier.</td>
+                    <td>UK standard often dictates sizing sewers for 6x DWF (which accounts for both domestic peaking and significant inflow).</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h3>2.2 Infiltration & Inflow (I&I)</h3>
+        <p><strong>Infiltration:</strong> Groundwater seeping into the sewer through defective pipe joints, cracked pipes, or bad manhole seals.<br>
+        <strong>Inflow:</strong> Surface stormwater illegally or accidentally entering the sewer (e.g., roof drains connected to sanitary, perforated manhole covers in sags).</p>
+        
+        <div class="mistake-box">
+            <strong>Common Mistake:</strong> Failing to add an I&I allowance to a new PVC/HDPE system because "the joints are watertight." Ten States mandates I&I allowances regardless of material. Manholes settle, contractors make mistakes, and illegal connections occur over a 50-year design life. Typical allowances are <strong>10% to 20% of Peak Flow</strong> or <strong>2,000 to 10,000 Liters/Hectare/day</strong>.
+        </div>
+
+        <div class="interview-box">
+            <h4>💡 Interview Question Focus</h4>
+            <p><strong>Q: You are designing a sewer for an industrial zone that operates 24/7 with a constant process discharge of 50 L/s. Do you apply the Harmon peaking factor to this flow?</strong><br>
+            <em>Answer:</em> Absolutely not. The Harmon formula is derived from the statistical diurnal habits of <em>human populations</em> (sleeping, waking, showering). It does not apply to continuous industrial process water. I would add the raw 50 L/s industrial flow directly to the <em>already peaked</em> domestic flow of the surrounding area.</p>
+        </div>
+    </section>
+
+    <section class="main-chapter" id="sec-3">
+        <h2>3. Sewer Pipe Material Selection</h2>
+        <p>Unlike water mains, sewers operate at atmospheric pressure but contain highly corrosive <strong>Hydrogen Sulfide (H₂S)</strong> gas. Therefore, chemical resistance is often prioritized over pressure rating.</p>
+
+        <div class="attr-grid">
+            <div class="full-width"><strong>The H₂S Problem:</strong> In sluggish, warm sewage, anaerobic bacteria reduce sulfates into H₂S gas. This gas rises to the pipe crown, where Thiobacillus bacteria convert it into Sulfuric Acid $(H_2SO_4)$. This acid aggressively eats alkaline materials (like bare concrete).</div>
+        </div>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Material</th>
+                    <th>Pros</th>
+                    <th>Cons / Failure Modes</th>
+                    <th>Best For</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>uPVC (Solid Wall)</strong></td>
+                    <td>Immune to H₂S, extremely smooth (Manning's n=0.009), lightweight.</td>
+                    <td>Becomes brittle over time, deflections if trench compaction is poor. Max sizes usually limited to ~600mm.</td>
+                    <td>Gravity laterals, residential subdivision networks.</td>
+                </tr>
+                <tr>
+                    <td><strong>HDPE (Corrugated or Solid)</strong></td>
+                    <td>Immune to H₂S, flexible (resists earth movement), welded joints stop infiltration.</td>
+                    <td>Requires skilled welding, susceptible to floatation in high water tables if backfill is incorrect.</td>
+                    <td>Trenchless applications, high groundwater areas, force mains.</td>
+                </tr>
+                <tr>
+                    <td><strong>Vitrified Clay Pipe (VCP)</strong></td>
+                    <td>The absolute highest chemical resistance. Incredible lifespan (100+ years).</td>
+                    <td>Very brittle, heavy, short pipe lengths mean many joints (high risk of root intrusion/infiltration).</td>
+                    <td>Highly aggressive industrial waste, deep urban trenches.</td>
+                </tr>
+                <tr>
+                    <td><strong>Reinforced Concrete Pipe (RCP)</strong></td>
+                    <td>Massive structural strength for deep burial, available in huge diameters (>3000mm).</td>
+                    <td><strong>Highly susceptible to H₂S crown corrosion.</strong> MUST be lined with PVC/HDPE ribs or epoxy in sanitary applications.</td>
+                    <td>Deep trunk sewers, massive interceptors.</td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
+
+    <section class="main-chapter" id="sec-4">
+        <h2>4. Hydraulic Design of Gravity Sewers</h2>
+        <p>Sewers are open channels. Flow is driven entirely by the pipe's slope. The universal governing equation is the <strong>Manning Equation</strong>.</p>
+
+        <div class="attr-grid">
+            <div class="full-width"><strong>Manning's Equation</strong>
+                <div class="math-block">$$V = \frac{1}{n} \cdot R^{2/3} \cdot S^{1/2}$$</div>
+                <div class="math-block">$$Q = A \cdot V = \frac{A}{n} \cdot R^{2/3} \cdot S^{1/2}$$</div>
+                <em>Where: V = Velocity (m/s), n = Roughness Coeff (dimensionless), R = Hydraulic Radius (A/P in meters), S = Slope (m/m), A = Wetted Area.</em>
+            </div>
+            <div><strong>Design Roughness (n)</strong><br>Ten States strictly requires using <strong>n = 0.013</strong> for ALL pipe materials during design to account for future slime buildup, even if PVC is 0.009 in the factory.</div>
+            <div><strong>Minimum Diameter</strong><br>Ten States § 33.1 requires a minimum of <strong>200 mm (8 inches)</strong> for municipal gravity sewers to prevent blockage from rags/FOG.</div>
+        </div>
+
+        <h3>4.1 Velocity and Slope Constraints</h3>
+        <p>Sewer slopes must be perfectly balanced. Too flat, and solids drop out. Too steep, and the water outruns the solids or scours the pipe invert.</p>
+
+        <ul>
+            <li><strong>Self-Cleansing Velocity (Min):</strong> 0.6 m/s (2.0 ft/s) when flowing full or half-full. Achieved via minimum slopes (e.g., 0.40% for 200mm).</li>
+            <li><strong>Maximum Velocity:</strong> 3.0 m/s (10.0 ft/s). Higher velocities cause grit to erode the pipe invert. If topography is too steep, introduce <em>Drop Manholes</em> to break the slope.</li>
+            <li><strong>d/D Ratio (Depth of Flow):</strong> Sewers are NEVER designed to flow 100% full. Maximum allowable d/D is typically 0.50 for pipes < 300mm, and 0.70 for pipes > 400mm. This empty space ensures ventilation of H₂S gases and provides a buffer for extreme storm inflow.</li>
+        </ul>
+
+        <div class="interview-box">
+            <h4>💡 Interview Question Focus</h4>
+            <p><strong>Q: A 200mm sewer pipe is designed at a slope of 0.5%, giving a full-pipe velocity of 0.7 m/s (passing the 0.6 m/s rule). However, during initial occupancy, the actual flow is only 10% of the design capacity. Will solids deposit?</strong><br>
+            <em>Answer:</em> Yes, absolutely. This is the "Partial Flow" trap. While the <em>full-bore</em> velocity is 0.7 m/s, at a d/D ratio of 0.10 (very shallow water), the hydraulic radius drops significantly. According to the partial flow hydraulic elements graph, the actual velocity will drop below 0.3 m/s. Solids will strand. To fix this, I must either steepen the initial slope to achieve 0.6 m/s at the <em>actual partial flow</em>, or implement a flushing program until the development builds out.</p>
+        </div>
+    </section>
+
+    <section class="main-chapter" id="sec-5">
+        <h2>5. Manholes and Lift Stations</h2>
+
+        <h3>5.1 Manhole Design Criteria</h3>
+        <ul>
+            <li><strong>Spacing:</strong> Max 120m (400 ft) for pipes under 400mm. Max 150m (500 ft) for larger pipes. Reason: Limits of CCTV inspection and hydro-jetting cleaning cables.</li>
+            <li><strong>Locations:</strong> Placed at EVERY change in grade, change in size, change in alignment, and at all intersections.</li>
+            <li><strong>Drop Manholes:</strong> Required when an incoming sewer invert is $\ge 0.6m$ (24 inches) above the manhole invert. An external/internal drop pipe routes the flow down. *Why? To protect workers from splashing, prevent structural scour of the manhole benching, and prevent turbulent stripping of H₂S gas into the atmosphere.*</li>
+        </ul>
+
+        <h3>5.2 Lift Station & Wet Well Sizing</h3>
+        <p>When excavation depth exceeds 6-8 meters (economic limit of trenching) or water must cross a ridge, a pump station is required.</p>
+        
+        <div class="attr-grid">
+            <div class="full-width"><strong>Active Volume Equation (Ten States § 42.6):</strong>
+                <div class="math-block">$$V = \frac{T_{min} \cdot q}{4}$$</div>
+                <em>Where: V = Active Volume between Pump ON and OFF levels. $T_{min}$ = Minimum pump cycle time (typically 10-15 minutes to prevent motor burnout). q = Pump capacity (usually sized to handle PWWF).</em>
+            </div>
+            <div><strong>Redundancy:</strong> Must have at least two pumps (1 Duty, 1 Standby). If Duty fails, Standby handles 100% of PWWF.</div>
+            <div><strong>Force Mains:</strong> Minimum velocity 0.9 m/s (higher than gravity to keep solids suspended vertically). Max velocity 2.5 m/s (prevent severe water hammer on pump trip).</div>
+        </div>
+    </section>
+
+    <section class="main-chapter" id="sec-6">
+        <h2>6. Final Deliverables (IFC)</h2>
+        <p>The Issued for Construction (IFC) package for sewers requires extreme precision in invert elevations. A 10cm mistake in a water pressure pipe is negligible; a 10cm mistake in a gravity sewer creates a sag, traps solids, and ruins the network.</p>
+        <ul>
+            <li><strong>Plan and Profile:</strong> Must show crossing utilities. Minimum separation per Ten States: Water mains must be <strong>10 feet horizontal</strong> and <strong>18 inches vertical (water above sewer)</strong> from any sanitary line.</li>
+            <li><strong>Trench Details:</strong> Bedding classes (e.g., granular envelop to springline) to prevent pipe deflection under traffic loads.</li>
+        </ul>
+    </section>
+
+    <section class="main-chapter" id="sec-7">
+        <h2>7. REAL-LIFE CASE STUDY: From Master Plan to IFC</h2>
+        <p>This section walks through a complete senior-level design execution, mimicking a technical interview test or a real consulting project workflow.</p>
+
+        <div class="case-study-box">
+            <h3>Project: "Oasis Greens" Residential Subdivision</h3>
+            <p><strong>The Brief:</strong> You are the Lead Wet Utilities Engineer. The client is building a 500-villa luxury subdivision on a 25-hectare flat site. You must design the sanitary network and connect it to an existing municipal trunk sewer located 1 km away. The existing trunk invert is at Depth = -2.0m.</p>
+
+            <h4 style="color:#065f46; border-bottom:1px solid #bbf7d0; padding-bottom:5px;">Step 1: Establish Design Criteria & Flows</h4>
+            <ul>
+                <li><strong>Population:</strong> 500 villas $\times$ 5.5 capita/villa = 2,750 people.</li>
+                <li><strong>Per Capita Demand:</strong> 250 Liters/capita/day (Luxury sizing).</li>
+                <li><strong>Sewage Generation (Return Factor):</strong> $250 \times 0.80 = 200$ L/c/d.</li>
+                <li><strong>Average Dry Weather Flow (ADWF):</strong> $2,750 \times 200 = 550,000$ L/day = <strong>6.36 L/s</strong>.</li>
+            </ul>
+
+            <h4 style="color:#065f46; border-bottom:1px solid #bbf7d0; padding-bottom:5px;">Step 2: Peaking and I&I</h4>
+            <ul>
+                <li><strong>Peaking Factor (Harmon):</strong> $PF = 1 + \frac{14}{4 + \sqrt{2.75}} = 1 + 2.47 =$ <strong>3.47</strong></li>
+                <li><strong>Peak Domestic Flow:</strong> $6.36 \text{ L/s} \times 3.47 = $ <strong>22.0 L/s</strong></li>
+                <li><strong>I&I Allowance:</strong> (Assuming 10% of Peak for a well-sealed new uPVC network) = 2.2 L/s.</li>
+                <li><strong>Total Design PWWF:</strong> 22.0 + 2.2 = <strong>24.2 L/s</strong>. <em>(The network outfall must handle this).</em></li>
+            </ul>
+
+            <h4 style="color:#065f46; border-bottom:1px solid #bbf7d0; padding-bottom:5px;">Step 3: Network Routing & Hydraulic Sizing (Manning's)</h4>
+            <p>You begin routing from the furthest upstream node. By Ten States rules, you select the minimum allowable pipe size: <strong>200mm uPVC</strong> (n=0.013).</p>
+            <ul>
+                <li>To achieve the minimum self-cleansing velocity of 0.6 m/s, you calculate the minimum slope for a 200mm pipe: <strong>0.33% (or 1 in 300)</strong>.</li>
+                <li>At 0.33% slope, a 200mm pipe flowing full handles <strong>~19 L/s</strong>.</li>
+                <li><em>Conflict!</em> The outfall flow is 24.2 L/s. Therefore, the downstream collector mains must be upsized to <strong>250mm</strong>.</li>
+                <li>At 0.33% slope, a 250mm pipe flowing full handles <strong>~34 L/s</strong>. This safely passes the 24.2 L/s flow with a healthy d/D ratio of ~0.75, allowing gas ventilation.</li>
+            </ul>
+
+            <h4 style="color:#065f46; border-bottom:1px solid #bbf7d0; padding-bottom:5px;">Step 4: The Elevation Trap (The Lift Station Pivot)</h4>
+            <p>You draw the profile. The site is perfectly flat. The furthest node starts at 1.2m depth (to allow house connections). The network runs for 800m at a 0.33% slope.</p>
+            <ul>
+                <li><strong>Elevation Drop in Network:</strong> $800\text{m} \times 0.0033 = 2.64\text{m}$ drop.</li>
+                <li><strong>Outfall Depth:</strong> Start Depth (1.2m) + Drop (2.64m) = <strong>3.84m deep</strong> at the edge of the site.</li>
+                <li><strong>The Problem:</strong> The existing municipal trunk is only <strong>2.0m deep</strong>. Gravity tie-in is physically impossible. Water cannot flow uphill.</li>
+            </ul>
+            <p><strong>The Solution:</strong> You must insert a <strong>Lift Station</strong> at the edge of the subdivision to pump the 24.2 L/s flow up to the municipal trunk.</p>
+            
+            <h4 style="color:#065f46; border-bottom:1px solid #bbf7d0; padding-bottom:5px;">Step 5: Lift Station & Force Main Design</h4>
+            <ul>
+                <li><strong>Pumps:</strong> You select Two (2) Submersible Pumps (1 Duty, 1 Standby) rated for 25 L/s at 5 meters of Total Dynamic Head (Static lift + friction).</li>
+                <li><strong>Force Main Sizing:</strong> To pass 25 L/s at an optimal velocity of ~1.2 m/s, you calculate $A = Q/V$. A <strong>150mm DI (Ductile Iron)</strong> force main provides exactly 1.4 m/s. Perfect.</li>
+                <li><strong>Wet Well Sizing:</strong> You use the Ten States rule to prevent the pump from turning on/off too rapidly (which burns out the motor). Max 4 starts per hour (15 min cycle).<br>
+                $V = \frac{T \cdot q}{4} = \frac{15 \text{ min} \cdot 1.5 \text{ m}^3/\text{min}}{4} =$ <strong>5.625 m³ of Active Volume</strong> required between the floats.</li>
+            </ul>
+
+            <h4 style="color:#065f46; border-bottom:1px solid #bbf7d0; padding-bottom:5px;">Step 6: IFC Deliverables & Clash Detection</h4>
+            <p>Before issuing the drawings to the contractor, you review the profiles. At station 0+400, the 250mm gravity sewer crosses beneath a 300mm water transmission main. </p>
+            <p><strong>Code Check:</strong> You verify the vertical separation is 500mm (Code requires minimum 450mm / 18 inches). The crossing passes inspection. You finalize the BOQ and issue the package.</p>
+        </div>
+    </section>
+
+</div>
+
+<script>
+(() => {
+    const volumeId = 'volume_2';
+    const volumeLabel = 'Volume 2';
+    const storageKey = `wetUtilities.sectionProgress.${volumeId}`;
+    const summaryKey = 'wetUtilities.volumeProgress';
+    const sections = Array.from(document.querySelectorAll('section.main-chapter[id]'));
+    let done = new Set(JSON.parse(localStorage.getItem(storageKey) || '[]'));
+
+    const progress = document.createElement('div');
+    progress.className = 'volume-progress';
+    progress.innerHTML = `
+        <div class="progress-meta">
+            <span>${volumeLabel} Progress</span>
+            <span id="volumeProgressText"></span>
+        </div>
+        <div class="progress-track"><div class="progress-fill" id="volumeProgressFill"></div></div>
+    `;
+    document.querySelector('header').after(progress);
+
+    function saveSummary(percent) {
+        const summary = JSON.parse(localStorage.getItem(summaryKey) || '{}');
+        summary[volumeId] = { percent, done: done.size, total: sections.length };
+        localStorage.setItem(summaryKey, JSON.stringify(summary));
+    }
+
+    function updateProgress() {
+        const percent = sections.length ? Math.round((done.size / sections.length) * 100) : 0;
+        document.getElementById('volumeProgressText').textContent = `${done.size} / ${sections.length} sections complete (${percent}%)`;
+        document.getElementById('volumeProgressFill').style.width = `${percent}%`;
+        localStorage.setItem(storageKey, JSON.stringify([...done]));
+        saveSummary(percent);
+    }
+
+    sections.forEach((section, index) => {
+        const h2 = section.querySelector('h2');
+        if (!h2) return;
+        const id = section.id || `section-${index + 1}`;
+        const button = document.createElement('button');
+        button.type = 'button';
+        button.className = 'section-done';
+        function syncButton() {
+            const isDone = done.has(id);
+            button.classList.toggle('done', isDone);
+            button.textContent = isDone ? 'Done' : 'Mark as Done';
+            button.setAttribute('aria-pressed', String(isDone));
+        }
+        button.addEventListener('click', () => {
+            if (done.has(id)) done.delete(id);
+            else done.add(id);
+            syncButton();
+            updateProgress();
+        });
+        syncButton();
+        h2.appendChild(button);
+    });
+
+    updateProgress();
+})();
+</script>
+</body>
+</html>

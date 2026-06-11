@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wet Utilities Master Handbook - Volume 6: Case Studies</title>
+    
+    <script>
+        window.MathJax = {
+            tex: { inlineMath: [['$', '$'], ['\\(', '\\)']], displayMath: [['$$', '$$'], ['\\[', '\\]']] },
+            svg: { fontCache: 'global' }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    
+    <style>
+        :root {
+            --primary: #0f766e; /* Teal 700 - Case Study Theme */
+            --secondary: #14b8a6; /* Teal 500 */
+            --bg: #f8fafc;
+            --surface: #ffffff;
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+            --border: #e2e8f0;
+            --water: #2DA8D8; 
+            --sewer: #4CAF7D; 
+            --storm: #E8913A; 
+            --pump: #8b5cf6;
+            --mat: #64748b;
+            
+            --incident: #fee2e2;
+            --analysis: #f0fdf4;
+            --resolution: #eff6ff;
+        }
+
+        body { font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; background-color: var(--bg); color: var(--text-main); line-height: 1.6; margin: 0; padding: 0; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 2rem; }
+
+        header { background-color: var(--primary); color: white; padding: 3rem 2rem; border-radius: 8px 8px 0 0; margin-bottom: 2rem; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); border-bottom: 6px solid var(--secondary); }
+        header h1 { margin: 0; font-size: 2.5rem; letter-spacing: -0.5px; }
+        header p { margin: 0.5rem 0 0; opacity: 0.9; font-size: 1.1rem; }
+        .vol-badge { display: inline-block; background: var(--secondary); color: white; padding: 0.25rem 0.75rem; border-radius: 999px; font-weight: bold; font-size: 0.875rem; margin-bottom: 1rem; }
+            .manual-link {
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                margin-top: 1.25rem;
+                padding: 0.8rem 1.2rem;
+                border-radius: 999px;
+                background: rgba(255, 255, 255, 0.14);
+                color: white;
+                border: 1px solid rgba(255, 255, 255, 0.3);
+                text-decoration: none;
+                font-weight: 700;
+                transition: all 0.2s ease;
+            }
+            .manual-link:hover { background: white; color: var(--primary); transform: translateY(-1px); }
+
+        .controls { background: var(--surface); padding: 1.5rem; border-radius: 8px; border: 1px solid var(--border); margin-bottom: 2rem; display: flex; flex-direction: column; gap: 1rem; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
+        .search-bar { width: 100%; padding: 0.75rem; font-size: 1rem; border: 1px solid var(--border); border-radius: 6px; box-sizing: border-box; }
+        .search-bar:focus { outline: none; border-color: var(--secondary); box-shadow: 0 0 0 3px rgba(20, 184, 166, 0.2); }
+        
+        .filters { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+        .filter-btn { padding: 0.5rem 1rem; border: 1px solid var(--border); background: var(--bg); border-radius: 999px; cursor: pointer; font-size: 0.875rem; font-weight: 600; color: var(--text-muted); transition: all 0.2s; }
+        .filter-btn:hover { background: #e2e8f0; }
+        .filter-btn.active { background: var(--primary); color: white; border-color: var(--primary); }
+
+        .stat-bar { display: flex; justify-content: space-between; font-size: 0.875rem; color: var(--text-muted); margin-bottom: 1rem; padding: 0 0.5rem; }
+        
+        .case-card { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; margin-bottom: 2rem; box-shadow: 0 2px 4px rgba(0,0,0,0.05); overflow: hidden; display: block; }
+        .case-header { padding: 1.5rem; background: #f8fafc; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
+        .case-header h2 { margin: 0; font-size: 1.4rem; color: var(--primary); }
+        
+        .badge { padding: 0.25rem 0.75rem; border-radius: 999px; font-size: 0.75rem; font-family: monospace; font-weight: bold; text-transform: uppercase; white-space: nowrap; }
+        .badge-water { background: rgba(45,168,216,0.1); color: var(--water); border: 1px solid var(--water); }
+        .badge-sewer { background: rgba(76,175,125,0.1); color: var(--sewer); border: 1px solid var(--sewer); }
+        .badge-storm { background: rgba(232,145,58,0.1); color: var(--storm); border: 1px solid var(--storm); }
+        .badge-pump { background: rgba(139,92,246,0.1); color: var(--pump); border: 1px solid var(--pump); }
+        .badge-mat { background: rgba(100,116,139,0.1); color: var(--mat); border: 1px solid var(--mat); }
+        
+        .case-body { padding: 1.5rem; display: flex; flex-direction: column; gap: 1rem; }
+        
+        .block { padding: 1.25rem; border-radius: 6px; border-left: 4px solid; }
+        .block-incident { background: var(--incident); border-color: #ef4444; }
+        .block-analysis { background: var(--analysis); border-color: #10b981; }
+        .block-resolution { background: var(--resolution); border-color: #3b82f6; }
+        
+        .block h3 { margin-top: 0; margin-bottom: 0.75rem; font-size: 1.1rem; display: flex; align-items: center; gap: 0.5rem; }
+        .block-incident h3 { color: #b91c1c; }
+        .block-analysis h3 { color: #047857; }
+        .block-resolution h3 { color: #1d4ed8; }
+        
+        .ref-box { padding: 1rem 1.5rem; background: #f1f5f9; border-top: 1px solid var(--border); font-size: 0.9rem; color: #475569; display: flex; gap: 1rem; align-items: center; }
+        .ref-tag { font-family: monospace; font-weight: bold; background: #e2e8f0; padding: 0.2rem 0.5rem; border-radius: 4px; border: 1px solid #cbd5e1; }
+        
+        .math-row { display: flex; justify-content: center; margin: 1rem 0; padding: 1rem; background: rgba(255,255,255,0.5); border-radius: 4px; border: 1px dashed rgba(0,0,0,0.1); overflow-x: auto; }
+        
+        @media (max-width: 768px) {
+            .case-header { flex-direction: column; align-items: flex-start; gap: 1rem; }
+        }
+
+        /* Mobile responsiveness */
+        * { box-sizing: border-box; }
+        img, svg, canvas { max-width: 100%; height: auto; }
+
+        @media (max-width: 768px) {
+            .container { padding: 1rem; }
+            header { padding: 2rem 1.25rem; margin-bottom: 1rem; }
+            header h1 { font-size: 2rem; line-height: 1.15; }
+            header p { font-size: 1rem; }
+            .manual-link { width: 100%; max-width: 320px; text-align: center; }
+            .controls { padding: 1rem; }
+            .filters { align-items: stretch; }
+            .filters > span { width: 100%; margin: 0 0 0.25rem 0 !important; }
+            .filter-btn { flex: 1 1 calc(50% - 0.5rem); min-height: 42px; padding: 0.55rem 0.75rem; }
+            .stat-bar { flex-direction: column; gap: 0.35rem; }
+            .case-card { margin-bottom: 1rem; }
+            .case-header { padding: 1rem; }
+            .case-header h2 { font-size: 1.15rem; line-height: 1.25; }
+            .case-body { padding: 1rem; }
+            .block { padding: 1rem; }
+            .block h3 { font-size: 1rem; }
+            .ref-box { flex-direction: column; align-items: flex-start; padding: 1rem; }
+            .math-row { justify-content: flex-start; }
+        }
+
+        @media (max-width: 480px) {
+            .container { padding: 0.75rem; }
+            header { padding: 1.5rem 1rem; }
+            header h1 { font-size: 1.65rem; }
+            .filter-btn { flex-basis: 100%; }
+            .search-bar { font-size: 0.95rem; }
+            .badge { white-space: normal; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <span class="vol-badge">VOLUME 6 OF 7</span>
+        <h1>Real-World Case Studies & Post-Mortems</h1>
+        <p>10 Detailed Incident Analyses for Principal Engineering Interviews</p>
+            <a class="manual-link" href="water resource manual.html">Back to Water Resource Manual</a>
+    </header>
+
+    <div class="controls">
+        <input type="text" id="searchInput" class="search-bar" placeholder="Search case studies, keywords, or standards (e.g., 'Surge', 'Siphon', 'HEC-22')...">
+        <div class="filters" id="categoryFilters">
+            <span style="font-size: 0.85rem; color: var(--text-muted); align-self: center; font-weight: bold; margin-right: 0.5rem; min-width: 45px;">Topic:</span>
+            <button class="filter-btn active" data-filter="all">All Cases (10)</button>
+            <button class="filter-btn" data-filter="Water">Water Supply</button>
+            <button class="filter-btn" data-filter="Sewer">Sanitary Sewer</button>
+            <button class="filter-btn" data-filter="Storm">Stormwater</button>
+            <button class="filter-btn" data-filter="Pump">Pumps & Surge</button>
+            <button class="filter-btn" data-filter="Material">Materials & Failures</button>
+        </div>
+    </div>
+
+    <div class="stat-bar">
+        <span id="resultCount">Showing 10 case studies</span>
+    </div>
+
+    <div id="caseList">
+        <!-- Injected via JS -->
+    </div>
+</div>
+
+<script>
+    const cases = [
+        /* ================= CASE 1 ================= */
+        {
+            c: "Water", 
+            title: "The Stagnant Mega-Development",
+            incident: "A newly constructed master-planned community (Phase 1 of 5 complete) is receiving hundreds of complaints. Residents report dark brown, foul-smelling water out of their taps. The health department issues a 'Boil Water' notice after detecting zero free chlorine residual and high bacterial counts at the cul-de-sacs.",
+            analysis: "The design engineer sized the entire transmission and primary distribution network (600mm and 400mm pipes) for the **Ultimate 30-Year Build-out Population**, including future commercial zones and max fire flow. <br><br>However, with only Phase 1 currently occupied (15% of ultimate demand), the velocity in these massive pipes is practically zero ($< 0.05$ m/s). <br><br>Water age modeling in EPANET revealed the retention time in the network exceeded **14 days**. Chlorine fully decays after 3-5 days. The stagnant water caused severe biofilm growth and nitrification.",
+            resolution: "Water networks cannot simply be 'future-proofed' by oversizing on Day 1. The solution required immediately installing automated flush valves at all dead ends to artificially force velocity and turnover. For Phase 2, the team designed parallel, smaller phased pipes rather than one massive ultimate pipe, and isolated oversized loops with temporary gate valves.",
+            refs: ["AWWA M32 (Computer Modeling of Water Distribution)", "WHO GDWQ (Guidelines for Drinking-Water Quality)"]
+        },
+        /* ================= CASE 2 ================= */
+        {
+            c: "Pump", 
+            title: "Catastrophic Force Main Slam",
+            incident: "A municipal wastewater lift station pumping 300 L/s through a 5km, 800mm Ductile Iron force main experiences a local grid blackout. 15 seconds after the pumps trip off, a massive geyser erupts 2km down the road. The DI pipe split longitudinally.",
+            analysis: "The designer failed to perform a proper transient (surge) analysis. When the pumps tripped, the massive momentum of the water column continued moving forward, creating a negative pressure wave. <br><br>Because the high points lacked functioning Air/Vacuum Relief Valves (ARVs), the pressure dropped below water's vapor pressure, causing **Column Separation** (a vapor pocket formed). <br><br>When gravity forced the water column to reverse, it slammed back into the stationary column at the high point. The Joukowsky equation calculated the resulting pressure spike: <div class='math-row'>$$ \\Delta P = \\rho \\cdot a \\cdot \\Delta V $$</div> The velocity change ($ \\Delta V $) upon column collapse was so violent that the pressure spike exceeded 30 bars, easily bursting the PN16 pipe.",
+            resolution: "Force mains over 400mm or with significant length/elevation profiles must undergo transient modeling (e.g., using Bentley HAMMER). The resolution required repairing the pipe, installing large-orifice vacuum breakers at all high points to admit air and prevent column separation, and installing a hydropneumatic surge vessel at the pump station.",
+            refs: ["BS EN 805 (Water Supply - Systems and Components)", "Ten States Standards - Section 42.6"]
+        },
+        /* ================= CASE 3 ================= */
+        {
+            c: "Storm", 
+            title: "The Kinematic Wave Trap",
+            incident: "A coastal industrial facility was designed to withstand a 25-year storm. The stormwater network outfalls into a tidal estuary. During a 10-year storm event that coincided with high tide, the entire facility flooded severely. The client sued, claiming the network was undersized.",
+            analysis: "You requested the original engineer's software files (EPA SWMM). You found they had sized the pipes using **Kinematic Wave Routing**. <br><br>Kinematic wave solves the continuity equation but simplifies momentum; it explicitly assumes free-flowing conditions and *cannot mathematically model backwater, reverse flow, or pressurized surcharging*. <br><br>Because the outfall was submerged by the high tide, the water physically couldn't exit. The Kinematic Wave model simply 'deleted' the water at the outfall, showing no flooding. When you re-ran their exact pipe sizes using **Dynamic Wave Routing** (St. Venant equations), the software immediately showed the Hydraulic Grade Line (HGL) blowing the manhole covers off.",
+            resolution: "Whenever an outfall is submerged (tidal, flooded river) or the terrain is extremely flat, Dynamic Wave routing is absolutely mandatory. The site had to be retrofitted with a massive stormwater lift station to pump the runoff over the high-tide elevation.",
+            refs: ["HEC-HMS Technical Reference Manual", "EPA SWMM Reference Manual Vol II (Hydraulics)"]
+        },
+        /* ================= CASE 4 ================= */
+        {
+            c: "Sewer", 
+            title: "The Partial Flow Settlement Blockage",
+            incident: "A 400mm gravity sewer trunk was installed at a 0.4% slope to serve a new business park. According to Manning's equation, this pipe flowing full achieves a velocity of 0.8 m/s (well above the 0.6 m/s self-cleansing requirement). Yet, within 6 months, the pipe is 80% blocked with hardened grease, grit, and solids.",
+            analysis: "The business park is currently only 15% occupied. The actual flow entering the pipe is a tiny fraction of the ultimate design flow. <br><br>Because gravity flow is open-channel, a small flow in a large pipe results in a very low depth of flow ($d/D \\approx 0.10$). <br><br>At this shallow depth, the hydraulic radius ($R = A/P$) shrinks drastically because the wetted perimeter is wide but the area is tiny. According to the partial-flow hydraulic elements graph, the actual velocity drops to **0.25 m/s**. This is way below self-cleansing velocity. Solids stranded on the invert and hardened.",
+            resolution: "Sewer design must check *both* full flow capacity and actual partial-flow velocity during initial occupancy. The utility had to implement a weekly mechanical hydro-jetting program to keep the pipe clear. Future phased developments must use steeper initial slopes or smaller parallel pipes.",
+            refs: ["BS EN 752 (Drain and Sewer Systems)", "Metcalf & Eddy (Wastewater Engineering)"]
+        },
+        /* ================= CASE 5 ================= */
+        {
+            c: "Material", 
+            title: "The Dissolving Concrete Highway Trunk",
+            incident: "A 1200mm Reinforced Concrete Pipe (RCP) sanitary trunk sewer running beneath a major interstate highway collapses after just 5 years in operation, creating a massive sinkhole and shutting down the highway.",
+            analysis: "The junior engineer specified standard unlined RCP because it was cheap and had the high structural strength required for the deep highway burial. <br><br>However, the sewer had a very flat slope and a long retention time, creating anaerobic conditions. Anaerobic bacteria produced Hydrogen Sulfide gas ($H_2S$). The gas rose to the empty space at the crown (top) of the pipe, where Thiobacillus bacteria oxidized it into **Sulfuric Acid** ($H_2SO_4$). <br><br>Concrete is highly alkaline (pH ~ 12). The acid literally dissolved the concrete crown down to the rebar in a process known as Microbial Induced Corrosion (MIC), leading to total structural failure.",
+            resolution: "Bare concrete must **never** be used for sanitary sewers with low velocities or long retention times. The collapsed section was replaced with GRP (Glass Reinforced Plastic) pipe. Alternatively, the concrete should have been specified with a cast-in-place HDPE internal liner or high-build epoxy coating.",
+            refs: ["Ten States Standards - Section 33.3", "ASCE Manual of Practice 92"]
+        },
+        /* ================= CASE 6 ================= */
+        {
+            c: "Water", 
+            title: "The Fire Flow Implosion",
+            incident: "During a major fire at a commercial strip mall, the fire department connects three pumper trucks to the hydrants, attempting to pull 3,000 GPM. Within 10 minutes, the 150mm (6-inch) PVC municipal water main physically collapses underground, and 200 surrounding homes lose all water pressure.",
+            analysis: "The distribution network was designed purely for domestic Peak Hour Demand (PHD). For this small zone, PHD was only 200 GPM, so a 150mm pipe seemed adequate. <br><br>However, forcing 3,000 GPM through a 150mm pipe results in a velocity exceeding **6.5 m/s**. At this extreme velocity, the friction headloss ($h_f$) becomes astronomically high. <div class='math-row'>$$ h_f \\propto V^{1.85} $$</div> The pumps sucked the water so hard that the Hydraulic Grade Line (HGL) dropped below the physical elevation of the pipe, creating a hard vacuum. The thin-walled PVC pipe lacked the external hoop strength to withstand a vacuum and crushed inward.",
+            resolution: "Water networks must *always* be checked for the **Maximum Day Demand (MDD) + Fire Flow** scenario. This scenario almost universally dictates the pipe sizes in small-to-medium networks. The system was upgraded to a 300mm looped ductile iron main.",
+            refs: ["AWWA M31 (Distribution System Requirements for Fire Protection)", "NFPA 1 (Fire Code)"]
+        },
+        /* ================= CASE 7 ================= */
+        {
+            c: "Storm", 
+            title: "The Inlet Control Culvert Washout",
+            incident: "A 1200mm highway culvert washes out during a 25-year storm, taking the road with it. The design engineer defends their work, producing calculations showing the culvert could pass the 100-year peak flow of $3.5 \\text{ m}^3/\\text{s}$ using Manning's equation.",
+            analysis: "The engineer used Manning's equation for open channel flow, treating the culvert like a continuous, free-flowing pipe. <br><br>They completely ignored **Culvert Hydraulics** (Inlet vs. Outlet control). The culvert was operating under *Inlet Control* (the barrel had more capacity than the opening could accept due to a sharp, projecting entrance). <br><br>Because the water couldn't get into the pipe fast enough, it created a massive headwater pool upstream. The pool rose until it overtopped the highway embankment, causing rapid erosion of the downstream face and total road failure.",
+            resolution: "Culverts cannot be sized using standard pipe flow equations. They must be routed using FHWA nomographs or software like HY-8 / HEC-RAS to determine the Headwater (HW) elevation under both inlet and outlet control. A flared concrete end-section and headwall were installed to improve the entrance coefficient ($K_e$), solving the issue.",
+            refs: ["HEC-22 (Urban Drainage Design Manual)", "FHWA Hydraulic Design of Highway Culverts (HDS 5)"]
+        },
+        /* ================= CASE 8 ================= */
+        {
+            c: "Pump", 
+            title: "The Parallel Pump Deadheading Trap",
+            incident: "A lift station is designed with two identical 50 L/s pumps. The operator expects 100 L/s when both are turned on. However, when both run, the flow meter reads only 65 L/s, the pipes vibrate violently, and one pump motor trips on high temperature.",
+            analysis: "The system pumps through a long, 200mm force main with high static lift. <br><br>When the second pump turns on, it attempts to force double the flow through the same common pipe. Friction headloss increases exponentially with velocity ($V^2$). <br><br>This caused the **System Curve** to steepen drastically. The pumps were forced to slide far to the left on their performance curves (operating at a much higher head, but much lower flow). Because the pumps weren't perfectly identical in wear, the slightly weaker pump couldn't overcome the new, massive system head. Its check valve closed, and it was spinning water in its casing (**Deadheading**), boiling the water and tripping the thermal overload.",
+            resolution: "Two identical pumps in parallel almost *never* yield double the flow due to the shifting system curve. The solution required installing VFDs (Variable Frequency Drives) to optimize speed, or upsizing the force main to flatten the system curve.",
+            refs: ["WEF MOP 8 (Design of Municipal WWTPs)", "Hydraulic Institute (HI) Pump Standards"]
+        },
+        /* ================= CASE 9 ================= */
+        {
+            c: "Water", 
+            title: "The 2:00 AM PRV Geysers",
+            incident: "A low-lying neighborhood at the bottom of a steep hill experiences multiple burst hot water heaters and indoor plumbing geysers at exactly 2:00 AM. The municipal main is fed by a high-elevation reservoir through a PRV (Pressure Reducing Valve) set to 50 psi.",
+            analysis: "During the day, the friction headloss in the 3km trunk main dropping down the hill burns off 40 psi of energy. The PRV easily throttles the remaining pressure down to 50 psi. <br><br>However, at 2:00 AM, residential demand drops to absolute zero. With zero flow, there is zero friction headloss ($h_f = 0$). The PRV is suddenly hit with the full static pressure of the reservoir (140 psi). <br><br>Because the PRV was massive (sized for fire flow), its internal plug was operating too close to the seat during zero-flow conditions. It failed to seat properly (wire-drawing), allowing the pressure to creep up and equalize across the valve. The 140 psi static head hit the fragile residential plumbing, blowing the fixtures.",
+            resolution: "A single large PRV cannot handle both massive fire flows and zero-flow night conditions. PRV stations must be designed with parallel branches: A large main PRV, and a small **'Jockey' PRV** to handle low-flow/nighttime conditions. A downstream pressure relief valve was also added to vent to a storm drain if pressure creeps.",
+            refs: ["AWWA M32", "Ten States Standards"]
+        },
+        /* ================= CASE 10 ================= */
+        {
+            c: "Sewer", 
+            title: "The Inverted Siphon Blockage",
+            incident: "A newly commissioned 600mm inverted siphon (a pressure pipe dipping under a river to convey gravity sewage to the other side) blocks completely within 3 months. It causes a massive Sanitary Sewer Overflow (SSO) into the river, resulting in millions in EPA fines.",
+            analysis: "The engineer designed a single 600mm barrel siphon sized for the ultimate 30-year peak flow. <br><br>Because siphons dip below the hydraulic grade line, they are always 100% full of liquid. At current low occupancy flows, the velocity in the 600mm pipe was $< 0.1$ m/s. <br><br>Sewage contains heavy grit, sand, and rags. Without the 0.9 m/s velocity required to push solids up the ascending leg of the siphon, the grit accumulated at the absolute lowest point of the 'U' bend, solidifying like concrete and plugging the pipe.",
+            resolution: "Siphons must *never* be designed as a single barrel. They require a minimum of two (preferably three) parallel barrels (e.g., 200mm, 300mm, and 600mm) separated by overflow weirs in the inlet chamber. Current low flows are directed entirely into the 200mm pipe, ensuring high velocity. As flow increases during a storm, it overtops the weir into the larger pipes.",
+            refs: ["Ten States Standards - Section 35 (Siphons)", "Metcalf & Eddy"]
+        }
+    ];
+
+    const caseList = document.getElementById('caseList');
+    const resultCount = document.getElementById('resultCount');
+    let currentCategory = 'all';
+    let searchTerm = '';
+
+    function renderCases() {
+        caseList.innerHTML = '';
+        let count = 0;
+
+        cases.forEach((item, index) => {
+            const matchCategory = currentCategory === 'all' || item.c === currentCategory;
+            const matchSearch = searchTerm === '' || 
+                                item.title.toLowerCase().includes(searchTerm) || 
+                                item.incident.toLowerCase().includes(searchTerm) || 
+                                item.analysis.toLowerCase().includes(searchTerm);
+
+            if (matchCategory && matchSearch) {
+                count++;
+
+                let badgeClass = '';
+                if (item.c === "Water") badgeClass = 'badge-water';
+                if (item.c === "Sewer") badgeClass = 'badge-sewer';
+                if (item.c === "Storm") badgeClass = 'badge-storm';
+                if (item.c === "Pump") badgeClass = 'badge-pump';
+                if (item.c === "Material") badgeClass = 'badge-mat';
+
+                // Format refs into tags
+                let refsHtml = item.refs.map(r => `<span class="ref-tag">${r}</span>`).join('');
+
+                const html = `
+                    <div class="case-card" id="c${index}">
+                        <div class="case-header">
+                            <h2>${count}. ${item.title}</h2>
+                            <span class="badge ${badgeClass}">${item.c}</span>
+                        </div>
+                        <div class="case-body">
+                            <div class="block block-incident">
+                                <h3>🚨 The Incident</h3>
+                                ${item.incident}
+                            </div>
+                            <div class="block block-analysis">
+                                <h3>⚙️ Engineering Analysis & Calculations</h3>
+                                ${item.analysis}
+                            </div>
+                            <div class="block block-resolution">
+                                <h3>✅ Resolution & Lessons Learned</h3>
+                                ${item.resolution}
+                            </div>
+                        </div>
+                        <div class="ref-box">
+                            <strong>Standards Applied:</strong> ${refsHtml}
+                        </div>
+                    </div>
+                `;
+                caseList.innerHTML += html;
+            }
+        });
+
+        resultCount.innerText = `Showing ${count} case studies`;
+        
+        // Ensure MathJax renders the injected equations
+        if (window.MathJax && typeof window.MathJax.typesetPromise === 'function') {
+            MathJax.typesetPromise().catch(err => console.error('MathJax typeset failed:', err));
+        }
+    }
+
+    // Initial Render
+    renderCases();
+
+    document.querySelectorAll('#categoryFilters .filter-btn').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            document.querySelectorAll('#categoryFilters .filter-btn').forEach(b => b.classList.remove('active'));
+            e.target.classList.add('active');
+            currentCategory = e.target.dataset.filter;
+            renderCases();
+        });
+    });
+
+    document.getElementById('searchInput').addEventListener('input', (e) => {
+        searchTerm = e.target.value.toLowerCase();
+        renderCases();
+    });
+
+</script>
+
+</body>
+</html>

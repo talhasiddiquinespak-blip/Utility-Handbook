@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wet Utilities Master Handbook - Volume 4: Interview Guide</title>
+    
+    <!-- MathJax Configuration -->
+    <script>
+        MathJax = {
+            tex: { inlineMath: [['$', '$'], ['\\(', '\\)']], displayMath: [['$$', '$$'], ['\\[', '\\]']] },
+            svg: { fontCache: 'global' }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    
+    <style>
+        :root {
+            --primary: #4338ca; /* Indigo 700 */
+            --secondary: #6366f1; /* Indigo 500 */
+            --bg: #f8fafc;
+            --surface: #ffffff;
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+            --border: #e2e8f0;
+            --water: #2DA8D8; 
+            --sewer: #4CAF7D; 
+            --storm: #E8913A; 
+            --pump: #ef4444;
+            --mat: #8b5cf6;
+        }
+
+        body { font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; background-color: var(--bg); color: var(--text-main); line-height: 1.6; margin: 0; padding: 0; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 2rem; }
+
+        header { background-color: var(--primary); color: white; padding: 3rem 2rem; border-radius: 8px 8px 0 0; margin-bottom: 2rem; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); border-bottom: 6px solid var(--secondary); }
+        header h1 { margin: 0; font-size: 2.5rem; letter-spacing: -0.5px; }
+        header p { margin: 0.5rem 0 0; opacity: 0.9; font-size: 1.1rem; }
+        .vol-badge { display: inline-block; background: var(--secondary); color: white; padding: 0.25rem 0.75rem; border-radius: 999px; font-weight: bold; font-size: 0.875rem; margin-bottom: 1rem; }
+        .manual-link {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: 1.25rem;
+            padding: 0.8rem 1.2rem;
+            border-radius: 999px;
+            background: rgba(255, 255, 255, 0.14);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            text-decoration: none;
+            font-weight: 700;
+            transition: all 0.2s ease;
+        }
+        .manual-link:hover { background: white; color: var(--primary); transform: translateY(-1px); }
+
+        .controls { background: var(--surface); padding: 1.5rem; border-radius: 8px; border: 1px solid var(--border); margin-bottom: 2rem; display: flex; flex-direction: column; gap: 1rem; }
+        .search-bar { width: 100%; padding: 0.75rem; font-size: 1rem; border: 1px solid var(--border); border-radius: 6px; box-sizing: border-box; }
+        .search-bar:focus { outline: none; border-color: var(--secondary); box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2); }
+        
+        .filters { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+        .filter-btn { padding: 0.5rem 1rem; border: 1px solid var(--border); background: var(--bg); border-radius: 999px; cursor: pointer; font-size: 0.875rem; font-weight: 600; color: var(--text-muted); transition: all 0.2s; }
+        .filter-btn:hover { background: #e2e8f0; }
+        .filter-btn.active { background: var(--primary); color: white; border-color: var(--primary); }
+
+        .qa-card { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; margin-bottom: 1rem; box-shadow: 0 1px 3px rgba(0,0,0,0.05); overflow: hidden; }
+        .qa-summary { padding: 1.25rem; font-weight: 600; cursor: pointer; display: flex; gap: 1rem; align-items: flex-start; background: var(--surface); }
+        .qa-summary:hover { background: #f8fafc; }
+        .qa-summary::-webkit-details-marker { display: none; }
+        .qa-content { padding: 1.5rem; border-top: 1px solid var(--border); background: #fafaf9; font-size: 0.95rem; }
+        
+        .badge { padding: 0.2rem 0.5rem; border-radius: 4px; font-size: 0.75rem; font-family: monospace; font-weight: bold; text-transform: uppercase; white-space: nowrap; }
+        .badge-water { background: rgba(45,168,216,0.1); color: var(--water); border: 1px solid var(--water); }
+        .badge-sewer { background: rgba(76,175,125,0.1); color: var(--sewer); border: 1px solid var(--sewer); }
+        .badge-storm { background: rgba(232,145,58,0.1); color: var(--storm); border: 1px solid var(--storm); }
+        .badge-pump { background: rgba(239,68,68,0.1); color: var(--pump); border: 1px solid var(--pump); }
+        .badge-mat { background: rgba(139,92,246,0.1); color: var(--mat); border: 1px solid var(--mat); }
+        
+        .level { font-size: 0.7rem; font-weight: bold; letter-spacing: 0.5px; margin-left: auto; align-self: center; padding: 0.2rem 0.5rem; border-radius: 4px; }
+        .level-beg { background: #dcfce7; color: #166534; }
+        .level-int { background: #fef08a; color: #854d0e; }
+        .level-exp { background: #fee2e2; color: #991b1b; }
+
+        .stat-bar { display: flex; justify-content: space-between; font-size: 0.875rem; color: var(--text-muted); margin-bottom: 1rem; padding: 0 0.5rem; }
+
+        /* Mobile responsiveness */
+        * { box-sizing: border-box; }
+        img, svg, canvas { max-width: 100%; height: auto; }
+        .qa-content { overflow-x: auto; }
+
+        @media (max-width: 768px) {
+            .container { padding: 1rem; }
+            header { padding: 2rem 1.25rem; margin-bottom: 1rem; }
+            header h1 { font-size: 2rem; line-height: 1.15; }
+            header p { font-size: 1rem; }
+            .manual-link { width: 100%; max-width: 320px; text-align: center; }
+            .controls { padding: 1rem; }
+            .filters { align-items: stretch; }
+            .filters > span { width: 100%; margin: 0 0 0.25rem 0 !important; }
+            .filter-btn { flex: 1 1 calc(50% - 0.5rem); min-height: 42px; padding: 0.55rem 0.75rem; }
+            .qa-summary { flex-wrap: wrap; gap: 0.6rem; padding: 1rem; }
+            .qa-summary span:not(.badge):not(.level) { flex: 1 1 100%; }
+            .badge, .level { white-space: normal; }
+            .level { margin-left: 0; }
+            .qa-content { padding: 1rem; }
+            .stat-bar { flex-direction: column; gap: 0.35rem; }
+        }
+
+        @media (max-width: 480px) {
+            .container { padding: 0.75rem; }
+            header { padding: 1.5rem 1rem; }
+            header h1 { font-size: 1.65rem; }
+            .filter-btn { flex-basis: 100%; }
+            .search-bar { font-size: 0.95rem; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <span class="vol-badge">VOLUME 4 OF 7</span>
+        <h1>Interview Master Guide</h1>
+        <p>100 Detailed Technical Questions & Answers for Principal-Level Engineering Interviews</p>
+        <a class="manual-link" href="water resource manual.html">Back to Water Resource Manual</a>
+    </header>
+    <div class="controls">
+        <input type="text" id="searchInput" class="search-bar" placeholder="Search scenarios, keywords, or concepts (e.g., 'Cavitation', 'Oversized', 'Surge')...">
+        <div style="display: flex; flex-direction: column; gap: 0.75rem; margin-top: 0.5rem;">
+
+            <div class="filters" id="categoryFilters">
+                <span style="font-size: 0.85rem; color: var(--text-muted); align-self: center; font-weight: bold; margin-right: 0.5rem; min-width: 45px;">Topic:</span>
+                <button class="filter-btn active" data-filter="all">All (100)</button>
+                <button class="filter-btn" data-filter="Water">Water Supply</button>
+                <button class="filter-btn" data-filter="Sewer">Sanitary Sewer</button>
+                <button class="filter-btn" data-filter="Storm">Stormwater</button>
+                <button class="filter-btn" data-filter="Pump">Pumps & Hydraulics</button>
+                <button class="filter-btn" data-filter="Material">Materials & Const.</button>
+            </div>
+            <div class="filters" id="levelFilters">
+                <span style="font-size: 0.85rem; color: var(--text-muted); align-self: center; font-weight: bold; margin-right: 0.5rem; min-width: 45px;">Level:</span>
+                <button class="filter-btn active" data-filter="all">All Levels</button>
+                <button class="filter-btn" data-filter="Beginner">Beginner</button>
+                <button class="filter-btn" data-filter="Intermediate">Intermediate</button>
+                <button class="filter-btn" data-filter="Expert">Expert</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="stat-bar">
+        <span id="resultCount">Showing 100 questions</span>
+        <span id="expandBtn" style="cursor: pointer; color: var(--secondary); font-weight: 600; transition: color 0.2s;">Expand all to study</span>
+    </div>
+
+    <div id="qaList">
+        <!-- Injected via JS -->
+    </div>
+</div>
+
+<script>
+    // 100 Detailed Q&A Database
+    const db = [
+        /* ================= WATER SUPPLY (20 Questions) ================= */
+        { c: "Water", l: "Beginner", q: "What is the difference between ADD, MDD, and PHD?", a: "ADD (Average Day Demand) is the baseline flow over a year. MDD (Maximum Day Demand) is the highest consumption in a single 24-hour period, typically 1.5x ADD. PHD (Peak Hour Demand) is the highest 1-hour consumption on that max day, typically 2.25x to 3.0x ADD. Transmission mains are sized for MDD; distribution mains are sized for PHD." },
+        { c: "Water", l: "Beginner", q: "What is the minimum pressure requirement during a fire flow event?", a: "According to AWWA and Ten States Standards, the residual pressure at the fire hydrant node and all surrounding nodes in the network must not drop below 20 psi (1.4 bar) during the required fire flow duration." },
+        { c: "Water", l: "Intermediate", q: "How do you handle fire flow modeling in EPANET or WaterGEMS?", a: "Fire flow is modeled as a massive point demand (e.g., 1000 to 3500 GPM) at a specific junction. You run a steady-state simulation at the worst-case scenario: Maximum Day Demand (MDD) plus Fire Flow. If the EGL (Energy Grade Line) drops causing any node to fall below 20 psi, the pipe diameters feeding that node must be increased." },
+        { c: "Water", l: "Intermediate", q: "Why do we establish 'Pressure Zones' in a water network?", a: "To prevent pipe bursts and leakage. If elevation varies by more than 30-40 meters, static pressure at the lowest point might exceed 80 psi (5.5 bar) if driven by the highest tank. We use Pressure Reducing Valves (PRVs) to isolate the lower elevations into a separate hydraulic grade line, keeping pressures in the optimal 35-80 psi range." },
+        { c: "Water", l: "Expert", q: "Explain 'Water Age' and how you mitigate it in a hydraulic model.", a: "Water age is the time it takes for water to travel from the source to the consumer. High water age (> 5-7 days) leads to chlorine residual decay and bacterial regrowth. It's caused by oversized pipes (low velocity) and dead-end branches. I mitigate it by looping the network, sizing pipes appropriately for current (not just ultimate) demand, and implementing automated flushing valves at dead ends." },
+        { c: "Water", l: "Expert", q: "An EPS model shows an elevated tank never reaching 100% full. What are the engineering implications?", a: "This indicates a Mass Balance deficit. The source pumps are undersized relative to the Total Daily Demand, or the head loss in the transmission main is too high, restricting flow. Over consecutive days, the tank will continuously lose volume until it runs dry. The supply flow rate must be increased to exceed the 24-hour ADD." },
+        { c: "Water", l: "Beginner", q: "What is the purpose of an Air Release Valve (ARV) on a water main?", a: "Air becomes trapped at localized high points in a pipeline, restricting flow area and increasing headloss. ARVs automatically vent this accumulated air under pressure. They also allow large volumes of air to enter the pipe during draining or pump failure, preventing vacuum collapse." },
+        { c: "Water", l: "Intermediate", q: "What is Hazen-Williams 'C-factor' and how does it change over time?", a: "C-factor represents internal pipe smoothness. A higher C means smoother pipe (less friction). A new Ductile Iron pipe might have a C of 130-140. However, over 30 years, tuberculation and biofilm buildup will reduce the C-factor to 100 or lower. Hydraulic models must use the 'aged' C-factor to ensure long-term capacity." },
+        { c: "Water", l: "Expert", q: "How do you size a Thrust Block?", a: "Thrust forces occur at bends, tees, and dead ends due to momentum change and static pressure. $Force = 2 \cdot P \cdot A \cdot \sin(\theta/2)$. I size the block area based on the soil's safe bearing capacity (e.g., $Area = Force / Soil Capacity$). The block transfers the hydrostatic force into the undisturbed trench wall." },
+        { c: "Water", l: "Intermediate", q: "What is Non-Revenue Water (NRW)?", a: "NRW is the difference between the volume of water put into the distribution system and the volume billed to customers. It consists of physical losses (pipe leaks, tank overflows) and commercial losses (meter inaccuracies, theft, unbilled authorized consumption). Standard allowance in design is 15% to 30%." },
+        { c: "Water", l: "Beginner", q: "Why loop a water distribution network?", a: "Looping prevents dead ends. It ensures two-way feed to any hydrant (increasing fire flow capacity), minimizes headloss, reduces water age (prevents stagnation), and allows sections to be isolated for maintenance without shutting off the whole neighborhood." },
+        { c: "Water", l: "Intermediate", q: "How do you calculate the required volume for an elevated storage tank?", a: "Volume = Equalization Storage (typically 15-25% of Max Day Demand to handle peak hour fluctuations) + Fire Storage (e.g., 1000 GPM x 2 hours = 120,000 gallons) + Emergency Storage (often 25% of ADD to allow for pump repairs)." },
+        { c: "Water", l: "Expert", q: "A PRV is 'chattering' (rapidly opening and closing). What causes this and how to fix it?", a: "Chattering occurs when a PRV is drastically oversized for the current low flow conditions. The valve plug operates too close to the seat, causing unstable pressure waves. The fix is to install a smaller 'jockey' PRV in parallel to handle low flows, and set the main large PRV to open only during high demand/fire flow." },
+        { c: "Water", l: "Beginner", q: "What is the minimum velocity in a water main?", a: "Ten States standard recommends a minimum of 0.6 m/s (2.0 ft/s) at peak flow to prevent the deposition of suspended solids and minimize water age." },
+        { c: "Water", l: "Expert", q: "Explain the difference between HGL and EGL in a pressurized pipe.", a: "The Hydraulic Grade Line (HGL) is the sum of pressure head and elevation head ($P/\gamma + Z$). The Energy Grade Line (EGL) includes the velocity head ($V^2/2g$). In pressurized water pipes, velocity is low, so EGL and HGL are almost identical. In free-surface sewer flow, the HGL matches the water surface." },
+        { c: "Water", l: "Intermediate", q: "What happens if a node has a negative pressure in EPANET?", a: "A negative pressure means the calculated HGL has fallen below the physical elevation of the node. In reality, water doesn't flow backwards; instead, a vacuum forms. The system will suck in groundwater through leaks (contamination risk), and the pipe may collapse structurally if it's a thin-walled material." },
+        { c: "Water", l: "Beginner", q: "What is the typical per capita water demand in a developed urban area?", a: "According to CPHEEO and WHO guidelines, a typical urban demand ranges from 135 to 250 Liters per Capita per Day (LPCD), depending on affluence, climate, and available resources." },
+        { c: "Water", l: "Intermediate", q: "How is commercial demand calculated in master planning?", a: "Unlike residential (per capita), commercial and industrial demands are calculated on a Land Use basis (e.g., Liters per Hectare per Day) or via Fixture Units if the specific building plumbing is known. Example: Light industry = 15,000 L/Ha/d." },
+        { c: "Water", l: "Expert", q: "What is column separation?", a: "It is a severe transient (water hammer) phenomenon. When a pump trips, the momentum of the water continues forward, dropping the pressure at high points below the vapor pressure of water. The water boils, creating a vapor cavity. When the water column reverses and slams back together, it creates a massive pressure spike that bursts pipes." },
+        { c: "Water", l: "Intermediate", q: "Why use an Altitude Valve on a reservoir?", a: "An altitude valve automatically shuts off flow when the water level in a tank reaches a predetermined high water mark, preventing overflow. It re-opens when the system pressure drops, allowing the tank to discharge back into the network." },
+
+        /* ================= SANITARY SEWER (20 Questions) ================= */
+        { c: "Sewer", l: "Beginner", q: "Why are sanitary sewers never designed to flow 100% full?", a: "Sewers are designed for a maximum depth-to-diameter ratio (d/D) of 0.50 to 0.75. This allows empty space at the crown of the pipe for the ventilation of corrosive H2S gases and provides a buffer volume for extreme, unexpected wet weather infiltration." },
+        { c: "Sewer", l: "Beginner", q: "What is the minimum self-cleansing velocity for a gravity sewer?", a: "0.6 m/s (2.0 ft/s) at full or half-full flow. This velocity ensures that organic solids remain in suspension and do not settle on the invert, which would cause blockages and anaerobic septic conditions." },
+        { c: "Sewer", l: "Intermediate", q: "Explain the Harmon Formula.", a: "The Harmon formula calculates the Peak Hour Factor for domestic sewage. $PF = 1 + [14 / (4 + \sqrt{P})]$, where P is population in thousands. It mathematically represents statistical diversity: small populations peak sharply (PF up to 4.0), while huge populations average out to a flatter peak (PF ~ 2.0)." },
+        { c: "Sewer", l: "Expert", q: "A 200mm sewer at 0.5% slope meets the 0.6 m/s rule when full. However, currently, it only serves 5 houses. Will solids settle?", a: "Yes. The 0.6 m/s is calculated at full flow. With only 5 houses, the flow depth (d/D) is extremely low (e.g., 0.05). At this partial depth, the hydraulic radius shrinks, and according to partial flow charts, the actual velocity will be well below 0.3 m/s. Solids will settle. You must run partial flow calculations." },
+        { c: "Sewer", l: "Intermediate", q: "What is a Drop Manhole and when is it required?", a: "A drop manhole uses an external or internal vertical drop pipe. Ten States Standards requires it when an incoming sewer invert is 24 inches (0.6 meters) or more above the manhole's outgoing invert. This prevents solids splashing, protects workers, and minimizes turbulent release of H2S gas." },
+        { c: "Sewer", l: "Beginner", q: "What is the difference between DWF and PWWF?", a: "DWF (Dry Weather Flow) is the base sewage flow plus baseline groundwater infiltration. PWWF (Peak Wet Weather Flow) applies the diurnal peaking factor (e.g., Harmon) PLUS a massive storm allowance for Inflow and Infiltration (I&I). Pipes are sized for PWWF." },
+        { c: "Sewer", l: "Intermediate", q: "What causes Hydrogen Sulfide (H2S) in sewers and why is it dangerous?", a: "H2S forms in anaerobic (oxygen-starved), stagnant sewage. It rises to the pipe crown where bacteria convert it to Sulfuric Acid ($H_2SO_4$). This acid rapidly eats away concrete pipes and manholes (crown corrosion). It is also highly toxic to maintenance workers." },
+        { c: "Sewer", l: "Expert", q: "Why is an oversized sewer pipe a catastrophic design failure?", a: "Increasing pipe diameter without increasing flow reduces the depth of water (d/D). The same volume of water is spread over a wider wetted perimeter, significantly dropping the velocity below the 0.6 m/s self-cleansing threshold. Solids will drop out, putrefy, and eventually block the oversized pipe." },
+        { c: "Sewer", l: "Beginner", q: "What is the minimum allowable pipe diameter for a municipal sanitary sewer?", a: "According to Ten States Standards § 33.1, the minimum diameter for municipal gravity sewer mains is 8 inches (200 mm). This size prevents blockages from household rags and grease." },
+        { c: "Sewer", l: "Intermediate", q: "What is I&I and what are typical allowance values?", a: "Infiltration (groundwater leaking into cracked pipes/joints) and Inflow (illegal roof drains or flooded manhole covers entering the sewer). A typical design allowance is 10% to 20% of the peak flow, or a set value like 2,000 Liters/Hectare/day." },
+        { c: "Sewer", l: "Expert", q: "How do you size the active volume of a lift station wet well?", a: "The volume between the Pump-ON and Pump-OFF elevations must ensure the pump does not cycle too frequently and burn out the motor. $V = (T \cdot Q) / 4$, where T is the minimum cycle time (usually 10 to 15 minutes) and Q is the pump capacity." },
+        { c: "Sewer", l: "Intermediate", q: "Why is Manning's 'n' of 0.013 used for PVC sewers when the factory spec says 0.009?", a: "Ten States Standards mandates n=0.013 for all sanitary sewer design regardless of material. This is because over a 50-year design life, PVC will grow a biological slime layer on the invert, increasing its roughness to equal that of concrete." },
+        { c: "Sewer", l: "Beginner", q: "What is the maximum distance between manholes?", a: "Typically 120 meters (400 feet) for pipes under 400mm. This is dictated by the physical length of CCTV camera cables and hydro-jetting cleaning hoses." },
+        { c: "Sewer", l: "Intermediate", q: "What is the return factor in wastewater generation?", a: "Not all domestic water supplied reaches the sewer. About 15-25% is lost to evaporation, drinking, and landscape irrigation. Therefore, sewage generated is typically calculated as 75% to 85% (return factor) of the per capita water demand." },
+        { c: "Sewer", l: "Expert", q: "Why do force mains require higher minimum velocities than gravity sewers?", a: "Gravity sewers require 0.6 m/s. Force mains require minimum 0.9 m/s (3.0 ft/s). Because force mains go up and down terrain, solids must be kept in suspension against gravity in the vertical or steeply inclined sections. If velocity drops, solids fall backward and plug the check valves." },
+        { c: "Sewer", l: "Beginner", q: "Where must manholes be placed?", a: "At every change in pipe size, change in slope (grade), change in horizontal alignment (direction), and at all intersections of multiple pipes." },
+        { c: "Sewer", l: "Intermediate", q: "How do you check for a sewer surcharge in a model?", a: "You review the profile view. If the Hydraulic Grade Line (HGL) rises above the crown (top) of the pipe, the pipe is pressurized/surcharging. If the HGL rises above the ground elevation, the manhole is flooding into the street." },
+        { c: "Sewer", l: "Expert", q: "Why should force mains not discharge directly into the invert of a gravity manhole?", a: "Force mains carry anaerobic sewage under pressure. Discharging directly causes massive turbulence, which violently strips dissolved H2S out of the liquid and into the air, causing severe odor complaints and rapid acid corrosion of the manhole. They should transition smoothly using a submerged drop or transition structure." },
+        { c: "Sewer", l: "Beginner", q: "What is a siphon (inverted siphon)?", a: "A pressure pipe section that dips under an obstruction (like a river or subway) and comes back up. Flow relies entirely on the upstream head being higher than the downstream head. They require multiple barrels and high velocities to prevent clogging." },
+        { c: "Sewer", l: "Intermediate", q: "What is the Babbit formula?", a: "An alternative to Harmon for calculating peak sewage flow. $PF = 5 / (P^{0.2})$, where P is population in thousands. It is often more conservative (yields a higher peak) than Harmon." },
+
+        /* ================= STORMWATER (20 Questions) ================= */
+        { c: "Storm", l: "Beginner", q: "Explain the Rational Method.", a: "Used to estimate peak runoff for small catchments (< 80 Hectares). $Q = CiA / 360$. C is the runoff coefficient (paved vs grass), i is rainfall intensity (from IDF curve), and A is area in hectares. It gives only peak flow, not a volume/hydrograph." },
+        { c: "Storm", l: "Intermediate", q: "What is Time of Concentration (Tc)?", a: "The time it takes for water to travel from the hydraulically most remote point in the catchment to the point of interest. It dictates the duration used on the IDF curve. Shorter Tc = Higher Intensity = Larger Pipes." },
+        { c: "Storm", l: "Expert", q: "Why do municipalities enforce a 'Minimum Tc' of 5 or 10 minutes?", a: "On an IDF curve, as duration approaches zero, intensity approaches infinity. Without a minimum Tc limit, a small roof catchment might yield a 30-second Tc, giving an absurd intensity of 500 mm/hr and massively oversizing the pipe. The 10-min minimum accounts for initial wetting and depression storage delays." },
+        { c: "Storm", l: "Beginner", q: "What is an IDF Curve?", a: "Intensity-Duration-Frequency curve. A graph provided by meteorological agencies. You input your Return Period (Frequency, e.g., 10-year storm) and your Time of Concentration (Duration), and it outputs the design Rainfall Intensity (mm/hr)." },
+        { c: "Storm", l: "Intermediate", q: "What is the SCS Curve Number (CN) Method?", a: "A method (TR-55) for calculating runoff volume. CN is a number from 30 to 98 based on Hydrologic Soil Group (A=sand, D=clay) and land cover. A higher CN means less infiltration and more runoff. Used in HEC-HMS and SWMM for hydrograph routing." },
+        { c: "Storm", l: "Expert", q: "Why use Dynamic Wave routing over Kinematic Wave routing in SWMM?", a: "Kinematic wave only translates hydrographs downstream; it cannot model backwater, pressurized surcharging, or reverse flow. Dynamic wave solves the full 1D St. Venant equations (continuity and momentum), allowing it to accurately model submerged outfalls and complex looped ponds." },
+        { c: "Storm", l: "Beginner", q: "What is the minimum pipe size for stormwater?", a: "Generally 300 mm (12 inches) or 375 mm (15 inches). Larger than sanitary sewers because stormwater carries significant grit, leaves, and street debris that easily blocks smaller pipes." },
+        { c: "Storm", l: "Intermediate", q: "How does a detention pond work?", a: "It temporarily stores peak stormwater runoff (Stage-Storage) and slowly releases it through a restricted outlet structure like an orifice or weir (Stage-Discharge). The goal is to limit the post-development peak outflow to the pre-development rate." },
+        { c: "Storm", l: "Expert", q: "Why can't you use the standard Rational Method to size a detention pond?", a: "The Rational Method calculates a single peak flow rate ($Q_p$); it does not provide volume or a time-based hydrograph. Ponds require 'Level-Pool Routing' using the continuity equation ($\Delta S = Inflow - Outflow$). You must use the Modified Rational Method or SCS Unit Hydrograph to generate the volume." },
+        { c: "Storm", l: "Beginner", q: "What is the difference between a 10-year and 100-year storm?", a: "Return period is a statistical probability. A 100-year storm has a 1% chance of occurring in any given year. A 10-year storm has a 10% chance. The 100-year storm produces much higher rainfall depth/intensity." },
+        { c: "Storm", l: "Intermediate", q: "What is gutter spread in street drainage?", a: "When it rains, water flows down the curb. The 'spread' is how far the water encroaches into the driving lane. HEC-22 guidelines limit this spread (e.g., max 1 lane width during a 10-yr storm). If spread exceeds the limit, you must add more catch basin inlets upstream." },
+        { c: "Storm", l: "Expert", q: "Explain the difference between a Sag Inlet and an On-Grade Inlet.", a: "An on-grade inlet is on a slope; water that bypasses it continues downhill to the next inlet. A sag inlet is at the low point (summit) of a road; 100% of the water must enter it. If a sag inlet blocks, the water ponds infinitely until it overtops the curb, causing severe flooding." },
+        { c: "Storm", l: "Beginner", q: "What are SuDS (Sustainable Drainage Systems)?", a: "Techniques designed to mimic natural hydrology by prioritizing infiltration, attenuation, and water quality treatment near the source. Examples include bioswales, permeable paving, and retention ponds." },
+        { c: "Storm", l: "Intermediate", q: "How do you calculate Time of Concentration using TR-55?", a: "Tc is the sum of three distinct travel times: Sheet Flow (max 30-100m, using Manning's kinematic equation), Shallow Concentrated Flow (using unpaved/paved nomographs), and Open Channel Flow (Manning's equation for pipes/swales)." },
+        { c: "Storm", l: "Expert", q: "What is the Kirpich Equation and when does it fail?", a: "$Tc = 0.0195 \cdot L^{0.77} \cdot S^{-0.385}$. It was developed for steep, natural, unpaved agricultural basins. It will drastically underestimate Tc (yielding massive, incorrect intensities) if applied to flat, paved urban commercial sites." },
+        { c: "Storm", l: "Beginner", q: "What is a Catch Basin?", a: "A structure with a grated cover placed in the gutter to collect stormwater. It usually has a 'sump' (a deepened floor below the outlet pipe) to trap sediment and grit before the water enters the main sewer system." },
+        { c: "Storm", l: "Intermediate", q: "What is a hydrograph?", a: "A graph showing flow rate (Discharge, Q) on the Y-axis versus Time on the X-axis. The area under the hydrograph curve represents the total volume of runoff." },
+        { c: "Storm", l: "Expert", q: "In orifice flow for pond outlets, what is the formula?", a: "$Q = C_d \cdot A \cdot \sqrt{2gH}$. $C_d$ is the discharge coefficient (typically 0.60 for a sharp-edged orifice), A is the area of the hole, and H is the head (water depth above the center of the orifice). Flow increases with the square root of head." },
+        { c: "Storm", l: "Beginner", q: "What is the purpose of a headwall on a culvert?", a: "To anchor the pipe, prevent the surrounding soil embankment from eroding into the pipe opening, and improve hydraulic efficiency by reducing entrance head losses." },
+        { c: "Storm", l: "Intermediate", q: "What is Hydrologic Soil Group (HSG)?", a: "NRCS classification (A, B, C, D) based on soil infiltration capacity. Group A (Sand) has high infiltration and low runoff. Group D (Clay) has low infiltration and very high runoff potential." },
+
+        /* ================= PUMPS & HYDRAULICS (20 Questions) ================= */
+        { c: "Pump", l: "Beginner", q: "What is Total Dynamic Head (TDH)?", a: "TDH is the total resistance a pump must overcome to move water. TDH = Static Lift (elevation difference from source to destination) + Friction Headloss (in pipes) + Minor Losses (valves, bends)." },
+        { c: "Pump", l: "Intermediate", q: "What is cavitation and how do you prevent it?", a: "Cavitation occurs when pressure at the pump impeller eye drops below the vapor pressure of water, causing it to boil into vapor bubbles that collapse violently, destroying the metal. Prevent it by ensuring NPSHa (Available) is strictly greater than NPSHr (Required)." },
+        { c: "Pump", l: "Expert", q: "Your pump is cavitating. Do you throttle the suction valve or the discharge valve to stop it?", a: "NEVER throttle the suction valve. Throttling suction increases headloss before the pump, dropping NPSHa further and making cavitation catastrophic. You must throttle the DISCHARGE valve. This pushes the pump back on its curve, reduces flow, lowers NPSHr, and increases NPSHa." },
+        { c: "Pump", l: "Beginner", q: "What does 'Duty/Standby' mean in a pump station?", a: "It is a redundancy design. If you need 100 L/s, you install two pumps, each capable of 100 L/s. One runs (Duty) while the other rests (Standby). If the duty pump fails, the standby takes over to prevent flooding." },
+        { c: "Pump", l: "Intermediate", q: "What is a System Curve?", a: "A graph plotting Flow (Q) vs. Total Dynamic Head (TDH). It starts at the static lift value and curves upward based on friction loss ($V^2$). The intersection of the System Curve and the Pump Performance Curve is the 'Operating Point'." },
+        { c: "Pump", l: "Expert", q: "Explain the Joukowsky Equation for water hammer.", a: "$\Delta P = \rho \cdot a \cdot \Delta V$. The pressure spike ($\Delta P$) is equal to fluid density ($\rho$) times the wave celerity/speed of sound in the pipe ($a$) times the sudden change in velocity ($\Delta V$). Instant valve closure causes maximum surge." },
+        { c: "Pump", l: "Beginner", q: "What is a submersible pump?", a: "A pump where the motor and impeller are sealed in a single unit designed to be fully submerged in the wet well liquid. Common in wastewater to save space and eliminate suction lift problems." },
+        { c: "Pump", l: "Intermediate", q: "How do you calculate Pump Water Horsepower (WHP)?", a: "$WHP = (Q.TDH.G_s) / 3960$ (in US Units). To get Brake Horsepower (BHP), divide WHP by the pump efficiency." },
+        { c: "Pump", l: "Expert", q: "If you put two identical centrifugal pumps in PARALLEL, what happens to Flow and Head?", a: "The capacities (Flow) are added together at any given head. However, because flow increases, friction in the common discharge pipe also increases. Therefore, two pumps in parallel will yield significantly LESS than double the flow of a single pump." },
+        { c: "Pump", l: "Beginner", q: "What is the purpose of a Check Valve?", a: "To allow flow in only one direction. Placed immediately after a pump, it prevents the entire force main from draining backwards through the pump when the motor turns off." },
+        { c: "Pump", l: "Intermediate", q: "What is a surge vessel (bladder tank)?", a: "A tank partially filled with water and compressed air. During a pump trip (water hammer), the air expands to push water into the void, preventing negative pressure. When the wave returns, the air compresses to absorb the high-pressure slam." },
+        { c: "Pump", l: "Expert", q: "If you put two identical pumps in SERIES, what happens?", a: "The Heads are added together at any given flow rate. Used when extreme static lift is required (e.g., pumping up a mountain) that a single pump cannot overcome." },
+        { c: "Pump", l: "Beginner", q: "What is the Best Efficiency Point (BEP)?", a: "The point on a pump curve where it operates most efficiently, transferring the highest percentage of electrical power into hydraulic power. Operating far from BEP causes vibration, heat, and premature bearing failure." },
+        { c: "Pump", l: "Intermediate", q: "What is an affinity law (speed change)?", a: "If you put a pump on a Variable Frequency Drive (VFD) and reduce speed by 50%: Flow drops by 50% (linear). Head drops by 75% (squared). Power drops by 87.5% (cubed). This is why VFDs save massive amounts of energy." },
+        { c: "Pump", l: "Expert", q: "What is a VFD 'Minimum Speed' constraint in a static-heavy system?", a: "If a system has 30m of static lift, you cannot slow the VFD down to 10% speed. At 10% speed, the pump might only generate 5m of head. The check valve won't even open, and the pump will churn water (Dead Heading), boiling it and destroying the seals." },
+        { c: "Pump", l: "Beginner", q: "What is friction headloss?", a: "The energy lost as water rubs against the inside walls of the pipe. It increases with pipe length, pipe roughness, and exponentially with velocity." },
+        { c: "Pump", l: "Intermediate", q: "What are 'Minor Losses'?", a: "Energy losses caused by turbulence through fittings (bends, tees, valves). Calculated as $h_m = K \cdot (V^2/2g)$. In long transmission mains, minor losses are ignored. In cramped pump stations, minor losses often exceed pipe friction." },
+        { c: "Pump", l: "Expert", q: "What is 'Dead Heading' a pump?", a: "Operating a centrifugal pump with the discharge valve completely closed. Flow is zero. All motor energy converts to heat, boiling the water inside the casing and causing catastrophic failure." },
+        { c: "Pump", l: "Beginner", q: "What does NPSH stand for?", a: "Net Positive Suction Head. It is the absolute pressure available at the pump suction to keep the liquid from boiling (cavitating)." },
+        { c: "Pump", l: "Intermediate", q: "How do you control odors in a sewage pump station wet well?", a: "Keep retention time low (small wet well) to prevent anaerobic conditions. If unavoidable, use chemical dosing (Ferric chloride, Bioxide) or install activated carbon scrubbers on the air vent." },
+
+        /* ================= MATERIALS & CONSTRUCTION (20 Questions) ================= */
+        { c: "Material", l: "Beginner", q: "What is the minimum horizontal separation between a water main and a sewer?", a: "Ten States Standards requires a minimum 10-foot (3.0 meter) horizontal separation to prevent cross-contamination if the water main depressurizes." },
+        { c: "Material", l: "Intermediate", q: "If a water main must cross a sewer, what are the rules?", a: "The water main must cross ABOVE the sewer with a minimum vertical separation of 18 inches (450 mm). The sewer joint must be equidistant and as far as possible from the water main." },
+        { c: "Material", l: "Expert", q: "Why is bedding and compaction critical for GRP or PVC pipes, but less critical for Ductile Iron?", a: "DI is a rigid pipe; it supports earth and traffic loads through its own inherent structural strength. GRP and PVC are flexible pipes; they deflect. They rely on the passive resistance of the highly compacted side-fill soil to prevent them from squashing into an oval and collapsing." },
+        { c: "Material", l: "Beginner", q: "Why do we internally line Ductile Iron pipes with cement mortar?", a: "To prevent internal corrosion and tuberculation (rust nodule growth) caused by water reacting with bare iron, which preserves the pipe's smooth C-factor over its lifetime." },
+        { c: "Material", l: "Intermediate", q: "What is butt-fusion welding?", a: "The method of joining HDPE pipes. The ends are shaved flat, heated with a hot plate until molten, and pressed together under pressure. It creates a continuous, jointless pipe that is as strong as the parent material." },
+        { c: "Material", l: "Expert", q: "You specify bare RCP (Concrete) for a sanitary sewer trunk. Why will the client sue you 5 years later?", a: "Bare concrete is highly alkaline. Anaerobic sewage generates H2S gas, which bacteria on the pipe crown convert to Sulfuric Acid. The acid will eat the concrete completely through in 3-5 years. Concrete sewers MUST be lined with HDPE, PVC ribs, or epoxy." },
+        { c: "Material", l: "Beginner", q: "What is a hydrotest (hydrostatic test)?", a: "Filling a newly constructed pipeline with water, pressurizing it to 1.5 times its working pressure, and holding it for 2 hours to check for leaks and joint integrity before burying it." },
+        { c: "Material", l: "Intermediate", q: "Why test with water (hydrotest) instead of compressed air?", a: "Water is incompressible. If a pipe ruptures during a hydrotest, the pressure drops instantly and safely. Air is compressible. If a pipe ruptures under 150 psi of air, it explodes like a bomb, sending deadly shrapnel across the site." },
+        { c: "Material", l: "Expert", q: "What is Cathodic Protection (CP)?", a: "An electrical method to stop corrosion on steel pipelines. It makes the pipeline the 'cathode' of an electrochemical cell. Can be done via Sacrificial Anodes (magnesium/zinc blocks that corrode instead of the pipe) or Impressed Current (using a rectifier power supply)." },
+        { c: "Material", l: "Beginner", q: "What is the purpose of trench warning tape?", a: "A brightly colored plastic tape (Blue for Water, Green for Sewer) buried 300mm above the pipe. It warns future excavators that a utility is below before they hit the pipe with a backhoe." },
+        { c: "Material", l: "Intermediate", q: "What is SDR in plastic pipes?", a: "Standard Dimension Ratio. It is the ratio of the pipe's outer diameter to its wall thickness ($SDR = OD / t$). A lower SDR means a thicker wall and a higher pressure rating." },
+        { c: "Material", l: "Expert", q: "Why is Polyethylene Encasement (bagging) used on Ductile Iron?", a: "When DI is buried in aggressive/corrosive soils, a loose PE sleeve is wrapped around it. It prevents direct contact between the pipe and soil. More importantly, it traps a thin layer of water that quickly depletes its oxygen, halting the galvanic corrosion process." },
+        { c: "Material", l: "Beginner", q: "What is a tracer wire?", a: "A continuous copper wire taped to the top of non-metallic pipes (PVC, HDPE). Since plastic cannot be detected by ground-penetrating radar/metal detectors, workers induce an electrical current in the wire to locate the pipe later." },
+        { c: "Material", l: "Intermediate", q: "What is trench box / shoring?", a: "Steel or aluminum retaining walls placed inside an excavation to protect workers from trench collapse (cave-ins) in deep excavations or unstable soils." },
+        { c: "Material", l: "Expert", q: "Explain the difference between Type 3, Type 4, and Type 5 trench bedding.", a: "Type 3 requires granular material to the pipe springline. Type 4 requires granular material up to the pipe crown. Type 5 (the strongest) requires the pipe to be fully encased in poured concrete. Specified based on depth of cover and traffic loads." },
+        { c: "Material", l: "Beginner", q: "What is CCTV inspection in sewers?", a: "Closed-Circuit Television. A robotic camera driven through newly constructed sewers to check for sags, cracked pipes, leaking joints, or poor connections before final handover." },
+        { c: "Material", l: "Intermediate", q: "What is trenchless technology (HDD)?", a: "Horizontal Directional Drilling. A method of installing pipes (usually HDPE) under rivers, highways, or existing buildings without digging an open trench. A pilot hole is drilled, reamed, and the pipe is pulled through." },
+        { c: "Material", l: "Expert", q: "Why can't you use standard gaskets for water pipes in contaminated soils?", a: "Standard EPDM rubber gaskets are degraded by hydrocarbons (petrol, solvents) in the soil. The contaminants will eat the rubber and permeate the water supply. You must specify Nitrile (NBR) gaskets or use welded steel." },
+        { c: "Material", l: "Beginner", q: "What is cover depth?", a: "The distance from the final ground surface to the crown (top) of the pipe. Required to protect pipes from freezing (frost line) and crushing under traffic." },
+        { c: "Material", l: "Intermediate", q: "What is a flanged joint vs. a push-on joint?", a: "Push-on uses a rubber gasket and is assembled by pushing the spigot into the bell; used for buried pipe as it allows some deflection. Flanged uses bolts and a flat gasket; it is completely rigid and used inside pump stations where pipes are exposed." }
+    ];
+
+    const qaList = document.getElementById('qaList');
+    const resultCount = document.getElementById('resultCount');
+    const expandBtn = document.getElementById('expandBtn');
+
+    // Filter State
+    let currentCategory = 'all';
+    let currentLevel = 'all';
+    let searchTerm = '';
+    let isExpanded = false;
+
+    function renderQA() {
+        qaList.innerHTML = '';
+        let count = 0;
+
+        db.forEach((item, index) => {
+            // Apply all 3 filters concurrently
+            const matchCategory = currentCategory === 'all' || item.c === currentCategory;
+            const matchLevel = currentLevel === 'all' || item.l === currentLevel;
+            const matchSearch = searchTerm === '' || 
+                                item.q.toLowerCase().includes(searchTerm) || 
+                                item.a.toLowerCase().includes(searchTerm) || 
+                                item.c.toLowerCase().includes(searchTerm);
+
+            if (matchCategory && matchLevel && matchSearch) {
+                count++;
+
+                let badgeClass = '';
+                if (item.c === "Water") badgeClass = 'badge-water';
+                if (item.c === "Sewer") badgeClass = 'badge-sewer';
+                if (item.c === "Storm") badgeClass = 'badge-storm';
+                if (item.c === "Pump") badgeClass = 'badge-pump';
+                if (item.c === "Material") badgeClass = 'badge-mat';
+
+                let lvlClass = '';
+                if (item.l === "Beginner") lvlClass = 'level-beg';
+                if (item.l === "Intermediate") lvlClass = 'level-int';
+                if (item.l === "Expert") lvlClass = 'level-exp';
+
+                // Keep expanded if search is active or "Expand all" was clicked
+                const expandAttr = isExpanded || searchTerm !== '' ? 'open' : '';
+
+                const html = `
+                    <details class="qa-card" id="q${index}" ${expandAttr}>
+                        <summary class="qa-summary">
+                            <div>
+                                <span class="badge ${badgeClass}">${item.c}</span>
+                                <span class="level ${lvlClass}">${item.l}</span>
+                            </div>
+                            <div style="flex-grow:1">${count}. ${item.q}</div>
+                            <div style="color:var(--secondary)">▼</div>
+                        </summary>
+                        <div class="qa-content">
+                            <strong>Answer:</strong> ${item.a}
+                        </div>
+                    </details>
+                `;
+                qaList.innerHTML += html;
+            }
+        });
+
+        resultCount.innerText = `Showing ${count} matching questions`;
+        
+        // Re-render math equations if applicable
+        if (window.MathJax && typeof window.MathJax.typesetPromise === 'function') {
+            MathJax.typesetPromise().catch(err => console.error('MathJax typeset failed:', err));
+        }
+    }
+
+    // Initialize display
+    renderQA();
+
+    
+    // Category Filter Buttons
+    document.querySelectorAll('#categoryFilters .filter-btn').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            document.querySelectorAll('#categoryFilters .filter-btn').forEach(b => b.classList.remove('active'));
+            e.target.classList.add('active');
+            currentCategory = e.target.dataset.filter;
+            renderQA();
+        });
+    });
+
+    // Difficulty Level Filter Buttons
+    document.querySelectorAll('#levelFilters .filter-btn').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            document.querySelectorAll('#levelFilters .filter-btn').forEach(b => b.classList.remove('active'));
+            e.target.classList.add('active');
+            currentLevel = e.target.dataset.filter;
+            renderQA();
+        });
+    });
+
+    // Search Input Logic
+    document.getElementById('searchInput').addEventListener('input', (e) => {
+        searchTerm = e.target.value.toLowerCase();
+        renderQA();
+    });
+
+    // Expand / Collapse All Logic
+    expandBtn.addEventListener('click', () => {
+        isExpanded = !isExpanded;
+        expandBtn.innerText = isExpanded ? "Collapse all" : "Expand all to study";
+        
+        // Update DOM elements manually to avoid fully re-rendering MathJax
+        document.querySelectorAll('.qa-card').forEach(card => {
+            if (isExpanded) {
+                card.setAttribute('open', '');
+            } else {
+                card.removeAttribute('open');
+            }
+        });
+    });
+
+</script>
+
+</body>
+</html>

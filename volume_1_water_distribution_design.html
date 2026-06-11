@@ -1,0 +1,643 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wet Utilities Master Handbook - Volume 1: Water Distribution</title>
+            <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']]
+            }
+        };
+    </script>
+
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        :root {
+            --primary: #1e3a8a; /* Deep Water Blue */
+            --secondary: #3b82f6;
+            --accent: #d97706;
+            --bg: #f8fafc;
+            --surface: #ffffff;
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+            --border: #e2e8f0;
+            --success: #16a34a;
+            --danger: #dc2626;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background-color: var(--bg);
+            color: var(--text-main);
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        header {
+            background-color: var(--primary);
+            color: white;
+            padding: 3rem 2rem;
+            border-radius: 8px 8px 0 0;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        header h1 { margin: 0; font-size: 2.5rem; letter-spacing: -0.5px; }
+        header p { margin: 0.5rem 0 0; opacity: 0.9; font-size: 1.1rem; }
+        .vol-badge { display: inline-block; background: var(--accent); color: white; padding: 0.25rem 0.75rem; border-radius: 999px; font-weight: bold; font-size: 0.875rem; margin-bottom: 1rem; }
+        .manual-link {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: 1.25rem;
+            padding: 0.8rem 1.2rem;
+            border-radius: 999px;
+            background: rgba(255, 255, 255, 0.14);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            text-decoration: none;
+            font-weight: 700;
+            transition: all 0.2s ease;
+        }
+        .manual-link:hover { background: white; color: var(--primary); transform: translateY(-1px); }
+
+        section.main-chapter {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+
+        h2 { color: var(--primary); border-bottom: 2px solid var(--border); padding-bottom: 0.5rem; margin-top: 0; }
+        h3 { color: var(--secondary); margin-top: 2rem; }
+        h4 { color: var(--text-main); font-weight: 600; margin-top: 1.5rem; }
+
+        /* Data grids for attribute blocks */
+        .attr-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            background: #f1f5f9;
+            padding: 1.5rem;
+            border-radius: 6px;
+            border-left: 4px solid var(--secondary);
+            margin: 1rem 0;
+            font-size: 0.95rem;
+        }
+        .attr-grid div { margin-bottom: 0.5rem; }
+        .attr-grid strong { color: var(--primary); display: block; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.5px; }
+        
+        .full-width { grid-column: 1 / -1; }
+
+        table { width: 100%; border-collapse: collapse; margin: 1.5rem 0; font-size: 0.9rem; }
+        th, td { padding: 0.75rem; border: 1px solid var(--border); text-align: left; }
+        th { background-color: #f8fafc; color: var(--primary); font-weight: 600; }
+
+        .interview-box {
+            background: #fffbeb;
+            border: 1px solid #fde68a;
+            border-left: 4px solid var(--accent);
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            border-radius: 0 6px 6px 0;
+        }
+        .interview-box h4 { color: #b45309; margin-top: 0; display: flex; align-items: center; gap: 0.5rem; }
+        
+        .mistake-box {
+            background: #fef2f2;
+            border: 1px solid #fecaca;
+            border-left: 4px solid var(--danger);
+            padding: 1rem 1.5rem;
+            margin: 1rem 0;
+        }
+        .mistake-box strong { color: var(--danger); }
+
+        .standards-tag {
+            display: inline-block;
+            background: #e2e8f0;
+            color: #334155;
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-family: monospace;
+            margin-right: 0.5rem;
+            border: 1px solid #cbd5e1;
+        }
+
+        details {
+            background: #ffffff;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            margin-bottom: 1rem;
+        }
+        summary {
+            padding: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            background: #f8fafc;
+            border-radius: 6px;
+        }
+        summary:hover { background: #f1f5f9; }
+        .details-content { padding: 1.5rem; border-top: 1px solid var(--border); }
+        
+        .math-block { overflow-x: auto; padding: 1rem 0; }
+
+        @media (max-width: 768px) {
+            .attr-grid { grid-template-columns: 1fr; }
+        }
+
+        /* Mobile responsiveness */
+        * { box-sizing: border-box; }
+        img, svg, canvas { max-width: 100%; height: auto; }
+        table { display: block; overflow-x: auto; white-space: nowrap; -webkit-overflow-scrolling: touch; }
+        th, td { vertical-align: top; }
+        .math-block { max-width: 100%; }
+
+        @media (max-width: 768px) {
+            .container { padding: 1rem; }
+            header { padding: 2rem 1.25rem; margin-bottom: 1rem; }
+            header h1 { font-size: 2rem; line-height: 1.15; }
+            header p { font-size: 1rem; }
+            .manual-link { width: 100%; max-width: 320px; text-align: center; }
+            section.main-chapter { padding: 1.25rem; }
+            h2 { font-size: 1.35rem; }
+            h3 { font-size: 1.1rem; }
+            .attr-grid { padding: 1rem; gap: 0.75rem; }
+            .interview-box, .mistake-box { padding: 1rem; }
+        }
+
+        @media (max-width: 480px) {
+            .container { padding: 0.75rem; }
+            header { padding: 1.5rem 1rem; }
+            header h1 { font-size: 1.65rem; }
+            section.main-chapter { padding: 1rem; }
+            table { font-size: 0.82rem; }
+            th, td { padding: 0.6rem; }
+        }
+
+        .volume-progress {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 1rem 1.25rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+        .progress-meta { display: flex; justify-content: space-between; gap: 1rem; font-weight: 700; color: var(--primary); margin-bottom: 0.6rem; }
+        .progress-track { height: 10px; background: var(--border); border-radius: 999px; overflow: hidden; }
+        .progress-fill { height: 100%; width: 0%; background: var(--secondary); transition: width 0.25s ease; }
+        .section-done {
+            float: right;
+            margin-left: 1rem;
+            padding: 0.45rem 0.75rem;
+            border: 1px solid var(--border);
+            border-radius: 999px;
+            background: var(--bg);
+            color: var(--text-muted);
+            font-weight: 700;
+            cursor: pointer;
+        }
+        .section-done.done { background: var(--success); color: white; border-color: var(--success); }
+        @media (max-width: 768px) {
+            .progress-meta { flex-direction: column; gap: 0.25rem; }
+            .section-done { float: none; display: inline-flex; margin: 0.75rem 0 0; width: 100%; justify-content: center; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <span class="vol-badge">VOLUME 1 OF 7</span>
+        <h1>Water Distribution Design</h1>
+        <p>Comprehensive Master Handbook for Senior Wet Utilities Engineers</p>
+        <a class="manual-link" href="water resource manual.html">Back to Water Resource Manual</a>
+    </header>
+
+    <!-- 1. DESIGN CRITERIA ESTABLISHMENT -->
+    <section class="main-chapter" id="sec-1">
+        <h2>1. Design Criteria Establishment</h2>
+        <p>The foundation of any municipal water network. Establishing criteria involves defining the hydraulic constraints, demand parameters, and regulatory frameworks before a single pipe is drawn.</p>
+        
+        <div class="attr-grid">
+            <div><strong>Purpose</strong>To ensure the designed network meets regulatory, performance, and safety requirements throughout its design life.</div>
+            <div><strong>Required Inputs</strong>Topography, Master Plan, local regulations, environmental constraints, fire authority mandates.</div>
+            <div class="full-width"><strong>Governing Standards</strong>
+                <span class="standards-tag">Ten States Part 8</span>
+                <span class="standards-tag">AWWA M32</span>
+                <span class="standards-tag">WHO GDWQ</span>
+                <span class="standards-tag">BS EN 805</span>
+                <span class="standards-tag">CPHEEO Ch 2</span>
+            </div>
+            <div><strong>Design Assumptions</strong>System must provide domestic peak demand concurrently with fire flow. Minimum pressure must be maintained at highest elevation nodes.</div>
+            <div><strong>Typical Values</strong>Min Velocity: 0.6 m/s (Ten States). Min Pressure: 20 psi / 1.4 bar during fire flow, 35-40 psi / 2.5 bar normal (AWWA). Max Velocity: 1.5 - 2.5 m/s.</div>
+        </div>
+
+        <div class="mistake-box">
+            <strong>Common Mistake:</strong> Establishing a uniform minimum pressure criteria without accounting for high-rise buildings (which require booster pumps rather than over-pressurizing the municipal mains) or failing to separate pressure zones where elevation varies by more than 30-40 meters.
+        </div>
+
+        <div class="interview-box">
+            <h4>💡 Interview Question Focus</h4>
+            <p><strong>Q: An urban network has an elevation difference of 60 meters. How do you handle design criteria?</strong><br>
+            <em>Answer:</em> A 60m drop creates approx. 6 bars (87 psi) of static pressure difference. If the high zone requires a minimum of 2.5 bars, the low zone will experience 8.5 bars, exceeding typical allowable limits (often 6-7 bars) causing bursts and leakage. I would establish dual pressure zones using PRVs (Pressure Reducing Valves) or separate service reservoirs to keep operating pressures within the 2.5 to 6.0 bar sweet spot (BS EN 805 / AWWA standards).</p>
+        </div>
+    </section>
+
+    <!-- 2. POPULATION PROJECTION METHODS -->
+    <section class="main-chapter" id="sec-2">
+        <h2>2. Population Projection Methods</h2>
+        <p>Accurate projection determines the ultimate capacity. Oversizing leads to water age and stagnation issues (chlorine decay); undersizing leads to premature hydraulic failure.</p>
+        
+        <details>
+            <summary>2.1 Arithmetic Increase Method</summary>
+            <div class="details-content">
+                <div class="attr-grid">
+                    <div><strong>Purpose</strong>Forecast population for old, established, fully built-out cities.</div>
+                    <div><strong>Equation</strong><div class="math-block">$$P_n = P_0 + n \cdot C$$</div><br><em>P<sub>n</sub> = Future pop, P<sub>0</sub> = Present pop, n = decades, C = avg increase per decade.</em></div>
+                    <div><strong>Governing Standards</strong><span class="standards-tag">CPHEEO Ch 2</span> <span class="standards-tag">Twort's Water Supply</span></div>
+                    <div><strong>When to use</strong>Large, old cities with no new land for expansion.</div>
+                    <div><strong>When NOT to use</strong>New developments or rapidly expanding suburbs.</div>
+                    <div><strong>Advantages</strong>Simple, prevents gross overestimation.</div>
+                    <div><strong>Limitations</strong>Ignores compounding growth; purely linear.</div>
+                </div>
+            </div>
+        </details>
+
+        <details>
+            <summary>2.2 Geometric Increase Method</summary>
+            <div class="details-content">
+                <div class="attr-grid">
+                    <div><strong>Purpose</strong>Forecast for rapidly growing, newly developing cities.</div>
+                    <div><strong>Equation</strong><div class="math-block">$$P_n = P_0 \left(1 + \frac{r}{100}\right)^n$$</div><br><em>r = average percentage growth rate per decade/year.</em></div>
+                    <div><strong>Governing Standards</strong><span class="standards-tag">Ten States Part 1</span> <span class="standards-tag">CPHEEO</span></div>
+                    <div><strong>When to use</strong>Cities with unlimited expansion potential and booming economies.</div>
+                    <div><strong>When NOT to use</strong>Old cities (will drastically over-predict demand).</div>
+                    <div><strong>Limitations</strong>Compounding nature can result in absurdly high figures over 30+ year horizons.</div>
+                </div>
+            </div>
+        </details>
+
+        <details>
+            <summary>2.3 Incremental Increase Method</summary>
+            <div class="details-content">
+                <div class="attr-grid">
+                    <div><strong>Purpose</strong>A compromise between Arithmetic and Geometric methods.</div>
+                    <div><strong>Equation</strong><div class="math-block">$$P_n = P_0 + n \cdot X + \frac{n(n+1)}{2} \cdot Y$$</div><br><em>X = avg arithmetic increase, Y = avg incremental increase (change in X).</em></div>
+                    <div><strong>When to use</strong>Cities currently growing but approaching saturation. Often mandated in South Asian (CPHEEO) master plans.</div>
+                </div>
+            </div>
+        </details>
+
+        <details>
+            <summary>2.4 Logistic Growth (S-Curve) Method</summary>
+            <div class="details-content">
+                <div class="attr-grid">
+                    <div><strong>Purpose</strong>Mathematical modeling of population hitting a geographic/resource saturation limit.</div>
+                    <div><strong>Equation</strong><div class="math-block">$$P_t = \frac{P_{sat}}{1 + e^{a + b \Delta t}}$$</div><br><em>P<sub>sat</sub> = saturation population, a,b = constants derived from historical data.</em></div>
+                    <div><strong>When to use</strong>Long-term master planning (50+ years) where geographic boundaries are strictly defined.</div>
+                </div>
+            </div>
+        </details>
+
+        <details>
+            <summary>2.5 Master Plan / Zoning Method</summary>
+            <div class="details-content">
+                <div class="attr-grid">
+                    <div><strong>Purpose</strong>Projection based on statutory town planning limits.</div>
+                    <div><strong>Method</strong>Area of Zone × Permitted Density (e.g., 50 Ha × 200 persons/Ha = 10,000 pop).</div>
+                    <div><strong>When to use</strong>Greenfield projects, planned subdivisions. *This is the most common method for specific real estate developments.*</div>
+                </div>
+            </div>
+        </details>
+
+        <details>
+            <summary>2.6 Utility Connection Method</summary>
+            <div class="details-content">
+                <div class="attr-grid">
+                    <div><strong>Purpose</strong>Projection based on active water/power meters.</div>
+                    <div><strong>Equation</strong>Pop = (Number of active domestic meters) × (Average household size, e.g., 5.5).</div>
+                    <div><strong>Advantages</strong>Highly accurate baseline data; ignores census flaws.</div>
+                </div>
+            </div>
+        </details>
+
+        <details>
+            <summary>2.7 Land Use Method</summary>
+            <div class="details-content">
+                <div class="attr-grid">
+                    <div><strong>Purpose</strong>Demand driven by commercial/industrial footprint rather than capita.</div>
+                    <div><strong>Method</strong>Area × Equivalent Demand (e.g., L/Ha/day for industrial zones).</div>
+                    <div><strong>Governing Standards</strong><span class="standards-tag">AWWA M1</span></div>
+                </div>
+            </div>
+        </details>
+
+        <details>
+            <summary>2.8 Equivalent Population Method</summary>
+            <div class="details-content">
+                <div class="attr-grid">
+                    <div><strong>Purpose</strong>Converting industrial/commercial loads into a "population equivalent" (PE) for standardized network modeling.</div>
+                    <div><strong>Method</strong>PE = (Total Non-Domestic Demand in L/d) / (Per Capita Demand in L/c/d).</div>
+                    <div><strong>Advantages</strong>Simplifies EPANET demand allocation.</div>
+                </div>
+            </div>
+        </details>
+        
+        <div class="interview-box">
+            <h4>💡 Interview Question Focus</h4>
+            <p><strong>Q: You are designing a 30-year master plan for a greenfield city that currently has zero population. Which projection method do you use and why?</strong><br>
+            <em>Answer:</em> I cannot use Arithmetic, Geometric, or Incremental methods because P = 0 and there is no historical census data. I must use the <strong>Master Plan / Land Use Method</strong>. I will take the urban planner's zoning map, apply housing densities (e.g., Low Density = 50 persons/Ha, High Density = 300 persons/Ha) to determine the ultimate saturation population, and phase the growth based on the developer's financial absorption rate.</p>
+        </div>
+    </section>
+
+    <!-- 3. DEMAND CALCULATIONS -->
+    <section class="main-chapter" id="sec-3">
+        <h2>3. Demand Calculations</h2>
+        <p>Water systems are not designed for "average" conditions. They are designed for extremes. Understanding peaking factors is critical to sizing pipes, pumps, and tanks.</p>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Demand Type</th>
+                    <th>Equation / Definition</th>
+                    <th>Typical Values / Peaking Factor</th>
+                    <th>Governing Code / Standard</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Average Day Demand (ADD)</strong></td>
+                    <td>ADD = Population × Per Capita Consumption + System Losses</td>
+                    <td>150 - 250 L/c/d (Developed). 100 L/c/d (Rural). Loss: 10-20%</td>
+                    <td><span class="standards-tag">WHO</span> <span class="standards-tag">CPHEEO</span></td>
+                </tr>
+                <tr>
+                    <td><strong>Maximum Day Demand (MDD)</strong></td>
+                    <td>MDD = ADD × Maximum Day Peaking Factor</td>
+                    <td>PF = 1.5 to 1.8. (e.g. hottest day of the year).</td>
+                    <td><span class="standards-tag">Ten States § 8.1</span> <span class="standards-tag">AWWA M32</span></td>
+                </tr>
+                <tr>
+                    <td><strong>Peak Hour Demand (PHD)</strong></td>
+                    <td>PHD = MDD × Peak Hour Factor <em>OR</em> ADD × Combined PF</td>
+                    <td>Combined PF = 2.25 to 3.0 (Highest hour on the highest day).</td>
+                    <td><span class="standards-tag">BS EN 805</span></td>
+                </tr>
+                <tr>
+                    <td><strong>Fire Flow Demand</strong></td>
+                    <td>US ISO Formula: $Q = 220 \sqrt{P} \left(1 - 0.01\sqrt{P}\right)$gpm (P=pop in thousands)</td>
+                    <td>Residential: 1,000 - 1,500 gpm. Comm/Ind: 2,500 - 3,500 gpm.</td>
+                    <td><span class="standards-tag">AWWA M31</span> <span class="standards-tag">NFPA 1</span></td>
+                </tr>
+                <tr>
+                    <td><strong>Combined Demand</strong></td>
+                    <td>Design Flow = MAX (PHD) <em>OR</em> (MDD + Fire Flow)</td>
+                    <td>Mains must be sized for the larger of these two scenarios.</td>
+                    <td><span class="standards-tag">Ten States § 8.1.1</span></td>
+                </tr>
+                <tr>
+                    <td><strong>Industrial Demand</strong></td>
+                    <td>Liters per hectare per day (L/Ha/d) based on industry type.</td>
+                    <td>Light: 10,000 L/Ha/d. Heavy: 40,000+ L/Ha/d.</td>
+                    <td><span class="standards-tag">AWWA M1</span></td>
+                </tr>
+                <tr>
+                    <td><strong>Institutional Demand</strong></td>
+                    <td>Hospitals (per bed), Schools (per student).</td>
+                    <td>Hospitals: 400-600 L/bed/d. Schools: 45-100 L/student/d.</td>
+                    <td><span class="standards-tag">Twort's Water Supply</span></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="mistake-box">
+            <strong>Common Mistake:</strong> Sizing distribution mains strictly for Peak Hour Demand (PHD) in small residential cul-de-sacs. In loops serving less than 500 people, the <strong>Fire Flow + MDD</strong> scenario will almost always dictate the pipe size (typically driving it up to a minimum of 150mm / 6-inch pipe regardless of actual domestic demand).
+        </div>
+
+        <div class="interview-box">
+            <h4>💡 Interview Question Focus</h4>
+            <p><strong>Q: An architect provides you with a landscape irrigation demand of 500 m³/day for a new district. Do you add this to the Peak Hour Demand to size your network?</strong><br>
+            <em>Answer:</em> No. Irrigation is a managed demand. I would specify in the design report and operational manual that irrigation systems must operate on automated timers during night-time off-peak hours (e.g., 11:00 PM to 4:00 AM). Adding irrigation to the domestic Peak Hour Demand (which occurs around 7:00 AM or 7:00 PM) would unnecessarily oversize the entire trunk network. It is added to the <em>Average Day Demand</em> for water source sizing, but not to the <em>Peak Hour</em> for pipe sizing.</p>
+        </div>
+    </section>
+
+    <!-- 4. PIPE MATERIAL SELECTION -->
+    <section class="main-chapter" id="sec-4">
+        <h2>4. Pipe Material Selection</h2>
+        <p>Selecting the right pipe requires balancing hydraulic capacity, structural strength, corrosion resistance, and total lifecycle cost. No single material is perfect for all applications.</p>
+
+        <details>
+            <summary>4.1 Ductile Iron (DI)</summary>
+            <div class="details-content">
+                <div class="attr-grid">
+                    <div><strong>Standards</strong><span class="standards-tag">AWWA C150/151</span> <span class="standards-tag">BS EN 545</span></div>
+                    <div><strong>Pressure Rating</strong>PN16, PN25, PN40 (Very High)</div>
+                    <div><strong>Corrosion</strong>Susceptible to acidic soils. Requires internal cement-mortar lining and external zinc/bitumen or polyethylene encasement.</div>
+                    <div><strong>Surge Resistance</strong>Excellent. Inherently handles high water hammer pressures.</div>
+                    <div><strong>Typical Use</strong>Trunk mains, pumped rising mains, high-traffic loads.</div>
+                    <div><strong>Failure Mode</strong>Graphitization (corrosion), localized pitting if coating fails.</div>
+                </div>
+            </div>
+        </details>
+
+        <details>
+            <summary>4.2 High-Density Polyethylene (HDPE)</summary>
+            <div class="details-content">
+                <div class="attr-grid">
+                    <div><strong>Standards</strong><span class="standards-tag">AWWA C906</span> <span class="standards-tag">ISO 4427</span> <span class="standards-tag">EN 12201</span></div>
+                    <div><strong>Pressure Rating</strong>PE100 typically rated up to PN16 or PN25 based on SDR (Standard Dimension Ratio).</div>
+                    <div><strong>Corrosion</strong>Immune to galvanic corrosion. Chemically inert.</div>
+                    <div><strong>Surge Resistance</strong>Very good due to material flexibility (lower wave celerity reduces water hammer spikes).</div>
+                    <div><strong>Typical Use</strong>Trenchless installation (HDD), areas with soil settlement, aggressive soils.</div>
+                    <div><strong>Failure Mode</strong>Slow crack growth, failure at butt-fusion joints if welded improperly, permeation of hydrocarbons (do not use in contaminated soils).</div>
+                </div>
+            </div>
+        </details>
+        
+        <details>
+            <summary>4.3 Unplasticized Polyvinyl Chloride (uPVC / PVC-U)</summary>
+            <div class="details-content">
+                <div class="attr-grid">
+                    <div><strong>Standards</strong><span class="standards-tag">AWWA C900</span> <span class="standards-tag">BS EN 1452</span></div>
+                    <div><strong>Pressure Rating</strong>PN10 to PN16. (Lower than DI).</div>
+                    <div><strong>Cost</strong>Highly economical for diameters up to 300mm.</div>
+                    <div><strong>Installation</strong>Push-fit joints. Requires careful bedding to prevent point loading.</div>
+                    <div><strong>Limitations</strong>Becomes brittle with UV exposure; fatigue failure under cyclic pumping loads.</div>
+                </div>
+            </div>
+        </details>
+
+        <details>
+            <summary>4.4 Glass Reinforced Plastic (GRP)</summary>
+            <div class="details-content">
+                <div class="attr-grid">
+                    <div><strong>Standards</strong><span class="standards-tag">AWWA C950</span> <span class="standards-tag">ISO 10639</span></div>
+                    <div><strong>Pressure Rating</strong>Up to PN32, extremely customizable.</div>
+                    <div><strong>Typical Use</strong>Very large transmission mains (>1000mm) where steel is too expensive and DI is too heavy.</div>
+                    <div><strong>Limitations</strong>Highly dependent on installation. If side-fill compaction is poor, the pipe deflects and joints fail.</div>
+                </div>
+            </div>
+        </details>
+
+        <details>
+            <summary>4.5 Steel (Carbon Steel / Stainless)</summary>
+            <div class="details-content">
+                <div class="attr-grid">
+                    <div><strong>Standards</strong><span class="standards-tag">AWWA C200</span> <span class="standards-tag">AWWA M11</span></div>
+                    <div><strong>Advantages</strong>Ultimate strength. Welded joints prevent thrust block requirements (fully restrained).</div>
+                    <div><strong>Limitations</strong>Requires strict Cathodic Protection (CP) and high-quality coatings (e.g., 3LPE). Expensive. Stainless is used primarily inside pump stations or WTPs.</div>
+                </div>
+            </div>
+        </details>
+
+        <div class="interview-box">
+            <h4>💡 Interview Question Focus</h4>
+            <p><strong>Q: You have a 400mm transmission main passing through an old industrial landfill site contaminated with petrol/hydrocarbons. What pipe material do you choose?</strong><br>
+            <em>Answer:</em> I absolutely <strong>cannot use HDPE or PVC</strong>. Hydrocarbons will permeate through polyethylene and contaminate the potable water supply. I must use <strong>Ductile Iron</strong> equipped with a specialized protective gasket (like Nitrile/NBR), or fully welded <strong>Steel</strong>. (Reference: AWWA M23 & M11 limitations).</p>
+        </div>
+    </section>
+
+    <!-- 5. HYDRAULIC DESIGN -->
+    <section class="main-chapter" id="sec-5">
+        <h2>5. Hydraulic Design</h2>
+        <p>The core mathematics of water engineering. Gravity brings it down, pumps push it up, and friction takes a toll.</p>
+
+        <div class="attr-grid">
+            <div class="full-width"><strong>Hazen-Williams Equation (Most Common for Water)</strong>
+                <div class="math-block">$$V = 0.849 \cdot C \cdot R^{0.63} \cdot S^{0.54}$$</div>
+                <div class="math-block">Headloss formulation: $$h_f = \frac{10.67 \cdot L \cdot Q^{1.852}}{C^{1.852} \cdot D^{4.87}}$$</div>
+                <em>Where: C = Roughness Coeff (140 for new HDPE/PVC, 130 for DI). Q in m³/s, D & L in meters.</em>
+            </div>
+            
+            <div class="full-width"><strong>Darcy-Weisbach Equation (More accurate, accounts for viscosity/temperature)</strong>
+                <div class="math-block">$$h_f = f \frac{L}{D} \frac{V^2}{2g}$$</div>
+                <em>Where: f = friction factor (calculated via Colebrook-White equation), V = velocity.</em>
+            </div>
+        </div>
+
+        <h4>System Configurations & Nodes</h4>
+        <p><strong>Branched Systems:</strong> Dead-ends. High risk of stagnation. Cheaper. Only used where loops are geographically impossible.<br>
+        <strong>Looped Systems:</strong> Two-way flow. Ensures redundancy, minimizes headloss, keeps water fresh. Required by Ten States Standards wherever feasible.</p>
+
+        <div class="mistake-box">
+            <strong>Common Mistake:</strong> Relying on the C-value of a <em>new</em> pipe. A Ductile Iron pipe might have a C=130 on day one, but after 30 years of tuberculation, C might drop to 100 or lower. All hydraulic models must be run using the "Design Life" C-value, not the factory C-value.
+        </div>
+
+        <div class="interview-box">
+            <h4>💡 Interview Question Focus</h4>
+            <p><strong>Q: Why do we limit maximum velocity in water mains to 1.5 - 2.5 m/s?</strong><br>
+            <em>Answer:</em> Three reasons. First, <strong>Headloss</strong> is proportional to the square of the velocity (V²), meaning pumping costs increase exponentially at high velocities. Second, <strong>Water Hammer</strong> pressure surge magnitude is directly proportional to the change in velocity (Joukowsky equation): $$\Delta P = \rho a \Delta V$$
+            Third, extreme velocity causes <strong>scouring</strong> of internal cement linings in DI pipes and erosion of fittings.</p>
+        </div>
+    </section>
+
+    <!-- 6. WATER NETWORK MODELING -->
+    <section class="main-chapter" id="sec-6">
+        <h2>6. Water Network Modeling</h2>
+        <p>Translating equations into computational reality using EPANET or Bentley WaterGEMS.</p>
+
+        <div class="attr-grid">
+            <div><strong>Demand Allocation</strong>Distributing spatial demands to junctions. Methods include: Nearest Node, Thiessen Polygons, or Meter geocoding.</div>
+            <div><strong>Calibration</strong>Adjusting C-values, PRV settings, and baseline demands in the model until model pressures match real-world field hydrant tests.</div>
+            <div><strong>EPS (Extended Period Simulation)</strong>Running the model over 24-48 hours. Required to verify that tanks fill during the night and empty during the day, and to calculate water age.</div>
+            <div><strong>Validation Checks</strong>Ensure all nodes > 2.5 bar. Ensure all pipes < 2.0 m/s. Check tank turnover (should exchange at least 20-30% of volume daily to maintain chlorine residuals).</div>
+        </div>
+
+        <div class="interview-box">
+            <h4>💡 Interview Question Focus</h4>
+            <p><strong>Q: You run an EPS model. The elevated storage tank starts at 50% full at hour 0, but at hour 24 it is only 30% full. What does this mean, and how do you fix it?</strong><br>
+            <em>Answer:</em> This means the system is operating at a mass balance deficit; the supply pumps or source cannot keep up with the 24-hour Total Daily Demand. If left running, the tank will eventually run dry. To fix this, I must either 1) Increase the supply pump flow rate, 2) Decrease network demand/leakage, or 3) Check if the pump control rules (HGL on/off settings) are shutting the pump down prematurely before the tank can fill.</p>
+        </div>
+    </section>
+
+    <!-- 7. FINAL DELIVERABLES -->
+    <section class="main-chapter" id="sec-7">
+        <h2>7. Final Deliverables (IFC Stage)</h2>
+        <p>An engineer's job is not complete when the model runs; it is complete when the contractor can build it.</p>
+        
+        <ul>
+            <li><strong>Design Report:</strong> Contains all criteria, population calcs, pump sizing, and hydraulic model outputs.</li>
+            <li><strong>Plan & Profile Drawings:</strong> Show horizontal alignment, vertical clearance from sewers (Ten States mandates water must be 18 inches above sewers), and thrust block locations.</li>
+            <li><strong>Standard Details:</strong> Trench bedding (Type 3, 4, 5 etc.), valve chambers, washout details, air valve installations.</li>
+            <li><strong>Technical Specifications:</strong> Exact pipe material standards (e.g., "DI to conform to AWWA C151 class 53"), testing procedures (hydrostatic test at 1.5x working pressure).</li>
+            <li><strong>BOQ (Bill of Quantities):</strong> Accurate take-offs for pipes, fittings (bends, tees), valves, and excavation volumes.</li>
+        </ul>
+    </section>
+
+</div>
+
+<script>
+(() => {
+    const volumeId = 'volume_1';
+    const volumeLabel = 'Volume 1';
+    const storageKey = `wetUtilities.sectionProgress.${volumeId}`;
+    const summaryKey = 'wetUtilities.volumeProgress';
+    const sections = Array.from(document.querySelectorAll('section.main-chapter[id]'));
+    let done = new Set(JSON.parse(localStorage.getItem(storageKey) || '[]'));
+
+    const progress = document.createElement('div');
+    progress.className = 'volume-progress';
+    progress.innerHTML = `
+        <div class="progress-meta">
+            <span>${volumeLabel} Progress</span>
+            <span id="volumeProgressText"></span>
+        </div>
+        <div class="progress-track"><div class="progress-fill" id="volumeProgressFill"></div></div>
+    `;
+    document.querySelector('header').after(progress);
+
+    function saveSummary(percent) {
+        const summary = JSON.parse(localStorage.getItem(summaryKey) || '{}');
+        summary[volumeId] = { percent, done: done.size, total: sections.length };
+        localStorage.setItem(summaryKey, JSON.stringify(summary));
+    }
+
+    function updateProgress() {
+        const percent = sections.length ? Math.round((done.size / sections.length) * 100) : 0;
+        document.getElementById('volumeProgressText').textContent = `${done.size} / ${sections.length} sections complete (${percent}%)`;
+        document.getElementById('volumeProgressFill').style.width = `${percent}%`;
+        localStorage.setItem(storageKey, JSON.stringify([...done]));
+        saveSummary(percent);
+    }
+
+    sections.forEach((section, index) => {
+        const h2 = section.querySelector('h2');
+        if (!h2) return;
+        const id = section.id || `section-${index + 1}`;
+        const button = document.createElement('button');
+        button.type = 'button';
+        button.className = 'section-done';
+        button.dataset.sectionId = id;
+        function syncButton() {
+            const isDone = done.has(id);
+            button.classList.toggle('done', isDone);
+            button.textContent = isDone ? 'Done' : 'Mark as Done';
+            button.setAttribute('aria-pressed', String(isDone));
+        }
+        button.addEventListener('click', () => {
+            if (done.has(id)) done.delete(id);
+            else done.add(id);
+            syncButton();
+            updateProgress();
+        });
+        syncButton();
+        h2.appendChild(button);
+    });
+
+    updateProgress();
+})();
+</script>
+</body>
+</html>

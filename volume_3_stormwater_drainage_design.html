@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wet Utilities Master Handbook - Volume 3: Stormwater Drainage</title>
+    
+    <!-- Explicit MathJax Configuration to enable $...$ for inline math -->
+    <script>
+        MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']]
+            },
+            svg: {
+                fontCache: 'global'
+            }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    
+    <style>
+        :root {
+            --primary: #0f172a; /* Slate 900 */
+            --secondary: #ea580c; /* Orange 600 - Stormwater Theme */
+            --accent: #f59e0b;
+            --bg: #f8fafc;
+            --surface: #ffffff;
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+            --border: #e2e8f0;
+            --success: #16a34a;
+            --danger: #dc2626;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background-color: var(--bg);
+            color: var(--text-main);
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        header {
+            background-color: var(--primary);
+            color: white;
+            padding: 3rem 2rem;
+            border-radius: 8px 8px 0 0;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            border-bottom: 6px solid var(--secondary);
+        }
+
+        header h1 { margin: 0; font-size: 2.5rem; letter-spacing: -0.5px; }
+        header p { margin: 0.5rem 0 0; opacity: 0.9; font-size: 1.1rem; }
+        .vol-badge { display: inline-block; background: var(--secondary); color: white; padding: 0.25rem 0.75rem; border-radius: 999px; font-weight: bold; font-size: 0.875rem; margin-bottom: 1rem; }
+        .manual-link {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: 1.25rem;
+            padding: 0.8rem 1.2rem;
+            border-radius: 999px;
+            background: rgba(255, 255, 255, 0.14);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            text-decoration: none;
+            font-weight: 700;
+            transition: all 0.2s ease;
+        }
+        .manual-link:hover { background: white; color: var(--primary); transform: translateY(-1px); }
+
+        section.main-chapter {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+
+        h2 { color: var(--primary); border-bottom: 2px solid var(--border); padding-bottom: 0.5rem; margin-top: 0; }
+        h3 { color: var(--secondary); margin-top: 2rem; border-left: 4px solid var(--secondary); padding-left: 0.75rem; }
+        h4 { color: var(--text-main); font-weight: 600; margin-top: 1.5rem; }
+
+        .attr-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            background: #f1f5f9;
+            padding: 1.5rem;
+            border-radius: 6px;
+            border-left: 4px solid var(--secondary);
+            margin: 1rem 0;
+            font-size: 0.95rem;
+        }
+        .attr-grid div { margin-bottom: 0.5rem; }
+        .attr-grid strong { color: var(--primary); display: block; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.5px; }
+        .full-width { grid-column: 1 / -1; }
+
+        table { width: 100%; border-collapse: collapse; margin: 1.5rem 0; font-size: 0.9rem; }
+        th, td { padding: 0.75rem; border: 1px solid var(--border); text-align: left; }
+        th { background-color: #f8fafc; color: var(--primary); font-weight: 600; }
+
+        .interview-box {
+            background: #fffbeb;
+            border: 1px solid #fde68a;
+            border-left: 4px solid var(--accent);
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            border-radius: 0 6px 6px 0;
+        }
+        .interview-box h4 { color: #b45309; margin-top: 0; display: flex; align-items: center; gap: 0.5rem; }
+        
+        .mistake-box {
+            background: #fef2f2;
+            border: 1px solid #fecaca;
+            border-left: 4px solid var(--danger);
+            padding: 1rem 1.5rem;
+            margin: 1rem 0;
+        }
+        .mistake-box strong { color: var(--danger); }
+
+        .case-study-box {
+            background: #f8fafc;
+            border: 1px solid #cbd5e1;
+            border-top: 4px solid var(--primary);
+            padding: 2rem;
+            margin: 2rem 0;
+            border-radius: 6px;
+        }
+        .case-study-box h3 { color: var(--primary); margin-top: 0; border: none; padding: 0; }
+        .case-step { color: var(--secondary); border-bottom: 1px solid #cbd5e1; padding-bottom: 5px; margin-top: 1.5rem; font-weight: bold; }
+
+        .standards-tag {
+            display: inline-block;
+            background: #e2e8f0;
+            color: #334155;
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-family: monospace;
+            margin-right: 0.5rem;
+            border: 1px solid #cbd5e1;
+            margin-bottom: 0.25rem;
+        }
+
+        details {
+            background: #ffffff;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            margin-bottom: 1rem;
+        }
+        summary {
+            padding: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            background: #f8fafc;
+            border-radius: 6px;
+        }
+        summary:hover { background: #f1f5f9; }
+        .details-content { padding: 1.5rem; border-top: 1px solid var(--border); }
+        
+        .math-block { 
+            overflow-x: auto; 
+            padding: 1.5rem; 
+            font-size: 1.15rem; 
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 4px;
+            margin: 1rem 0;
+            text-align: center;
+        }
+
+        @media (max-width: 768px) {
+            .attr-grid { grid-template-columns: 1fr; }
+        }
+
+        /* Mobile responsiveness */
+        * { box-sizing: border-box; }
+        img, svg, canvas { max-width: 100%; height: auto; }
+        table { display: block; overflow-x: auto; white-space: nowrap; -webkit-overflow-scrolling: touch; }
+        th, td { vertical-align: top; }
+        .math-block { max-width: 100%; }
+
+        @media (max-width: 768px) {
+            .container { padding: 1rem; }
+            header { padding: 2rem 1.25rem; margin-bottom: 1rem; }
+            header h1 { font-size: 2rem; line-height: 1.15; }
+            header p { font-size: 1rem; }
+            .manual-link { width: 100%; max-width: 320px; text-align: center; }
+            section.main-chapter { padding: 1.25rem; }
+            h2 { font-size: 1.35rem; }
+            h3 { font-size: 1.1rem; }
+            .attr-grid { padding: 1rem; gap: 0.75rem; }
+            .interview-box, .mistake-box { padding: 1rem; }
+        }
+
+        @media (max-width: 480px) {
+            .container { padding: 0.75rem; }
+            header { padding: 1.5rem 1rem; }
+            header h1 { font-size: 1.65rem; }
+            section.main-chapter { padding: 1rem; }
+            table { font-size: 0.82rem; }
+            th, td { padding: 0.6rem; }
+        }
+
+        .volume-progress {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 1rem 1.25rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+        .progress-meta { display: flex; justify-content: space-between; gap: 1rem; font-weight: 700; color: var(--primary); margin-bottom: 0.6rem; }
+        .progress-track { height: 10px; background: var(--border); border-radius: 999px; overflow: hidden; }
+        .progress-fill { height: 100%; width: 0%; background: var(--secondary); transition: width 0.25s ease; }
+        .section-done {
+            float: right;
+            margin-left: 1rem;
+            padding: 0.45rem 0.75rem;
+            border: 1px solid var(--border);
+            border-radius: 999px;
+            background: var(--bg);
+            color: var(--text-muted);
+            font-weight: 700;
+            cursor: pointer;
+        }
+        .section-done.done { background: var(--success); color: white; border-color: var(--success); }
+        @media (max-width: 768px) {
+            .progress-meta { flex-direction: column; gap: 0.25rem; }
+            .section-done { float: none; display: inline-flex; margin: 0.75rem 0 0; width: 100%; justify-content: center; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <span class="vol-badge">VOLUME 3 OF 7</span>
+        <h1>Stormwater Drainage Design</h1>
+        <p>Comprehensive Master Handbook for Senior Wet Utilities Engineers</p>
+        <a class="manual-link" href="water resource manual.html">Back to Water Resource Manual</a>
+    </header>
+
+    <!-- SECTION 1: CATCHMENT BREAKDOWN -->
+    <section class="main-chapter" id="sec-1">
+        <h2>1. Catchment Delineation & Topologic Breakdown</h2>
+        <p>Before any mathematical method is applied, a site must be correctly delineated into sub-catchments. Modern software (like SWMM, SewerGEMS, or InfoDrainage) requires a strict nodal topology. You cannot simply apply one massive area to a single outfall if you want an accurate pipe network.</p>
+
+        <div class="attr-grid">
+            <div class="full-width"><strong>The Node-Link-Subcatchment Model</strong>
+                <ul>
+                    <li><strong>Node (Inlet/Manhole):</strong> The entry point of runoff into the buried system.</li>
+                    <li><strong>Link (Pipe/Channel):</strong> The hydraulic conduit transferring water between nodes.</li>
+                    <li><strong>Subcatchment:</strong> The specific topographic area draining <em>exclusively</em> to a single Node.</li>
+                </ul>
+            </div>
+            <div><strong>Delineation Rules (Civil 3D / GIS)</strong><br>Polygons are drawn using proposed grading contours. The ridge lines dictate flow direction. Every square meter of the site must be assigned to an inlet node.</div>
+            <div><strong>Width Parameter (SWMM specific)</strong><br>In EPA SWMM, subcatchment "Width" is critical. $W = \text{Area} / \text{Length of overland flow}$. It dictates how quickly runoff enters the node.</div>
+        </div>
+    </section>
+
+    <!-- SECTION 2: HYDROLOGY METHODS -->
+    <section class="main-chapter" id="sec-2">
+        <h2>2. Advanced Hydrology Methods</h2>
+        <p>Interviews for principal roles will test your knowledge beyond the basic Rational equation. You must understand <em>when</em> to apply peak flow methods versus hydrograph methods.</p>
+
+        <details>
+            <summary>2.1 Rational & Modified Rational Method</summary>
+            <div class="details-content">
+                <div class="attr-grid">
+                    <div class="full-width"><strong>The Rational Equation (Peak Flow Only)</strong>
+                        <div class="math-block">$$Q_p = \frac{C \cdot i \cdot A}{360}$$</div>
+                        <em>Where: $Q_p$ = Peak Flow ($m^3/s$), $C$ = Runoff Coefficient, $i$ = Rainfall Intensity ($mm/hr$), $A$ = Area (Hectares). Limit: $A \le 80 \text{ Ha}$.</em>
+                    </div>
+                    <div class="full-width"><strong>Modified Rational Method (For Volume/Pond Sizing)</strong>
+                        <p>Unlike the standard method, this creates a trapezoidal hydrograph. It assumes the storm duration ($T_d$) is longer than the time of concentration ($T_c$). The engineer iterates different storm durations to find the one that produces the maximum required storage volume ($V_{max}$).</p>
+                        <div class="math-block">$$V_{storage} = \left( \frac{C \cdot i(T_d) \cdot A}{360} - Q_{allowable} \right) \cdot T_d \cdot 60$$</div>
+                    </div>
+                </div>
+            </div>
+        </details>
+
+        <details>
+            <summary>2.2 SCS Curve Number & Unit Hydrograph (TR-55 / HEC-HMS)</summary>
+            <div class="details-content">
+                <p>Mandatory for catchments $> 80$ Hectares or when exact flow-over-time (hydrograph) routing is required. It separates abstractions (infiltration/depression storage) from effective rainfall.</p>
+                <div class="attr-grid">
+                    <div class="full-width"><strong>Runoff Depth ($Q$) and Storage ($S$)</strong>
+                        <div class="math-block">$$Q = \frac{(P - I_a)^2}{(P - I_a) + S}$$</div>
+                        <div class="math-block">$$S = \frac{25400}{CN} - 254 \quad \text{(Metric, mm)}$$</div>
+                        <em>Where: $P$ = Total Rainfall Depth (mm), $I_a$ = Initial Abstraction (Usually $0.2S$), $CN$ = Curve Number (30 to 98).</em>
+                    </div>
+                    <div class="full-width"><strong>SCS Dimensionless Unit Hydrograph</strong>
+                        <p>Converts the runoff depth ($Q$) into a time-based hydrograph using the time to peak ($T_p$).</p>
+                        <div class="math-block">$$T_p = \frac{\Delta D}{2} + L_g$$</div>
+                        <em>Where: $\Delta D$ = Rainfall burst duration, $L_g$ = Basin Lag Time (often approximated as $0.6 \cdot T_c$). Peak discharge $q_p = \frac{2.08 \cdot A \cdot Q}{T_p}$.</em>
+                    </div>
+                </div>
+            </div>
+        </details>
+
+        <details>
+            <summary>2.3 EPA SWMM Non-Linear Reservoir Method</summary>
+            <div class="details-content">
+                <p>This is how hydraulic software (InfoWorks, SewerGEMS, EPA SWMM) actually generates runoff internally. It treats every subcatchment as a rectangular reservoir.</p>
+                <ul>
+                    <li><strong>Inflow:</strong> Precipitation.</li>
+                    <li><strong>Outflow:</strong> Evaporation + Infiltration (via Green-Ampt or Horton equations) + Surface Runoff.</li>
+                    <li><strong>The Runoff Equation:</strong> Uses Manning's equation for overland flow once depression storage ($d_p$) is exceeded.
+                        <div class="math-block">$$Q = \frac{W}{n} \cdot (d - d_p)^{5/3} \cdot S^{1/2}$$</div>
+                        <em>Where: $W$ = Subcatchment Width, $n$ = Overland Manning's roughness, $d$ = Water depth, $S$ = Slope.</em>
+                    </li>
+                </ul>
+            </div>
+        </details>
+    </section>
+
+    <!-- SECTION 3: TIME OF CONCENTRATION -->
+    <section class="main-chapter" id="sec-3">
+        <h2>3. Time of Concentration ($T_c$) & IDF Application</h2>
+        <p>The time required for runoff to travel from the hydraulically most distant point to the node. $T_c$ directly controls the intensity ($i$) pulled from the Intensity-Duration-Frequency (IDF) curve.</p>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Method</th>
+                    <th>Equation / Concept</th>
+                    <th>Best Application</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Kirpich Equation</strong></td>
+                    <td>$T_c = 0.0195 \cdot L^{0.77} \cdot S^{-0.385}$</td>
+                    <td>Natural, unpaved, steep basins. Tends to vastly underestimate $T_c$ in flat, paved urban areas.</td>
+                </tr>
+                <tr>
+                    <td><strong>FAA Method</strong></td>
+                    <td>$T_c = \frac{1.8 \cdot (1.1 - C) \cdot L^{0.5}}{S^{0.33}}$</td>
+                    <td>Urban airfields and highly paved flat commercial sites.</td>
+                </tr>
+                <tr>
+                    <td><strong>NRCS Velocity (TR-55)</strong></td>
+                    <td>$T_c = T_{\text{sheet}} + T_{\text{shallow}} + T_{\text{channel}}$</td>
+                    <td>The absolute industry standard. Calculates travel time segment by segment based on actual ground cover and slope.</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="interview-box">
+            <h4>💡 Interview Question Focus</h4>
+            <p><strong>Q: Why do municipalities mandate a "Minimum $T_c$" (usually 5 to 10 minutes)?</strong><br>
+            <em>Answer:</em> On a theoretical IDF curve, as Duration approaches zero, Intensity ($i$) approaches infinity. For a tiny roof catchment, calculating a $T_c$ of 30 seconds would yield a mathematically absurd rainfall intensity (e.g., $400 \text{ mm/hr}$), leading to wildly oversized pipes. A minimum 10-minute $T_c$ caps the intensity, representing the physical reality that it takes time for roofs to wet, minor depressions to fill, and initial splashing to organize into channelized overland flow.</p>
+        </div>
+    </section>
+
+    <!-- SECTION 4: HYDRAULIC ROUTING METHODS -->
+    <section class="main-chapter" id="sec-4">
+        <h2>4. Software Hydraulic Routing (The Software Black Box)</h2>
+        <p>When you press "Run" in SewerGEMS, InfoDrainage, or SWMM, the software routes the hydrographs through the pipe network. Interviewers want to know that you understand the mathematical engine you selected in the settings.</p>
+
+        <div class="attr-grid">
+            <div class="full-width"><strong>A. Steady State Routing</strong>
+                <p>Translates peak flows instantly from node to node. Used for basic Rational Method pipe sizing. <strong>Ignores volume, ignores time, ignores backwater.</strong></p>
+            </div>
+            <div class="full-width"><strong>B. Kinematic Wave Routing</strong>
+                <p>Solves the continuity equation and a simplified momentum equation. Hydrographs move through pipes and can attenuate (flatten out), but <strong>it cannot model backwater effects, pressurized surcharging, or reverse flow.</strong> If the outfall is submerged, Kinematic Wave will fail to show the resulting upstream flooding.</p>
+            </div>
+            <div class="full-width"><strong>C. Dynamic Wave Routing (St. Venant Equations)</strong>
+                <p>The gold standard. Solves the complete 1D Saint-Venant equations (Continuity + full Momentum). <strong>Accounts for channel storage, backwater, entrance/exit losses, flow reversal, and pressurized surcharging.</strong> Always use this for flat terrain, complex interconnected ponds, or tidal outfalls.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 5: DETENTION & SUDS -->
+    <section class="main-chapter" id="sec-5">
+        <h2>5. Detention Pond Level-Pool Routing</h2>
+        <p>When post-development flow exceeds allowable pre-development discharge, a detention basin is required. Ponds are routed using the <strong>Continuity Equation for Storage</strong>:</p>
+
+        <div class="math-block">$$\frac{\Delta S}{\Delta t} = I_{avg} - O_{avg}$$</div>
+        <p style="text-align:center;"><em>Change in Storage over time = Average Inflow - Average Outflow</em></p>
+
+        <p>The software establishes a <strong>Stage-Storage-Discharge</strong> relationship. The engineer inputs the pond contour areas (Stage vs. Storage) and designs an outlet structure (e.g., a multi-stage weir/orifice combination) to define the Stage vs. Discharge curve.</p>
+        
+        <ul>
+            <li><strong>Orifice Flow (Low flow throttle):</strong> $Q = C_d \cdot A \cdot \sqrt{2gH}$</li>
+            <li><strong>Weir Flow (High flow overflow):</strong> $Q = C_w \cdot L \cdot H^{3/2}$</li>
+        </ul>
+    </section>
+
+    <!-- SECTION 6: CASE STUDY -->
+    <section class="main-chapter" id="sec-6">
+        <h2>6. REAL-LIFE CASE STUDY: From Hydrology to IFC</h2>
+
+        <div class="case-study-box">
+            <h3>Project: "Apex Logistics Hub" - Full SWMM Execution</h3>
+            <p><strong>The Brief:</strong> You are the Lead Wet Utilities Engineer for a 12-hectare industrial logistics park. The municipality dictates that post-development peak discharge must not exceed pre-development peak discharge for the 10-year storm event. The downstream outfall is partially submerged by a river.</p>
+
+            <div class="case-step">Step 1: Topologic Catchment Breaking & Pre-Dev Hydrology</div>
+            <p>You cannot treat the 12-Ha site as one node. You overlay the proposed grading plan in Civil 3D and delineate 8 distinct subcatchments, each draining to a specific catch basin. But first, we find the global allowable limit.</p>
+            <ul>
+                <li><strong>Pre-Dev Surface:</strong> Pasture/Grassland. Composite Runoff Coefficient ($C_{pre}$) = $0.20$.</li>
+                <li><strong>$T_c$:</strong> Using TR-55, $T_c$ = $30 \text{ minutes}$.</li>
+                <li><strong>Rainfall Intensity ($i$):</strong> From IDF curve (10-yr, 30-min) = $50 \text{ mm/hr}$.</li>
+                <li><strong>Target Outflow Limit:</strong>
+                    $$Q_{pre} = \frac{C \cdot i \cdot A}{360} = \frac{0.20 \cdot 50 \cdot 12}{360} = \mathbf{0.33 \text{ m}^3\text{/s}}$$
+                </li>
+            </ul>
+
+            <div class="case-step">Step 2: Post-Development Load & Dynamic Software Setup</div>
+            <p>The site is now 90% paved asphalt yards ($C_{post} = 0.85$). We build the network in EPA SWMM.</p>
+            <ul>
+                <li>Because the downstream river outfall is submerged, Kinematic Wave routing will yield false results. We select <strong>Dynamic Wave Routing</strong> in SWMM settings to accurately model the backwater effect pushing up the pipes.</li>
+                <li>We apply an SCS Type II 24-hour design storm hyetograph to generate inflow hydrographs for all 8 subcatchments.</li>
+                <li>The unmitigated post-development peak flow entering the system is modeled at **$2.27 \text{ m}^3\text{/s}$**.</li>
+            </ul>
+
+            <div class="case-step">Step 3: Internal Trunk Sewer Sizing (Manning's Verification)</div>
+            <p>We check Subcatchment 4's outfall pipe. Topography restricts slope ($S$) to $0.005 \text{ m/m}$.</p>
+            <ul>
+                <li><strong>Trial: 900mm ($0.9\text{m}$) RCP Pipe (n=0.013)</strong>
+                    <ul>
+                        <li>$A = \pi \cdot (0.45)^2 = 0.636 \text{ m}^2$</li>
+                        <li>$R = D/4 = 0.225 \text{ m}$</li>
+                        <li>$V = \frac{1}{0.013} \cdot (0.225)^{2/3} \cdot (0.005)^{1/2} = \mathbf{2.01 \text{ m/s}}$</li>
+                        <li>$Q_{cap} = A \cdot V = 0.636 \cdot 2.01 = \mathbf{1.28 \text{ m}^3\text{/s}}$</li>
+                        <li><em>SWMM Output check: The Dynamic Wave profile shows the HGL breaching the manhole rim. The 900mm pipe is undersized for the $2.27 \text{ m}^3\text{/s}$ peak.</em></li>
+                    </ul>
+                </li>
+                <li><strong>Revision: 1200mm ($1.2\text{m}$) Pipe</strong> handles $2.75 \text{ m}^3\text{/s}$. We upsize the trunk main to 1200mm. The HGL drops safely below the surface.</li>
+            </ul>
+
+            <div class="case-step">Step 4: Detention Basin & Multi-Stage Outlet Design</div>
+            <p>We must throttle the $2.27 \text{ m}^3\text{/s}$ back down to the allowable $0.33 \text{ m}^3\text{/s}$. We design a dry detention basin.</p>
+            <ul>
+                <li><strong>Storage Volume:</strong> SWMM routing indicates a required volume of $4,500 \text{ m}^3$ to attenuate the peak.</li>
+                <li><strong>Outlet Structure:</strong> To restrict flow to $0.33 \text{ m}^3\text{/s}$ under a maximum pond head ($H$) of $1.5\text{m}$, we size a bottom orifice.
+                    $$Q = C_d \cdot A \cdot \sqrt{2gH}$$
+                    $$0.33 = 0.60 \cdot A \cdot \sqrt{2 \cdot 9.81 \cdot 1.5}$$
+                    $$0.33 = 0.60 \cdot A \cdot 5.42 \implies A = 0.101 \text{ m}^2$$
+                </li>
+                <li>Solving for diameter: $A = \frac{\pi \cdot D^2}{4} \implies D = \mathbf{360 \text{ mm}}$. We specify a $350\text{mm}$ control orifice plate on the outfall structure.</li>
+            </ul>
+
+            <div class="case-step">Step 5: IFC & Clash Detection</div>
+            <p>The 1200mm trunk intersects a proposed sanitary sewer. The storm invert is $-2.5\text{m}$. The sanitary crown is $-3.2\text{m}$. Separation is $0.7\text{m}$, safely passing the 0.3m (12-inch) code minimum. The design is locked for Issued for Construction (IFC).</p>
+        </div>
+    </section>
+
+</div>
+
+<script>
+(() => {
+    const volumeId = 'volume_3';
+    const volumeLabel = 'Volume 3';
+    const storageKey = `wetUtilities.sectionProgress.${volumeId}`;
+    const summaryKey = 'wetUtilities.volumeProgress';
+    const sections = Array.from(document.querySelectorAll('section.main-chapter[id]'));
+    let done = new Set(JSON.parse(localStorage.getItem(storageKey) || '[]'));
+
+    const progress = document.createElement('div');
+    progress.className = 'volume-progress';
+    progress.innerHTML = `
+        <div class="progress-meta">
+            <span>${volumeLabel} Progress</span>
+            <span id="volumeProgressText"></span>
+        </div>
+        <div class="progress-track"><div class="progress-fill" id="volumeProgressFill"></div></div>
+    `;
+    document.querySelector('header').after(progress);
+
+    function saveSummary(percent) {
+        const summary = JSON.parse(localStorage.getItem(summaryKey) || '{}');
+        summary[volumeId] = { percent, done: done.size, total: sections.length };
+        localStorage.setItem(summaryKey, JSON.stringify(summary));
+    }
+
+    function updateProgress() {
+        const percent = sections.length ? Math.round((done.size / sections.length) * 100) : 0;
+        document.getElementById('volumeProgressText').textContent = `${done.size} / ${sections.length} sections complete (${percent}%)`;
+        document.getElementById('volumeProgressFill').style.width = `${percent}%`;
+        localStorage.setItem(storageKey, JSON.stringify([...done]));
+        saveSummary(percent);
+    }
+
+    sections.forEach((section, index) => {
+        const h2 = section.querySelector('h2');
+        if (!h2) return;
+        const id = section.id || `section-${index + 1}`;
+        const button = document.createElement('button');
+        button.type = 'button';
+        button.className = 'section-done';
+        function syncButton() {
+            const isDone = done.has(id);
+            button.classList.toggle('done', isDone);
+            button.textContent = isDone ? 'Done' : 'Mark as Done';
+            button.setAttribute('aria-pressed', String(isDone));
+        }
+        button.addEventListener('click', () => {
+            if (done.has(id)) done.delete(id);
+            else done.add(id);
+            syncButton();
+            updateProgress();
+        });
+        syncButton();
+        h2.appendChild(button);
+    });
+
+    updateProgress();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,678 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Water Design Engineer — Reference Manual Guide</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,600;0,700;1,300&display=swap');
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg:        #0D1117;
+    --surface:   #161B22;
+    --card:      #1C2230;
+    --border:    #2A3445;
+    --accent-w:  #2DA8D8;   /* water blue */
+    --accent-s:  #4CAF7D;   /* sewer green */
+    --accent-d:  #E8913A;   /* drainage amber */
+    --accent-x:  #A78BFA;   /* cross-cutting violet */
+    --txt:       #CDD9E5;
+    --txt-dim:   #768A9E;
+    --txt-head:  #E6EDF3;
+    --tag-bg:    #1F2D3D;
+    --mono:      'IBM Plex Mono', monospace;
+    --sans:      'IBM Plex Sans', sans-serif;
+  }
+
+  body { background: var(--bg); color: var(--txt); font-family: var(--sans); font-size: 13.5px; line-height: 1.6; }
+
+  /* ── HEADER ── */
+  header {
+    border-bottom: 1px solid var(--border);
+    padding: 32px 48px 24px;
+    display: flex; justify-content: space-between; align-items: flex-end;
+  }
+  header h1 { font-size: 22px; font-weight: 700; color: var(--txt-head); letter-spacing: -0.3px; }
+  header p  { font-size: 12px; color: var(--txt-dim); margin-top: 4px; font-style: italic; }
+  .status-chip {
+    font-family: var(--mono); font-size: 11px; padding: 5px 12px;
+    border: 1px solid #2DA8D8; color: #2DA8D8; border-radius: 3px; white-space: nowrap;
+  }
+
+  /* ── LEGEND STRIP ── */
+  .legend {
+    display: flex; gap: 24px; padding: 14px 48px;
+    border-bottom: 1px solid var(--border); background: var(--surface);
+    flex-wrap: wrap;
+  }
+  .leg { display: flex; align-items: center; gap: 8px; font-size: 11.5px; color: var(--txt-dim); }
+  .dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+
+  /* ── GRID ── */
+  main { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0; }
+
+  /* ── COLUMN ── */
+  .col { border-right: 1px solid var(--border); padding: 28px 28px 36px; }
+  .col:last-child { border-right: none; }
+
+  .col-head {
+    display: flex; align-items: center; gap: 10px;
+    margin-bottom: 22px; padding-bottom: 14px;
+    border-bottom: 2px solid;
+  }
+  .col-head svg { flex-shrink: 0; }
+  .col-head h2 { font-size: 15px; font-weight: 700; color: var(--txt-head); }
+  .col-head span { font-size: 11px; color: var(--txt-dim); display: block; margin-top: 1px; font-weight: 300; }
+  .water  .col-head { border-color: var(--accent-w); }
+  .sewer  .col-head { border-color: var(--accent-s); }
+  .drain  .col-head { border-color: var(--accent-d); }
+
+  /* ── CARD ── */
+  .card {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 6px; padding: 14px 16px; margin-bottom: 12px;
+    position: relative;
+  }
+  .card::before {
+    content: ''; position: absolute; left: 0; top: 0; bottom: 0;
+    width: 3px; border-radius: 6px 0 0 6px;
+  }
+  .water  .card::before { background: var(--accent-w); }
+  .sewer  .card::before { background: var(--accent-s); }
+  .drain  .card::before { background: var(--accent-d); }
+
+  .card-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 8px; margin-bottom: 6px; }
+  .card-num { font-family: var(--mono); font-size: 10px; color: var(--txt-dim); flex-shrink: 0; padding-top: 2px; }
+  .card-title { font-size: 13px; font-weight: 600; color: var(--txt-head); line-height: 1.35; }
+  .card-sub   { font-size: 11.5px; color: var(--txt-dim); margin-bottom: 8px; font-style: italic; }
+  .card-body  { font-size: 12px; color: var(--txt); line-height: 1.55; }
+
+  .tags { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 9px; }
+  .tag {
+    font-family: var(--mono); font-size: 10px; padding: 2px 8px;
+    border-radius: 3px; background: var(--tag-bg); color: var(--txt-dim);
+  }
+  .tag.key { color: #2DA8D8; border: 1px solid #1A3A50; }
+  .tag.key.g { color: #4CAF7D; border: 1px solid #1A3A28; }
+  .tag.key.a { color: #E8913A; border: 1px solid #3A2A14; }
+  .tag.key.v { color: #A78BFA; border: 1px solid #2E2550; }
+
+  /* ── DEMAND SECTION ── */
+  .demand-band {
+    grid-column: 1 / -1;
+    border-top: 1px solid var(--border);
+    padding: 28px 48px 36px;
+    background: var(--surface);
+  }
+  .demand-band h2 { font-size: 15px; font-weight: 700; color: var(--txt-head); margin-bottom: 6px; }
+  .demand-band > p { font-size: 12px; color: var(--txt-dim); margin-bottom: 22px; font-style: italic; }
+  .demand-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  .d-card { background: var(--card); border: 1px solid var(--border); border-radius: 6px; padding: 14px 16px; }
+  .d-card h3 { font-size: 12.5px; font-weight: 600; color: var(--txt-head); margin-bottom: 10px; padding-bottom: 8px; border-bottom: 1px solid var(--border); }
+  .d-item { font-size: 12px; line-height: 1.55; color: var(--txt); padding: 4px 0; border-bottom: 1px dashed var(--border); }
+  .d-item:last-child { border-bottom: none; }
+  .d-item strong { color: var(--txt-head); display: block; font-size: 11.5px; }
+  .d-item span { color: var(--txt-dim); font-size: 11px; display: block; }
+
+  /* ── FOOTER ── */
+  footer {
+    border-top: 1px solid var(--border); padding: 14px 48px;
+    display: flex; justify-content: space-between; align-items: center;
+    background: var(--surface);
+  }
+  footer p { font-size: 11px; color: var(--txt-dim); font-style: italic; }
+  .tier { font-family: var(--mono); font-size: 11px; color: var(--txt-dim); }
+  .tier span { color: var(--txt-head); }
+
+  /* Volume handbook theme override */
+  :root {
+    --primary: #0f172a;
+    --secondary: #3b82f6;
+    --accent: #d97706;
+    --bg: #f8fafc;
+    --surface: #ffffff;
+    --card: #ffffff;
+    --border: #e2e8f0;
+    --txt: #1e293b;
+    --txt-dim: #64748b;
+    --txt-head: #0f172a;
+    --tag-bg: #f1f5f9;
+    --mono: Consolas, 'Courier New', monospace;
+    --sans: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--txt);
+    font-family: var(--sans);
+    font-size: 14px;
+  }
+
+  header {
+    max-width: 1200px;
+    margin: 2rem auto;
+    padding: 3rem 2rem;
+    color: white;
+    background: var(--primary);
+    border: 0;
+    border-bottom: 6px solid var(--secondary);
+    border-radius: 8px 8px 0 0;
+    gap: 1.5rem;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  }
+
+  header h1 {
+    color: white;
+    font-size: 2.5rem;
+    letter-spacing: -0.5px;
+  }
+
+  header p {
+    color: white;
+    opacity: 0.9;
+    margin-top: 0.5rem;
+    font-size: 1.1rem;
+    font-style: normal;
+  }
+
+  .header-actions {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0.75rem;
+    flex-shrink: 0;
+  }
+
+  .status-chip {
+    display: inline-block;
+    padding: 0.25rem 0.75rem;
+    border: 0;
+    border-radius: 999px;
+    background: var(--accent);
+    color: white;
+    font-family: var(--sans);
+    font-size: 0.875rem;
+    font-weight: 700;
+  }
+
+  .manual-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.8rem 1.2rem;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.14);
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    text-decoration: none;
+    font-weight: 700;
+    transition: all 0.2s ease;
+  }
+
+  .manual-link:hover {
+    background: white;
+    color: var(--primary);
+    transform: translateY(-1px);
+  }
+
+  .legend,
+  main,
+  footer {
+    max-width: 1200px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .legend {
+    margin-bottom: 2rem;
+    padding: 1rem 1.25rem;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: var(--surface);
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+  }
+
+  .leg {
+    font-size: 0.85rem;
+    font-weight: 600;
+  }
+
+  main {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+  }
+
+  .col {
+    padding: 1.5rem;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: var(--surface);
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+  }
+
+  .col:last-child {
+    border-right: 1px solid var(--border);
+  }
+
+  .col-head h2 {
+    color: var(--txt-head);
+    font-size: 1.05rem;
+  }
+
+  .col-head span {
+    color: var(--txt-dim);
+    font-size: 0.8rem;
+    font-weight: 400;
+  }
+
+  .card,
+  .d-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    box-shadow: 0 1px 2px rgba(0,0,0,0.03);
+  }
+
+  .card-num { font-size: 0.75rem; }
+  .card-title { color: var(--txt-head); font-size: 0.95rem; font-weight: 700; }
+  .card-sub { color: var(--txt-dim); font-size: 0.82rem; }
+  .card-body { color: var(--txt); font-size: 0.9rem; }
+
+  .card-body strong[style] {
+    color: var(--txt-head) !important;
+  }
+
+  .tag {
+    border: 1px solid #cbd5e1;
+    border-radius: 4px;
+    background: var(--tag-bg);
+    color: var(--txt-dim);
+  }
+
+  .tag.key { color: #0369a1; border-color: #7dd3fc; background: #f0f9ff; }
+  .tag.key.g { color: #047857; border-color: #86efac; background: #f0fdf4; }
+  .tag.key.a { color: #c2410c; border-color: #fdba74; background: #fff7ed; }
+  .tag.key.v { color: #6d28d9; border-color: #c4b5fd; background: #f5f3ff; }
+
+  .demand-band {
+    padding: 1.5rem;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: var(--surface);
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+  }
+
+  .demand-band h2 {
+    color: var(--txt-head);
+    font-size: 1.25rem;
+  }
+
+  .demand-band > p,
+  .d-item span {
+    color: var(--txt-dim);
+  }
+
+  .d-card h3,
+  .d-item strong,
+  .tier span {
+    color: var(--txt-head);
+  }
+
+  footer {
+    margin-top: 2rem;
+    padding: 1rem 0 2rem;
+    background: transparent;
+    gap: 1rem;
+  }
+
+  footer p,
+  .tier {
+    color: var(--txt-dim);
+  }
+
+  @media (max-width: 1000px) {
+    header {
+      flex-direction: column;
+      align-items: flex-start;
+      margin: 1rem;
+    }
+
+    .header-actions {
+      align-items: flex-start;
+    }
+
+    .legend,
+    main,
+    footer {
+      margin-left: 1rem;
+      margin-right: 1rem;
+    }
+
+    main,
+    .demand-grid {
+      grid-template-columns: 1fr;
+    }
+
+    footer {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+  }
+
+  @media (max-width: 768px) {
+    header h1 { font-size: 2rem; }
+    header p { font-size: 1rem; }
+    .legend { gap: 0.75rem; }
+    .col { padding: 1rem; }
+    .col-head { align-items: flex-start; }
+    .card { padding: 0.9rem; }
+    .card-top { flex-wrap: wrap; }
+    .demand-band { padding: 1rem; }
+    .d-card { padding: 0.9rem; }
+    .d-item { overflow-wrap: anywhere; }
+    .manual-link { width: 100%; max-width: 320px; text-align: center; }
+  }
+
+  @media (max-width: 480px) {
+    header { padding: 1.5rem 1rem; }
+    header h1 { font-size: 1.65rem; }
+    .legend { padding: 1rem; }
+    .card-title, .card-body, .d-item { overflow-wrap: anywhere; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div>
+    <h1>Water Design Engineer — Essential Design References</h1>
+    <p>Design Manuals · Standards · Demand Calculation References &nbsp;|&nbsp; Water Supply · Sewerage · Storm Drainage</p>
+  </div>
+  <div class="header-actions">
+    <div class="status-chip">INTERVIEW READY</div>
+    <a class="manual-link" href="water resource manual.html">Back to Water Resource Manual</a>
+  </div>
+</header>
+
+<div class="legend">
+  <div class="leg"><div class="dot" style="background:#2DA8D8"></div>Water Supply</div>
+  <div class="leg"><div class="dot" style="background:#4CAF7D"></div>Sewerage / Wastewater</div>
+  <div class="leg"><div class="dot" style="background:#E8913A"></div>Storm Drainage</div>
+  <div class="leg"><div class="dot" style="background:#A78BFA"></div>Cross-cutting / International</div>
+  <div class="leg"><div class="dot" style="background:#555"></div>Standard or Regulation</div>
+</div>
+
+<main>
+
+  <!-- ══ WATER SUPPLY ══ -->
+  <div class="col water">
+    <div class="col-head">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#2DA8D8" stroke-width="2"><path d="M12 2C6 8 4 12 4 15a8 8 0 0016 0c0-3-2-7-8-13z"/></svg>
+      <div><h2>Water Supply</h2><span>Distribution, treatment & storage design</span></div>
+    </div>
+
+    <div class="card">
+      <div class="card-top"><span class="card-num">01</span><div class="card-title">Recommended Standards for Water Works (Ten States Standards)</div></div>
+      <div class="card-sub">GLUMRB — Great Lakes Upper Mississippi River Board, Latest Ed.</div>
+      <div class="card-body">The definitive regulatory-grade design standard in North America. Covers design criteria for intakes, treatment, storage, distribution mains, pumping stations, and pressure zones. Memorise minimum pipe velocity (0.6 m/s), residual pressure (14 psi/1.0 bar at any point), and storage requirements.</div>
+      <div class="tags"><span class="tag key">Gold Standard</span><span class="tag">Distribution</span><span class="tag">Storage</span><span class="tag">Pumping</span></div>
+    </div>
+
+    <div class="card">
+      <div class="card-top"><span class="card-num">02</span><div class="card-title">AWWA Manuals of Water Supply Practices (M-Series)</div></div>
+      <div class="card-sub">American Water Works Association — Key volumes: M1, M11, M23, M31, M32, M36</div>
+      <div class="card-body"><strong style="color:#CDD9E5">M1</strong> — Rates, fees, demand analysis. <strong style="color:#CDD9E5">M11</strong> — Steel pipe. <strong style="color:#CDD9E5">M23</strong> — PVC pipe. <strong style="color:#CDD9E5">M31</strong> — Distribution for fire protection. <strong style="color:#CDD9E5">M32</strong> — Computer modelling (EPANET basis). <strong style="color:#CDD9E5">M36</strong> — Water audits and loss control. Each manual is a standalone design guide for that pipe material or topic.</div>
+      <div class="tags"><span class="tag key">Pipe Design</span><span class="tag">Modelling</span><span class="tag">NRW</span></div>
+    </div>
+
+    <div class="card">
+      <div class="card-top"><span class="card-num">03</span><div class="card-title">WHO Guidelines for Drinking-Water Quality (4th Ed. + Updates)</div></div>
+      <div class="card-sub">World Health Organization, 2017 (+ 2022 Addendum)</div>
+      <div class="card-body">Global benchmark for water quality standards — residual chlorine, turbidity, microbiological limits, chemical contaminants. Underpins nearly every national standard in developing countries. Essential for justifying treatment train selection and quality targets in any design report.</div>
+      <div class="tags"><span class="tag key v">International</span><span class="tag">Water Quality</span><span class="tag">Treatment</span></div>
+    </div>
+
+    <div class="card">
+      <div class="card-top"><span class="card-num">04</span><div class="card-title">Twort's Water Supply (7th Edition)</div></div>
+      <div class="card-sub">Twort, Ratnayaka & Brandt — IWA Publishing</div>
+      <div class="card-body">The most comprehensive single-volume textbook for water supply engineers. Covers hydrology, demand forecasting, source works, treatment, distribution, hydraulics, and asset management. If only one book — this one. Widely cited in design reports and specification preambles globally.</div>
+      <div class="tags"><span class="tag key">Core Textbook</span><span class="tag">Hydraulics</span><span class="tag">Treatment</span></div>
+    </div>
+
+    <div class="card">
+      <div class="card-top"><span class="card-num">05</span><div class="card-title">BS EN 805:2000 — Water Supply Requirements</div></div>
+      <div class="card-sub">British Standards / European Standard</div>
+      <div class="card-body">Requirements for systems and components outside buildings. Covers design pressure, velocity limits, surge analysis, pipe jointing, and testing. Widely used on UK and EU-funded projects across South Asia, Africa, and the Middle East. Defines Maximum Allowable Operating Pressure (MAOP) and test pressure protocols.</div>
+      <div class="tags"><span class="tag key">Standard</span><span class="tag">Pressure Design</span><span class="tag">Testing</span></div>
+    </div>
+
+    <div class="card">
+      <div class="card-top"><span class="card-num">06</span><div class="card-title">CPHEEO Manual on Water Supply & Treatment</div></div>
+      <div class="card-sub">Central Public Health & Environmental Engineering Organisation, India (3rd Ed.)</div>
+      <div class="card-body">The authoritative design manual for South Asia (Pakistan, India, Bangladesh context). Contains per capita demand norms, peak factor tables, storage design, fire demand, and trunk main sizing criteria. Most WASA/PHED projects reference this alongside WHO. Know the per capita demand ranges: 70–150 LPCD rural; 150–200 LPCD urban.</div>
+      <div class="tags"><span class="tag key v">South Asia</span><span class="tag">Per Capita</span><span class="tag">Storage</span></div>
+    </div>
+
+  </div><!-- /water col -->
+
+  <!-- ══ SEWERAGE ══ -->
+  <div class="col sewer">
+    <div class="col-head">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#4CAF7D" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M8 12h8M12 8v8"/><path d="M5.6 5.6l1.4 1.4M16.9 16.9l1.5 1.5"/></svg>
+      <div><h2>Sewerage & Wastewater</h2><span>Collection, conveyance & treatment design</span></div>
+    </div>
+
+    <div class="card">
+      <div class="card-top"><span class="card-num">01</span><div class="card-title">Recommended Standards for Wastewater Facilities (Ten States Standards)</div></div>
+      <div class="card-sub">GLUMRB — Great Lakes Upper Mississippi River Board, Latest Ed.</div>
+      <div class="card-body">The sewerage equivalent of the water Ten States — the single most cited sewer design document in North America. Design criteria for gravity sewers (min. velocity 0.6 m/s, min. diameter 200mm), manholes (max. spacing 120m), lift stations, and force mains. Minimum depth of cover, pipe slope tables, and house connection rules are all here.</div>
+      <div class="tags"><span class="tag key g">Gold Standard</span><span class="tag">Gravity Sewer</span><span class="tag">Lift Stations</span></div>
+    </div>
+
+    <div class="card">
+      <div class="card-top"><span class="card-num">02</span><div class="card-title">Wastewater Engineering: Treatment & Resource Recovery (5th Ed.)</div></div>
+      <div class="card-sub">Metcalf & Eddy / Tchobanoglous et al. — McGraw-Hill</div>
+      <div class="card-body">The definitive wastewater engineering textbook globally. Flow estimation, peaking factors (Harmon, Babbitt, ten Broeck equations), hydraulics of sewers, treatment process design, biosolids, and energy recovery. Every wastewater engineer should know the Harmon formula for peak flow. Chapter 3 (quantity of wastewater) is the go-to for flow calculations.</div>
+      <div class="tags"><span class="tag key g">Core Textbook</span><span class="tag">Peaking Factors</span><span class="tag">Treatment</span><span class="tag">Flow Calcs</span></div>
+    </div>
+
+    <div class="card">
+      <div class="card-top"><span class="card-num">03</span><div class="card-title">WEF MOP 8 — Design of Municipal Wastewater Treatment Plants (5th Ed.)</div></div>
+      <div class="card-sub">Water Environment Federation Manual of Practice No. 8</div>
+      <div class="card-body">The comprehensive design manual for WWTP design — screens, grit chambers, primary treatment, biological treatment (activated sludge, SBR, MBR), nutrient removal, disinfection, and biosolids. Used for detailed design of all major treatment components. Companion to Metcalf & Eddy for plant-level work.</div>
+      <div class="tags"><span class="tag key g">Treatment Design</span><span class="tag">WEF</span><span class="tag">Biosolids</span></div>
+    </div>
+
+    <div class="card">
+      <div class="card-top"><span class="card-num">04</span><div class="card-title">BS EN 752:2017 — Drain & Sewer Systems Outside Buildings</div></div>
+      <div class="card-sub">British / European Standard — Replaced earlier EN 752 parts</div>
+      <div class="card-body">The European framework for gravity sewer design: hydraulic design criteria, design flood frequencies (Table 1 — from 1-in-1 year for residential to 1-in-10 year for city centres), pipe roughness, surcharge levels, and manhole design. Mandatory reference on UKAID, EU, and ADB-funded infrastructure projects.</div>
+      <div class="tags"><span class="tag key g">Standard</span><span class="tag">Hydraulic Design</span><span class="tag">Flood Frequency</span></div>
+    </div>
+
+    <div class="card">
+      <div class="card-top"><span class="card-num">05</span><div class="card-title">Sewers for Adoption — Guide 7th Edition</div></div>
+      <div class="card-sub">Water UK (formerly WRc / Sewers for Adoption Guide)</div>
+      <div class="card-body">The standard adopted by all UK water companies for adoptable sewer design and construction. Sets criteria for pipe materials, bedding classes, surcharge test, CCTV inspection, hydraulic design flows, and manhole specs. Widely used internationally as a construction quality baseline for new sewer schemes.</div>
+      <div class="tags"><span class="tag key g">Adoptable Sewers</span><span class="tag">UK Standard</span><span class="tag">Construction</span></div>
+    </div>
+
+    <div class="card">
+      <div class="card-top"><span class="card-num">06</span><div class="card-title">CPHEEO Manual on Sewerage & Sewage Treatment (3rd Ed.)</div></div>
+      <div class="card-sub">Central Public Health & Environmental Engineering Organisation, India</div>
+      <div class="card-body">South Asia's most used sewer design manual. Per capita sewage generation (80% of water supply), minimum sewer gradients, Manning's n values, DWF and PWF calculations, septic tank design, and WSP design. Standard reference on all ADB/World Bank funded sanitation projects in Pakistan. Know: DWF = PQ × 1.5 + I (dry weather flow formula).</div>
+      <div class="tags"><span class="tag key g v">South Asia</span><span class="tag">DWF Formula</span><span class="tag">Manning's n</span></div>
+    </div>
+
+  </div><!-- /sewer col -->
+
+  <!-- ══ STORM DRAINAGE ══ -->
+  <div class="col drain">
+    <div class="col-head">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#E8913A" stroke-width="2"><path d="M20 16V7a2 2 0 00-2-2H6a2 2 0 00-2 2v9"/><path d="M4 16h16"/><path d="M8 20h8"/><path d="M8 12l2 2 4-4"/></svg>
+      <div><h2>Storm Drainage</h2><span>Urban hydrology, drain & culvert design</span></div>
+    </div>
+
+    <div class="card">
+      <div class="card-top"><span class="card-num">01</span><div class="card-title">HEC-22 — Urban Drainage Design Manual (3rd Ed.)</div></div>
+      <div class="card-sub">FHWA / US Dept. of Transportation — Hydraulic Engineering Circular No. 22</div>
+      <div class="card-body">The most widely used urban drainage design manual globally. Covers the entire urban storm drainage design process: hydrology (Rational Method, NRCS), inlet design, gutter flow, culverts, open channels, detention basins, and outlet structures. Every drain engineer must know the Rational Method: Q = CiA, and how to select C, derive i from IDF curves, and calculate time of concentration.</div>
+      <div class="tags"><span class="tag key a">Core Manual</span><span class="tag">Rational Method</span><span class="tag">IDF Curves</span><span class="tag">Culverts</span></div>
+    </div>
+
+    <div class="card">
+      <div class="card-top"><span class="card-num">02</span><div class="card-title">TR-55 — Urban Hydrology for Small Watersheds (2nd Ed.)</div></div>
+      <div class="card-sub">USDA — Natural Resources Conservation Service (NRCS)</div>
+      <div class="card-body">The standard method for runoff volume and peak discharge from small urban catchments. Introduces the Curve Number (CN) method — probably the most universally used runoff estimation method in the world. Know how to look up CN from land use and hydrological soil group, compute S (retention), and derive Q (runoff depth). Paired with TR-20 for detailed routing.</div>
+      <div class="tags"><span class="tag key a">Curve Number</span><span class="tag">Runoff Volume</span><span class="tag">Small Catchments</span></div>
+    </div>
+
+    <div class="card">
+      <div class="card-top"><span class="card-num">03</span><div class="card-title">HEC-HMS — Hydrologic Modeling System (User Manual + Technical Reference)</div></div>
+      <div class="card-sub">US Army Corps of Engineers — Hydrologic Engineering Centre</div>
+      <div class="card-body">The industry-standard software and methodology reference for rainfall-runoff modelling of catchments. Used for basin-level storm modelling, sub-catchment routing, reservoir design, and flood frequency analysis. The technical reference manual defines the methods (SCS unit hydrograph, Muskingum routing, etc.) that underpin modern drainage design. Knowing this software is a key interview differentiator.</div>
+      <div class="tags"><span class="tag key a">Software Reference</span><span class="tag">Hydrograph</span><span class="tag">Routing</span></div>
+    </div>
+
+    <div class="card">
+      <div class="card-top"><span class="card-num">04</span><div class="card-title">ASCE/WEF MOP — Design of Urban Stormwater Controls (MOP 23)</div></div>
+      <div class="card-sub">ASCE / Water Environment Federation — Manual of Practice</div>
+      <div class="card-body">Comprehensive guide for stormwater control measures: detention/retention basins, bioretention, permeable pavements, green roofs, constructed wetlands, and infiltration systems. Covers hydraulic design of each BMP/SuDS type, maintenance requirements, and sizing methods. Essential for projects requiring stormwater quality treatment alongside quantity management.</div>
+      <div class="tags"><span class="tag key a">SuDS / BMPs</span><span class="tag">Detention Basins</span><span class="tag">Water Quality</span></div>
+    </div>
+
+    <div class="card">
+      <div class="card-top"><span class="card-num">05</span><div class="card-title">CIRIA C753 — The SuDS Manual (2015)</div></div>
+      <div class="card-sub">CIRIA — Construction Industry Research & Information Association (UK)</div>
+      <div class="card-body">The UK and internationally adopted reference for Sustainable Drainage Systems design. Covers the SuDS management train, volume control, water quality treatment trains, and design of each SuDS component. Mandatory on UK-compliant and many ADB projects. Introduces the SuDS 4 pillars: Quantity, Quality, Biodiversity, and Amenity — a framework widely tested at interview.</div>
+      <div class="tags"><span class="tag key a">SuDS</span><span class="tag">UK Standard</span><span class="tag">Management Train</span></div>
+    </div>
+
+    <div class="card">
+      <div class="card-top"><span class="card-num">06</span><div class="card-title">BS EN 752:2017 — Drain & Sewer Systems Outside Buildings</div></div>
+      <div class="card-sub">British / European Standard (shared with Sewerage column)</div>
+      <div class="card-body">Governs hydraulic design of combined and storm sewers as well as gravity foul sewers. Table 1 defines design storm return periods by land use type. Also covers surcharge risk assessment, hydraulic gradient analysis, and the performance levels required for different types of development — fundamental to any gravity drainage network design in a UK/EU framework.</div>
+      <div class="tags"><span class="tag key a">Standard</span><span class="tag">Combined Sewers</span><span class="tag">Return Periods</span></div>
+    </div>
+
+  </div><!-- /drain col -->
+
+  <!-- ══ DEMAND CALCULATIONS ══ -->
+  <div class="demand-band">
+    <h2>Demand Calculation — Key Methods, Parameters & References (Know These for the Interview)</h2>
+    <p>The formulae and parameters interviewers expect you to recall or apply immediately — organised by discipline.</p>
+
+    <div class="demand-grid">
+
+      <div class="d-card">
+        <h3 style="color:#2DA8D8">💧 Water Demand</h3>
+        <div class="d-item">
+          <strong>Average Daily Demand (ADD)</strong>
+          <span>ADD = Per capita demand (LPCD) × Population</span>
+          <span>Urban: 150–200 LPCD (CPHEEO) | WHO: 100 LPCD minimum</span>
+        </div>
+        <div class="d-item">
+          <strong>Maximum Daily Demand (MDD)</strong>
+          <span>MDD = 1.2 to 1.5 × ADD (peak day factor)</span>
+        </div>
+        <div class="d-item">
+          <strong>Maximum Hourly Demand (MHD)</strong>
+          <span>MHD = 1.5 × MDD = 2.25 × ADD (combined peak factor)</span>
+          <span>Some codes use 1.8 × ADD for distribution sizing</span>
+        </div>
+        <div class="d-item">
+          <strong>Fire Demand (ISO 291 / NFPA)</strong>
+          <span>Q = 220√P(1 − 0.01√P) (US, P = population in thousands)</span>
+          <span>Min residual pressure at hydrant: 10 psi (0.7 bar)</span>
+        </div>
+        <div class="d-item">
+          <strong>Storage Volume</strong>
+          <span>Equalising: 15–20% of MDD | Emergency: 25% of MDD</span>
+          <span>Fire: per fire demand × duration (2–4 hrs)</span>
+        </div>
+        <div class="d-item">
+          <strong>Key Refs: Ten States § | AWWA M1 | CPHEEO Ch.3 | Twort Ch.7</strong>
+          <span></span>
+        </div>
+      </div>
+
+      <div class="d-card">
+        <h3 style="color:#4CAF7D">🌀 Sewage Flow</h3>
+        <div class="d-item">
+          <strong>Dry Weather Flow (DWF)</strong>
+          <span>DWF = PG + I + E  where P = population, G = per capita flow,</span>
+          <span>I = infiltration (m³/d), E = trade effluent (m³/d)</span>
+          <span>Sewage generation: 70–80% of water supply (CPHEEO)</span>
+        </div>
+        <div class="d-item">
+          <strong>Peak Dry Weather Flow</strong>
+          <span>PDWF = 6 × DWF (BS EN 752 / Sewers for Adoption default)</span>
+        </div>
+        <div class="d-item">
+          <strong>Harmon's Peaking Factor (Metcalf & Eddy)</strong>
+          <span>PF = 1 + 14 / (4 + √P)  where P = population in thousands</span>
+          <span>For P = 10,000: PF ≈ 3.3 | For P = 100,000: PF ≈ 2.0</span>
+        </div>
+        <div class="d-item">
+          <strong>Manning's Equation (Gravity Sewers)</strong>
+          <span>Q = (1/n) × A × R^(2/3) × S^(1/2)</span>
+          <span>n = 0.013 (concrete), 0.009 (PVC/uPVC)</span>
+        </div>
+        <div class="d-item">
+          <strong>Self-cleansing Velocity</strong>
+          <span>Min. 0.6 m/s at full-bore flow (Ten States / BS EN 752)</span>
+          <span>Preferred 0.75–1.0 m/s to prevent H₂S generation</span>
+        </div>
+        <div class="d-item">
+          <strong>Key Refs: Metcalf & Eddy Ch.3 | CPHEEO Ch.4 | Ten States § | BS EN 752</strong>
+          <span></span>
+        </div>
+      </div>
+
+      <div class="d-card">
+        <h3 style="color:#E8913A">⛈ Stormwater Runoff</h3>
+        <div class="d-item">
+          <strong>Rational Method (for A ≤ 80 ha)</strong>
+          <span>Q = C · i · A / 360  (metric: Q in m³/s, A in ha, i in mm/hr)</span>
+          <span>C = runoff coefficient (0.10 lawn → 0.95 paved)</span>
+          <span>i = rainfall intensity from IDF curve at Tc (time of concentration)</span>
+        </div>
+        <div class="d-item">
+          <strong>Time of Concentration (Tc)</strong>
+          <span>Kirpich: Tc = 0.0195 × L^0.77 × S^(-0.385) (min)</span>
+          <span>Or: Tc = entry time + travel time in sewer</span>
+        </div>
+        <div class="d-item">
+          <strong>NRCS Curve Number (TR-55, larger catchments)</strong>
+          <span>Q = (P − 0.2S)² / (P + 0.8S), S = 25400/CN − 254</span>
+          <span>CN varies: 39 (open land/HSG A) → 98 (paved/HSG D)</span>
+        </div>
+        <div class="d-item">
+          <strong>IDF Curve (Intensity-Duration-Frequency)</strong>
+          <span>Derived from local rain gauge records — must reference national or regional IDF data. For Pakistan, PMD data + Gumbel distribution for frequency analysis.</span>
+        </div>
+        <div class="d-item">
+          <strong>Design Return Periods (BS EN 752 Table 1)</strong>
+          <span>Residential: 1-in-2 yr | City centres: 1-in-10 yr</span>
+          <span>Critical infrastructure: 1-in-100 yr (check for flooding)</span>
+        </div>
+        <div class="d-item">
+          <strong>Key Refs: HEC-22 Ch.3 | TR-55 | BS EN 752 Table 1 | HEC-HMS manual</strong>
+          <span></span>
+        </div>
+      </div>
+
+    </div><!-- /demand-grid -->
+  </div><!-- /demand-band -->
+
+</main>
+
+<footer>
+  <p>Compiled for interview preparation — Water Design Engineer (NESPAK / Consulting Engineering context) · June 2026</p>
+  <div class="tier">TIER <span>1 = Cite by name</span> &nbsp;|&nbsp; TIER <span>2 = Know the key formula/criteria</span> &nbsp;|&nbsp; All manuals above are Tier 1</div>
+</footer>
+
+</body>
+</html>
